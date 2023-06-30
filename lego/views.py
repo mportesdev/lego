@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 
 from .models import LegoPart, LegoSet
 
@@ -13,7 +13,7 @@ def index(request):
 
 
 def set_detail(request, lego_id):
-    set_ = LegoSet.objects.get(lego_id=lego_id)
+    set_ = get_object_or_404(LegoSet, lego_id=lego_id)
     set_items = set_.setitem_set.all()
     return render(
         request,
@@ -23,7 +23,7 @@ def set_detail(request, lego_id):
 
 
 def part_detail(request, lego_id):
-    part = LegoPart.objects.get(lego_id=lego_id)
+    part = get_object_or_404(LegoPart, lego_id=lego_id)
     set_items = part.setitem_set.all()
     return render(
         request,

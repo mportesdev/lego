@@ -33,6 +33,11 @@ class TestGetResponse(TestCase):
             b".*1x.*234pr.*Brick 2 x 4",
         )
 
+    def test_set_detail_not_found(self):
+        response = self.client.get("/lego/set/999/")
+
+        self.assertEqual(response.status_code, 404)
+
     def test_part_detail(self):
         response = self.client.get("/lego/part/234pr/")
 
@@ -43,3 +48,8 @@ class TestGetResponse(TestCase):
             b".*Included in:"
             b".*1x in.*123-1.*Brick House",
         )
+
+    def test_part_detail_not_found(self):
+        response = self.client.get("/lego/part/999/")
+
+        self.assertEqual(response.status_code, 404)

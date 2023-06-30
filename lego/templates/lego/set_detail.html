@@ -4,6 +4,7 @@
   Contains:
   {% for item in set_items %}
     <div>
+      <div>{{ item.quantity }}x</div>
       <div><a href="{% url 'part_detail' item.part.lego_id %}">{{ item.part.lego_id }}</a></div>
       <div>{{ item.part.name }}</div>
     </div>

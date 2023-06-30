@@ -2,10 +2,11 @@
 {% block content %}
   <div>{{ title }}</div>
   Contains:
-  {% for part in parts %}
+  {% for rel in relations %}
     <div>
-      <div><a href="{% url 'part_detail' part.lego_id %}">{{ part.lego_id }}</a></div>
-      <div>{{ part.name }}</div>
+      <div>{{ rel.quantity }}x</div>
+      <div><a href="{% url 'part_detail' rel.part.lego_id %}">{{ rel.part.lego_id }}</a></div>
+      <div>{{ rel.part.name }}</div>
     </div>
   {% endfor %}
 {% endblock %}

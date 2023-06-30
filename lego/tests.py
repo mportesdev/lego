@@ -30,7 +30,7 @@ class TestGetResponse(TestCase):
             response.content,
             b"(?s)Lego Set 123-1 Brick House"
             b".*Contains:"
-            b".*234pr.*Brick 2 x 4",
+            b".*1x.*234pr.*Brick 2 x 4",
         )
 
     def test_part_detail(self):
@@ -41,5 +41,5 @@ class TestGetResponse(TestCase):
             response.content,
             b"(?s)Lego Part 234pr Brick 2 x 4"
             b".*Included in:"
-            b".*123-1.*Brick House",
+            b".*1x in.*123-1.*Brick House",
         )

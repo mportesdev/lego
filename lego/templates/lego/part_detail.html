@@ -2,10 +2,11 @@
 {% block content %}
   <div>{{ title }}</div>
   Included in:
-  {% for set in sets %}
+  {% for rel in relations %}
     <div>
-      <div><a href="{% url 'set_detail' set.lego_id %}">{{ set.lego_id }}</a></div>
-      <div>{{ set.name }}</div>
+      <div>{{ rel.quantity }}x in</div>
+      <div><a href="{% url 'set_detail' rel.set.lego_id %}">{{ rel.set.lego_id }}</a></div>
+      <div>{{ rel.set.name }}</div>
     </div>
   {% endfor %}
 {% endblock %}

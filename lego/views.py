@@ -1,6 +1,7 @@
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, render
 
+from .forms import SearchForm
 from .models import LegoPart, LegoSet
 
 
@@ -9,7 +10,11 @@ def index(request):
     return render(
         request,
         "lego/index.html",
-        context={"sets": sets, "title": "Our Lego"},
+        context={
+            "sets": sets,
+            "title": "Our Lego",
+            "search_form": SearchForm(),
+        },
     )
 
 
@@ -19,7 +24,11 @@ def set_detail(request, lego_id):
     return render(
         request,
         "lego/set_detail.html",
-        context={"set_items": set_items, "title": f"Lego Set {set_}"},
+        context={
+            "set_items": set_items,
+            "title": f"Lego Set {set_}",
+            "search_form": SearchForm(),
+        },
     )
 
 
@@ -29,7 +38,11 @@ def part_detail(request, lego_id):
     return render(
         request,
         "lego/part_detail.html",
-        context={"set_items": set_items, "title": f"Lego Part {part}"},
+        context={
+            "set_items": set_items,
+            "title": f"Lego Part {part}",
+            "search_form": SearchForm(),
+        },
     )
 
 
@@ -49,5 +62,6 @@ def search(request):
             "sets": sets,
             "parts": parts,
             "title": f"Search Results for {search_string!r}",
+            "search_form": SearchForm(request.GET),
         },
     )

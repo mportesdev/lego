@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, render
 
 from .models import LegoPart, LegoSet
@@ -29,4 +30,24 @@ def part_detail(request, lego_id):
         request,
         "lego/part_detail.html",
         context={"set_items": set_items, "title": f"Lego Part {part}"},
+    )
+
+
+def search(request):
+    search_string = request.GET["q"]
+
+    name_q = Q(name__icontains=search_string)
+    lego_id_q = Q(lego_id__startswith=search_string)
+
+    sets = LegoSet.objects.filter(name_q | lego_id_q)
+    parts = LegoPart.objects.filter(name_q | lego_id_q)
+
+    return render(
+        request,
+        "lego/search.html",
+        context={
+            "sets": sets,
+            "parts": parts,
+            "title": f"Search Results for {search_string!r}",
+        },
     )

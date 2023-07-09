@@ -1,0 +1,20 @@
+{% extends "lego/base.html" %}
+{% block content %}
+  <div>{{ title }}</div>
+  {% if sets.exists or parts.exists %}
+    {% for set in sets %}
+      <div>
+        <div><a href="{% url 'set_detail' set.lego_id %}">{{ set.lego_id }}</a></div>
+        <div>{{ set.name }}</div>
+      </div>
+    {% endfor %}
+    {% for part in parts %}
+      <div>
+        <div><a href="{% url 'part_detail' part.lego_id %}">{{ part.lego_id }}</a></div>
+        <div>{{ part.name }}</div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div>Nothing Found</div>
+  {% endif %}
+{% endblock %}

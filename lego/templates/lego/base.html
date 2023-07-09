@@ -7,6 +7,10 @@
 </head>
 <body>
   <div><a href="{% url 'index' %}">Our Lego</a></div>
+  <form action="{% url 'search' %}" method="get">
+    {{ search_form }}
+    <input type="submit" value="OK" id="search_submit">
+  </form>
   {% block content %}
   {% endblock %}
 </body>

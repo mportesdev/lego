@@ -6,7 +6,7 @@
   <title>{{ title }}</title>
 </head>
 <body>
-  <div><a href="{% url 'index' %}">Our Lego</a></div>
+  <div><a href="{% url 'index' %}" id="index_link">Our Lego</a></div>
   <form action="{% url 'search' %}" method="get">
     {{ search_form }}
     <input type="submit" value="OK" id="search_submit">

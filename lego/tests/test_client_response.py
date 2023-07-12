@@ -1,14 +1,8 @@
 from django.test import TestCase
 
-from lego.models import LegoPart, LegoSet
-
 
 class TestGetResponse(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        house = LegoSet.objects.create(lego_id="123-1", name="Brick House")
-        brick = LegoPart.objects.create(lego_id="234pr", name="Brick 2 x 4")
-        house.parts.add(brick)
+    fixtures = ["test_data"]
 
     def test_index_page(self):
         response = self.client.get("/lego/")
@@ -56,10 +50,7 @@ class TestGetResponse(TestCase):
 
 
 class TestSearch(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        LegoSet.objects.create(lego_id="123-1", name="Brick House")
-        LegoPart.objects.create(lego_id="234pr", name="Brick 2 x 4")
+    fixtures = ["test_data"]
 
     def test_set_found_by_name(self):
         response = self.client.get("/lego/search/", data={"q": "house", "mode": "all"})

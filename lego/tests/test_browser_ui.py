@@ -11,19 +11,23 @@ from lego.models import LegoPart, LegoSet
 
 
 class TestBrowserUI(LiveServerTestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        os.environ["TMPDIR"] = cls.temp_dir = mkdtemp(dir=Path(__file__).parent)
+        cls.addClassCleanup(shutil.rmtree, cls.temp_dir)
+        cls.driver = Firefox()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.driver.quit()
+        super().tearDownClass()
+
     def setUp(self):
         house = LegoSet.objects.create(lego_id="123-1", name="Brick House")
         brick = LegoPart.objects.create(lego_id="234pr", name="Brick 2 x 4")
         house.parts.add(brick)
-
-        self.temp_dir = mkdtemp(dir=Path(__file__).parent)
-        os.environ["TMPDIR"] = self.temp_dir
-        self.driver = Firefox()
         self.driver.get(f"{self.live_server_url}/lego/")
-
-    def tearDown(self):
-        self.driver.quit()
-        shutil.rmtree(self.temp_dir)
 
     def test_detail_pages(self):
         # go to set detail

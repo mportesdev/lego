@@ -1,0 +1,27 @@
+[
+{
+    "model": "lego.legoset",
+    "pk": 1,
+    "fields": {
+        "lego_id": "123-1",
+        "name": "Brick House"
+    }
+},
+{
+    "model": "lego.legopart",
+    "pk": 1,
+    "fields": {
+        "lego_id": "234pr",
+        "name": "Brick 2 x 4"
+    }
+},
+{
+    "model": "lego.setitem",
+    "pk": 1,
+    "fields": {
+        "set": 1,
+        "part": 1,
+        "quantity": 1
+    }
+}
+]

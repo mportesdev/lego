@@ -7,10 +7,10 @@ from django.test import LiveServerTestCase
 from selenium.webdriver import Firefox
 from selenium.webdriver.common.by import By
 
-from lego.models import LegoPart, LegoSet
-
 
 class TestBrowserUI(LiveServerTestCase):
+    fixtures = ["test_data"]
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -24,9 +24,6 @@ class TestBrowserUI(LiveServerTestCase):
         super().tearDownClass()
 
     def setUp(self):
-        house = LegoSet.objects.create(lego_id="123-1", name="Brick House")
-        brick = LegoPart.objects.create(lego_id="234pr", name="Brick 2 x 4")
-        house.parts.add(brick)
         self.driver.get(f"{self.live_server_url}/lego/")
 
     def test_detail_pages(self):

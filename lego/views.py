@@ -24,7 +24,7 @@ def set_detail(request, lego_id):
 
 def part_detail(request, lego_id):
     part = LegoPart.objects.get(lego_id=lego_id)
-    sets = part.legoset_set.all()
+    sets = part.sets.all()
     return render(
         request,
         "lego/part_detail.html",

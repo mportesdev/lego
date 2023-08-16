@@ -38,7 +38,7 @@ class TestGetResponse(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
             response.content,
-            b"(?s)Lego Part 234pr Brick 2 x 4"
+            b"(?s)Lego Part 234pr Brick 2 x 4, Red"
             b".*Included in:"
             b".*1x in.*123-1.*Brick House",
         )

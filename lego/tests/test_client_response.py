@@ -24,7 +24,7 @@ class TestGetResponse(TestCase):
             response.content,
             b"(?s)Lego Set 123-1 Brick House"
             b".*Contains:"
-            b".*1x.*234pr.*Brick 2 x 4",
+            b".*1x.*234pr.*Brick 2 x 4.*Red",
         )
 
     def test_set_detail_not_found(self):
@@ -69,7 +69,7 @@ class TestSearch(TestCase):
         self.assertRegex(
             response.content,
             b"(?s)Search Results for.*2 x 4"
-            b".*234pr.*Brick 2 x 4",
+            b".*234pr.*Brick 2 x 4.*Red",
         )
 
     def test_multiple_results_found_by_name(self):
@@ -80,7 +80,7 @@ class TestSearch(TestCase):
             response.content,
             b"(?s)Search Results for.*brick"
             b".*123-1.*Brick House"
-            b".*234pr.*Brick 2 x 4",
+            b".*234pr.*Brick 2 x 4.*Red",
         )
 
     def test_set_found_by_lego_id(self):
@@ -100,7 +100,7 @@ class TestSearch(TestCase):
         self.assertRegex(
             response.content,
             b"(?s)Search Results for.*234"
-            b".*234pr.*Brick 2 x 4",
+            b".*234pr.*Brick 2 x 4.*Red",
         )
 
     def test_set_found_by_name_in_name_mode(self):

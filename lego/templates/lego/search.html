@@ -12,6 +12,7 @@
       <div>
         <div><a href="{% url 'part_detail' part.shape.lego_id %}">{{ part.shape.lego_id }}</a></div>
         <div>{{ part.shape.name }}</div>
+        <div>{% if part.color %}{{ part.color.name }}{% endif %}</div>
       </div>
     {% endfor %}
   {% else %}

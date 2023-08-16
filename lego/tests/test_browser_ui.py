@@ -32,6 +32,7 @@ class TestBrowserUI(LiveServerTestCase):
         self.assertEqual(self.driver.title, "Lego Set 123-1 Brick House")
         link = self.driver.find_element(By.XPATH, "//a[text()='234pr']")
         self.driver.find_element(By.XPATH, "//div[text()='Brick 2 x 4']")
+        self.driver.find_element(By.XPATH, "//div[text()='Red']")
 
         # go to part detail
         link.click()
@@ -55,6 +56,7 @@ class TestBrowserUI(LiveServerTestCase):
         self.driver.find_element(By.XPATH, "//div[text()='Brick House']")
         self.driver.find_element(By.XPATH, "//a[text()='234pr']")
         self.driver.find_element(By.XPATH, "//div[text()='Brick 2 x 4']")
+        self.driver.find_element(By.XPATH, "//div[text()='Red']")
 
         self.driver.find_element(By.ID, "id_q").send_keys("99")
         self.driver.find_element(By.ID, "search_submit").click()
@@ -81,6 +83,7 @@ class TestBrowserUI(LiveServerTestCase):
         self.assertEqual(self.driver.title, "Search Results for '234'")
         self.driver.find_element(By.XPATH, "//a[text()='234pr']")
         self.driver.find_element(By.XPATH, "//div[text()='Brick 2 x 4']")
+        self.driver.find_element(By.XPATH, "//div[text()='Red']")
 
     def test_search_form_populated_from_get(self):
         self.driver.find_element(By.ID, "id_q").send_keys("123")

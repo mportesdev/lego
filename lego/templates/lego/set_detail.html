@@ -7,6 +7,7 @@
       <div>{{ rel.quantity }}x</div>
       <div><a href="{% url 'part_detail' rel.part.shape.lego_id %}">{{ rel.part.shape.lego_id }}</a></div>
       <div>{{ rel.part.shape.name }}</div>
+      <div>{% if rel.part.color %}{{ rel.part.color.name }}{% endif %}</div>
     </div>
   {% endfor %}
 {% endblock %}

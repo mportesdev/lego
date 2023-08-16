@@ -1,0 +1,11 @@
+{% extends "lego/base.html" %}
+{% block content %}
+  <div>{{ title }}</div>
+  Included in:
+  {% for set in sets %}
+    <div>
+      <div><a href="{% url 'set_detail' set.lego_id %}">{{ set.lego_id }}</a></div>
+      <div>{{ set.name }}</div>
+    </div>
+  {% endfor %}
+{% endblock %}

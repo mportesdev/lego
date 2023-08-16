@@ -7,6 +7,7 @@
       <div>{{ item.quantity }}x</div>
       <div><a href="{% url 'part_detail' item.part.shape.lego_id %}">{{ item.part.shape.lego_id }}</a></div>
       <div>{{ item.part.shape.name }}</div>
+      <div>{% if item.part.color %}{{ item.part.color.name }}{% endif %}</div>
     </div>
   {% endfor %}
 {% endblock %}

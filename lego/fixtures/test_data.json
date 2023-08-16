@@ -16,10 +16,18 @@
     }
 },
 {
+    "model": "lego.color",
+    "pk": 1,
+    "fields": {
+        "name": "Red"
+    }
+},
+{
     "model": "lego.legopart",
     "pk": 1,
     "fields": {
-        "shape": 1
+        "shape": 1,
+        "color": 1
     }
 },
 {

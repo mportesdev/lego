@@ -35,7 +35,7 @@ class TestBrowserUI(LiveServerTestCase):
 
         # go to part detail
         link.click()
-        self.assertEqual(self.driver.title, "Lego Part 234pr Brick 2 x 4")
+        self.assertEqual(self.driver.title, "Lego Part 234pr Brick 2 x 4, Red")
         self.driver.find_element(By.XPATH, "//a[text()='123-1']")
         self.driver.find_element(By.XPATH, "//div[text()='Brick House']")
 

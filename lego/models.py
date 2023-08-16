@@ -9,11 +9,19 @@ class Shape(models.Model):
         return f"{self.lego_id} {self.name}"
 
 
-class LegoPart(models.Model):
-    shape = models.ForeignKey(Shape, on_delete=models.CASCADE)
+class Color(models.Model):
+    name = models.CharField(max_length=30)
 
     def __str__(self):
-        return f"{self.shape}"
+        return self.name
+
+
+class LegoPart(models.Model):
+    shape = models.ForeignKey(Shape, on_delete=models.CASCADE)
+    color = models.ForeignKey(Color, on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return f"{self.shape}, {self.color}" if self.color else f"{self.shape}"
 
 
 class LegoSet(models.Model):

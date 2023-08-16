@@ -1,0 +1,11 @@
+{% extends "lego/base.html" %}
+{% block content %}
+  <div>{{ title }}</div>
+  Contains:
+  {% for part in parts %}
+    <div>
+      <div><a href="{% url 'part_detail' part.lego_id %}">{{ part.lego_id }}</a></div>
+      <div>{{ part.name }}</div>
+    </div>
+  {% endfor %}
+{% endblock %}

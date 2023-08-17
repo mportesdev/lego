@@ -33,7 +33,7 @@ def set_detail(request, lego_id):
 
 
 def part_detail(request, lego_id):
-    part = get_object_or_404(LegoPart, lego_id=lego_id)
+    part = get_object_or_404(LegoPart, shape__lego_id=lego_id)
     set_items = part.setitem_set.all()
     return render(
         request,
@@ -52,16 +52,18 @@ def search(request):
 
     name_q = Q(name__icontains=search_string)
     lego_id_q = Q(lego_id__startswith=search_string)
+    shape_name_q = Q(shape__name__icontains=search_string)
+    shape_lego_id_q = Q(shape__lego_id__startswith=search_string)
 
     if search_mode == "name":
         sets = LegoSet.objects.filter(name_q)
-        parts = LegoPart.objects.filter(name_q)
+        parts = LegoPart.objects.filter(shape_name_q)
     elif search_mode == "id":
         sets = LegoSet.objects.filter(lego_id_q)
-        parts = LegoPart.objects.filter(lego_id_q)
+        parts = LegoPart.objects.filter(shape_lego_id_q)
     else:
         sets = LegoSet.objects.filter(name_q | lego_id_q)
-        parts = LegoPart.objects.filter(name_q | lego_id_q)
+        parts = LegoPart.objects.filter(shape_name_q | shape_lego_id_q)
 
     return render(
         request,

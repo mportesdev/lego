@@ -1,8 +1,9 @@
 from django.db.models import Q
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 
+from .external_api import get_set_info, get_set_parts
 from .forms import SearchForm
-from .models import LegoPart, LegoSet
+from .models import Shape, Color, LegoPart, LegoSet
 
 
 def index(request):
@@ -79,3 +80,27 @@ def search(request):
             "search_form": SearchForm(request.GET),
         },
     )
+
+
+def add_set(request):
+    set_lego_id = request.POST["set_lego_id"]
+    set_, created = LegoSet.objects.get_or_create(lego_id=set_lego_id)
+    if not created:
+        return redirect("index")
+
+    try:
+        set_info = get_set_info(set_lego_id)
+    except OSError:
+        return redirect("index")
+
+    set_.name = set_info["name"]
+    set_.save()
+    for item in get_set_parts(set_lego_id):
+        shape = Shape.objects.get_or_create(
+            lego_id=item["lego_id"], name=item["name"]
+        )[0]
+        color_name = item["color_name"]
+        color = Color.objects.get_or_create(name=color_name)[0] if color_name else None
+        part = LegoPart.objects.get_or_create(shape=shape, color=color)[0]
+        set_.parts.add(part, through_defaults={"quantity": item["quantity"]})
+    return redirect("set_detail", set_lego_id)

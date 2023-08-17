@@ -1,5 +1,7 @@
 from django.test import TestCase
 
+from . import get_set_info_mock, get_set_parts_mock
+
 
 class TestGetResponse(TestCase):
     fixtures = ["test_data"]
@@ -209,3 +211,44 @@ class TestSearch(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertIn(b"Nothing Found", response.content)
+
+
+class TestAddSet(TestCase):
+    fixtures = ["test_data"]
+
+    def test_add_set(self):
+        with get_set_info_mock() as mock_1, get_set_parts_mock() as mock_2:
+            response = self.client.post(
+                "/lego/set/add/", data={"set_lego_id": "1234-1"}, follow=True
+            )
+            mock_1.assert_called_once_with("1234-1")
+            mock_2.assert_called_once_with("1234-1")
+
+        self.assertRedirects(response, "/lego/set/1234-1/")
+        self.assertRegex(
+            response.content,
+            b"(?s)Lego Set 1234-1 Fighter Jet"
+            b".*Contains:"
+            b".*1x.*111.*Jet Engine.*Blue"
+            b".*3x.*222.*Wheel.*Black",
+        )
+
+    def test_add_set_existing_lego_id(self):
+        with get_set_info_mock() as mock_1, get_set_parts_mock() as mock_2:
+            response = self.client.post(
+                "/lego/set/add/", data={"set_lego_id": "123-1"}, follow=True
+            )
+            mock_1.assert_not_called()
+            mock_2.assert_not_called()
+
+        self.assertRedirects(response, "/lego/")
+
+    def test_add_set_invalid_lego_id(self):
+        with get_set_info_mock() as mock_1, get_set_parts_mock() as mock_2:
+            response = self.client.post(
+                "/lego/set/add/", data={"set_lego_id": "999-1"}, follow=True
+            )
+            mock_1.assert_called_once_with("999-1")
+            mock_2.assert_not_called()
+
+        self.assertRedirects(response, "/lego/")

@@ -3,9 +3,11 @@
   <div>{{ title }}</div>
   Contains:
   {% for rel in relations %}
+    {% if rel.part.color %}{% url 'part_detail' rel.part.shape.lego_id rel.part.color.id as part_detail_url %}
+    {% else %}{% url 'part_detail' rel.part.shape.lego_id as part_detail_url %}{% endif %}
     <div>
       <div>{{ rel.quantity }}x</div>
-      <div><a href="{% url 'part_detail' rel.part.shape.lego_id %}">{{ rel.part.shape.lego_id }}</a></div>
+      <div><a href="{{ part_detail_url }}">{{ rel.part.shape.lego_id }}</a></div>
       <div>{{ rel.part.shape.name }}</div>
       <div>{% if rel.part.color %}{{ rel.part.color.name }}{% endif %}</div>
     </div>

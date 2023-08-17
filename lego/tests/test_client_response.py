@@ -25,6 +25,7 @@ class TestGetResponse(TestCase):
             b"(?s)Lego Set 123-1 Brick House"
             b".*Contains:"
             b".*1x.*234pr.*Brick 2 x 4.*Red",
+            b".*1x.*567.*Figure",
         )
 
     def test_set_detail_not_found(self):
@@ -33,7 +34,18 @@ class TestGetResponse(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_part_detail(self):
-        response = self.client.get("/lego/part/234pr/")
+        response = self.client.get("/lego/part/567/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertRegex(
+            response.content,
+            b"(?s)Lego Part 567 Figure"
+            b".*Included in:"
+            b".*1x in.*123-1.*Brick House",
+        )
+
+    def test_part_detail_with_color_id(self):
+        response = self.client.get("/lego/part/234pr/1/")
 
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
@@ -43,8 +55,18 @@ class TestGetResponse(TestCase):
             b".*1x in.*123-1.*Brick House",
         )
 
-    def test_part_detail_not_found(self):
+    def test_part_detail_not_found_if_lego_id_invalid(self):
         response = self.client.get("/lego/part/999/")
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_part_detail_not_found_if_lego_id_invalid_with_color_id(self):
+        response = self.client.get("/lego/part/999/1/")
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_part_detail_not_found_if_color_id_invalid(self):
+        response = self.client.get("/lego/part/234pr/99/")
 
         self.assertEqual(response.status_code, 404)
 
@@ -70,6 +92,7 @@ class TestSearch(TestCase):
             response.content,
             b"(?s)Search Results for.*2 x 4"
             b".*234pr.*Brick 2 x 4.*Red",
+            b".*234pr.*Brick 2 x 4.*White",
         )
 
     def test_multiple_results_found_by_name(self):
@@ -81,6 +104,7 @@ class TestSearch(TestCase):
             b"(?s)Search Results for.*brick"
             b".*123-1.*Brick House"
             b".*234pr.*Brick 2 x 4.*Red",
+            b".*234pr.*Brick 2 x 4.*White",
         )
 
     def test_set_found_by_lego_id(self):
@@ -101,6 +125,7 @@ class TestSearch(TestCase):
             response.content,
             b"(?s)Search Results for.*234"
             b".*234pr.*Brick 2 x 4.*Red",
+            b".*234pr.*Brick 2 x 4.*White",
         )
 
     def test_part_found_by_color(self):

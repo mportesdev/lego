@@ -16,10 +16,25 @@
     }
 },
 {
+    "model": "lego.shape",
+    "pk": 2,
+    "fields": {
+        "lego_id": "567",
+        "name": "Figure"
+    }
+},
+{
     "model": "lego.color",
     "pk": 1,
     "fields": {
         "name": "Red"
+    }
+},
+{
+    "model": "lego.color",
+    "pk": 2,
+    "fields": {
+        "name": "White"
     }
 },
 {
@@ -31,11 +46,36 @@
     }
 },
 {
+    "model": "lego.legopart",
+    "pk": 2,
+    "fields": {
+        "shape": 1,
+        "color": 2
+    }
+},
+{
+    "model": "lego.legopart",
+    "pk": 3,
+    "fields": {
+        "shape": 2,
+        "color": null
+    }
+},
+{
     "model": "lego.partinset",
     "pk": 1,
     "fields": {
         "set": 1,
         "part": 1,
+        "quantity": 1
+    }
+},
+{
+    "model": "lego.partinset",
+    "pk": 2,
+    "fields": {
+        "set": 1,
+        "part": 3,
         "quantity": 1
     }
 }

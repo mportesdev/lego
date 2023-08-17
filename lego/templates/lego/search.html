@@ -10,8 +10,8 @@
     {% endfor %}
     {% for part in parts %}
       <div>
-        <div><a href="{% url 'part_detail' part.lego_id %}">{{ part.lego_id }}</a></div>
-        <div>{{ part.name }}</div>
+        <div><a href="{% url 'part_detail' part.shape.lego_id %}">{{ part.shape.lego_id }}</a></div>
+        <div>{{ part.shape.name }}</div>
       </div>
     {% endfor %}
   {% else %}

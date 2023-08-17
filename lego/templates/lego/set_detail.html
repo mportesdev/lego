@@ -5,8 +5,8 @@
   {% for rel in relations %}
     <div>
       <div>{{ rel.quantity }}x</div>
-      <div><a href="{% url 'part_detail' rel.part.lego_id %}">{{ rel.part.lego_id }}</a></div>
-      <div>{{ rel.part.name }}</div>
+      <div><a href="{% url 'part_detail' rel.part.shape.lego_id %}">{{ rel.part.shape.lego_id }}</a></div>
+      <div>{{ rel.part.shape.name }}</div>
     </div>
   {% endfor %}
 {% endblock %}

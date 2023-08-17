@@ -8,11 +8,18 @@
     }
 },
 {
-    "model": "lego.legopart",
+    "model": "lego.shape",
     "pk": 1,
     "fields": {
         "lego_id": "234pr",
         "name": "Brick 2 x 4"
+    }
+},
+{
+    "model": "lego.legopart",
+    "pk": 1,
+    "fields": {
+        "shape": 1
     }
 },
 {

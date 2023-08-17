@@ -14,3 +14,11 @@ class SearchForm(forms.Form):
         initial="all",
         label="",
     )
+
+
+class AddSetForm(forms.Form):
+    set_lego_id = forms.CharField(
+        max_length=30,
+        widget=forms.TextInput(attrs={"autofocus": True}),
+        label="Lego Set ID",
+    )

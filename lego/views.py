@@ -2,7 +2,7 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404, render, redirect
 
 from .external_api import get_set_info, get_set_parts
-from .forms import SearchForm
+from .forms import SearchForm, AddSetForm
 from .models import Shape, Color, LegoPart, LegoSet
 
 
@@ -83,15 +83,26 @@ def search(request):
 
 
 def add_set(request):
+    if request.method == "GET":
+        return render(
+            request,
+            "lego/add_set.html",
+            context={
+                "add_set_form": AddSetForm(),
+                "title": "Add a New Lego Set",
+                "search_form": SearchForm(),
+            },
+        )
+
     set_lego_id = request.POST["set_lego_id"]
     set_, created = LegoSet.objects.get_or_create(lego_id=set_lego_id)
     if not created:
-        return redirect("index")
+        return redirect("add_set")
 
     try:
         set_info = get_set_info(set_lego_id)
     except OSError:
-        return redirect("index")
+        return redirect("add_set")
 
     set_.name = set_info["name"]
     set_.save()

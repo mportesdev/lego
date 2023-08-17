@@ -33,6 +33,8 @@ class TestBrowserUI(LiveServerTestCase):
         link = self.driver.find_element(By.XPATH, "//a[text()='234pr']")
         self.driver.find_element(By.XPATH, "//div[text()='Brick 2 x 4']")
         self.driver.find_element(By.XPATH, "//div[text()='Red']")
+        self.driver.find_element(By.XPATH, "//a[text()='567']")
+        self.driver.find_element(By.XPATH, "//div[text()='Figure']")
 
         # go to part detail
         link.click()
@@ -57,6 +59,9 @@ class TestBrowserUI(LiveServerTestCase):
         self.driver.find_element(By.XPATH, "//a[text()='234pr']")
         self.driver.find_element(By.XPATH, "//div[text()='Brick 2 x 4']")
         self.driver.find_element(By.XPATH, "//div[text()='Red']")
+        self.driver.find_element(By.XPATH, "//a[text()='234pr']")
+        self.driver.find_element(By.XPATH, "//div[text()='Brick 2 x 4']")
+        self.driver.find_element(By.XPATH, "//div[text()='White']")
 
         self.driver.find_element(By.ID, "id_q").send_keys("99")
         self.driver.find_element(By.ID, "search_submit").click()
@@ -84,6 +89,9 @@ class TestBrowserUI(LiveServerTestCase):
         self.driver.find_element(By.XPATH, "//a[text()='234pr']")
         self.driver.find_element(By.XPATH, "//div[text()='Brick 2 x 4']")
         self.driver.find_element(By.XPATH, "//div[text()='Red']")
+        self.driver.find_element(By.XPATH, "//a[text()='234pr']")
+        self.driver.find_element(By.XPATH, "//div[text()='Brick 2 x 4']")
+        self.driver.find_element(By.XPATH, "//div[text()='White']")
 
         # search by color
         search_field = self.driver.find_element(By.ID, "id_q")

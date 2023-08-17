@@ -3,9 +3,11 @@
   <div>{{ title }}</div>
   Contains:
   {% for item in set_items %}
+    {% if item.part.color %}{% url 'part_detail' item.part.shape.lego_id item.part.color.id as part_detail_url %}
+    {% else %}{% url 'part_detail' item.part.shape.lego_id as part_detail_url %}{% endif %}
     <div>
       <div>{{ item.quantity }}x</div>
-      <div><a href="{% url 'part_detail' item.part.shape.lego_id %}">{{ item.part.shape.lego_id }}</a></div>
+      <div><a href="{{ part_detail_url }}">{{ item.part.shape.lego_id }}</a></div>
       <div>{{ item.part.shape.name }}</div>
       <div>{% if item.part.color %}{{ item.part.color.name }}{% endif %}</div>
     </div>

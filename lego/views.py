@@ -32,8 +32,8 @@ def set_detail(request, lego_id):
     )
 
 
-def part_detail(request, lego_id):
-    part = get_object_or_404(LegoPart, shape__lego_id=lego_id)
+def part_detail(request, lego_id, color_id=None):
+    part = get_object_or_404(LegoPart, shape__lego_id=lego_id, color=color_id)
     set_items = part.setitem_set.all()
     return render(
         request,

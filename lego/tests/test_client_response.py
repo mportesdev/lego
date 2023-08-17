@@ -241,7 +241,7 @@ class TestAddSet(TestCase):
             mock_1.assert_not_called()
             mock_2.assert_not_called()
 
-        self.assertRedirects(response, "/lego/")
+        self.assertRedirects(response, "/lego/set/add/")
 
     def test_add_set_invalid_lego_id(self):
         with get_set_info_mock() as mock_1, get_set_parts_mock() as mock_2:
@@ -251,4 +251,4 @@ class TestAddSet(TestCase):
             mock_1.assert_called_once_with("999-1")
             mock_2.assert_not_called()
 
-        self.assertRedirects(response, "/lego/")
+        self.assertRedirects(response, "/lego/set/add/")

@@ -7,6 +7,8 @@ from django.test import LiveServerTestCase
 from selenium.webdriver import Firefox
 from selenium.webdriver.common.by import By
 
+from . import get_set_info_mock, get_set_parts_mock
+
 
 class TestBrowserUI(LiveServerTestCase):
     fixtures = ["test_data"]
@@ -115,3 +117,19 @@ class TestBrowserUI(LiveServerTestCase):
             "123",
         )
         self.assertTrue(self.driver.find_element(By.ID, "id_mode_2").is_selected())
+
+    def test_add_set(self):
+        self.driver.find_element(By.XPATH, "//a[text()='Add a New Lego Set']").click()
+        self.assertEqual(self.driver.title, "Add a New Lego Set")
+
+        with get_set_info_mock(), get_set_parts_mock():
+            self.driver.find_element(By.ID, "id_set_lego_id").send_keys("1234-1")
+            self.driver.find_element(By.ID, "add_set_submit").click()
+
+        self.assertEqual(self.driver.title, "Lego Set 1234-1 Fighter Jet")
+        self.driver.find_element(By.XPATH, "//a[text()='111']")
+        self.driver.find_element(By.XPATH, "//div[text()='Jet Engine']")
+        self.driver.find_element(By.XPATH, "//div[text()='Blue']")
+        self.driver.find_element(By.XPATH, "//a[text()='222']")
+        self.driver.find_element(By.XPATH, "//div[text()='Wheel']")
+        self.driver.find_element(By.XPATH, "//div[text()='Black']")

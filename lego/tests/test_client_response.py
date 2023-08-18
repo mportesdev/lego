@@ -277,3 +277,25 @@ class TestAddSet(TestCase):
             mock_2.assert_not_called()
 
         self.assertRedirects(response, "/lego/set/add/")
+
+
+class TestAuth(TestCase):
+    fixtures = ["test_user"]
+
+    def test_login_and_logout(self):
+        response = self.client.get("/lego/")
+        self.assertIn(b"Log in", response.content)
+
+        # log in
+        response = self.client.post(
+            "/lego/login/",
+            data={"username": "test-user", "password": "test-password"},
+            follow=True,
+        )
+        self.assertRedirects(response, "/lego/")
+        self.assertRegex(response.content, b"(?s)test-user.*Log out")
+
+        # log out
+        response = self.client.post("/lego/logout/", follow=True)
+        self.assertRedirects(response, "/lego/")
+        self.assertIn(b"Log in", response.content)

@@ -11,7 +11,7 @@ from . import get_set_info_mock, get_set_parts_mock
 
 
 class TestBrowserUI(LiveServerTestCase):
-    fixtures = ["test_data"]
+    fixtures = ["test_data", "test_user"]
 
     @classmethod
     def setUpClass(cls):
@@ -152,3 +152,14 @@ class TestBrowserUI(LiveServerTestCase):
 
         self.assertTrue(self.driver.current_url.endswith("/lego/set/1234-1/"))
         self.assertEqual(self.driver.title, "Lego Set 1234-1 Fighter Jet")
+
+    def test_login_and_logout(self):
+        # log in
+        self.driver.find_element(By.XPATH, "//a[text()='Log in']").click()
+        self.driver.find_element(By.ID, "id_username").send_keys("test-user")
+        self.driver.find_element(By.ID, "id_password").send_keys("test-password")
+        self.driver.find_element(By.ID, "login_submit").click()
+        # log out
+        self.driver.find_element(By.XPATH, "//div[text()='test-user']")
+        self.driver.find_element(By.XPATH, "//a[text()='Log out']").click()
+        self.driver.find_element(By.XPATH, "//a[text()='Log in']")

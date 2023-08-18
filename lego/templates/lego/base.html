@@ -12,6 +12,12 @@
     <input type="submit" value="OK" id="search_submit">
   </form>
   <div><a href="{% url 'add_set' %}">Add a New Lego Set</a></div>
+  {% if user.is_authenticated %}
+    <div>{{ user.username }}</div>
+    <div><a href="{% url 'logout' %}">Log out</a></div>
+  {% else %}
+    <div><a href="{% url 'login' %}">Log in</a></div>
+  {% endif %}
   {% block content %}
   {% endblock %}
 </body>

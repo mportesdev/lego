@@ -12,6 +12,14 @@
     <input type="submit" value="OK" id="search_submit">
   </form>
   <div><a href="{% url 'add_set' %}">Add a New Lego Set</a></div>
+  {% if user.is_authenticated %}
+    <div>{{ user.username }}</div>
+    <form action="{% url 'logout' %}" method="post">{% csrf_token %}
+      <input type="submit" value="Log out" id="log_out">
+    </form>
+  {% else %}
+    <div><a href="{% url 'login' %}">Log in</a></div>
+  {% endif %}
   {% block content %}
   {% endblock %}
 </body>

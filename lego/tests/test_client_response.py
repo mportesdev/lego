@@ -214,9 +214,10 @@ class TestSearch(TestCase):
 
 
 class TestAddSet(TestCase):
-    fixtures = ["test_data"]
+    fixtures = ["test_data", "test_user"]
 
     def test_add_set(self):
+        self.client.login(username="test-user", password="test-password")
         with get_set_info_mock() as mock_1, get_set_parts_mock() as mock_2:
             with self.assertLogs("lego.views", "INFO"):
                 response = self.client.post(
@@ -235,6 +236,7 @@ class TestAddSet(TestCase):
         )
 
     def test_add_set_without_suffix(self):
+        self.client.login(username="test-user", password="test-password")
         with get_set_info_mock() as mock_1, get_set_parts_mock() as mock_2:
             with self.assertLogs("lego.views", "INFO"):
                 response = self.client.post(
@@ -246,6 +248,7 @@ class TestAddSet(TestCase):
         self.assertRedirects(response, "/lego/set/1234-1/")
 
     def test_add_set_existing_lego_id(self):
+        self.client.login(username="test-user", password="test-password")
         with get_set_info_mock() as mock_1, get_set_parts_mock() as mock_2:
             with self.assertLogs("lego.views", "WARNING"):
                 response = self.client.post(
@@ -257,6 +260,7 @@ class TestAddSet(TestCase):
         self.assertRedirects(response, "/lego/set/add/")
 
     def test_add_set_existing_lego_id_without_suffix(self):
+        self.client.login(username="test-user", password="test-password")
         with get_set_info_mock() as mock_1, get_set_parts_mock() as mock_2:
             with self.assertLogs("lego.views", "WARNING"):
                 response = self.client.post(
@@ -268,6 +272,7 @@ class TestAddSet(TestCase):
         self.assertRedirects(response, "/lego/set/add/")
 
     def test_add_set_invalid_lego_id(self):
+        self.client.login(username="test-user", password="test-password")
         with get_set_info_mock() as mock_1, get_set_parts_mock() as mock_2:
             with self.assertLogs("lego.views", "ERROR"):
                 response = self.client.post(
@@ -278,6 +283,12 @@ class TestAddSet(TestCase):
 
         self.assertRedirects(response, "/lego/set/add/")
 
+    def test_add_set_redirects_to_login_if_not_logged_in(self):
+        response = self.client.post(
+            "/lego/set/add/", data={"set_lego_id": "1234-1"}, follow=True
+        )
+        self.assertRedirects(response, "/lego/login/?next=/lego/set/add/")
+
 
 class TestAuth(TestCase):
     fixtures = ["test_user"]
@@ -285,6 +296,7 @@ class TestAuth(TestCase):
     def test_login_and_logout(self):
         response = self.client.get("/lego/")
         self.assertIn(b"Log in", response.content)
+        self.assertNotIn(b"Add a New Lego Set", response.content)
 
         # log in
         response = self.client.post(
@@ -294,8 +306,10 @@ class TestAuth(TestCase):
         )
         self.assertRedirects(response, "/lego/")
         self.assertRegex(response.content, b"(?s)test-user.*Log out")
+        self.assertIn(b"Add a New Lego Set", response.content)
 
         # log out
         response = self.client.post("/lego/logout/", follow=True)
         self.assertRedirects(response, "/lego/")
         self.assertIn(b"Log in", response.content)
+        self.assertNotIn(b"Add a New Lego Set", response.content)

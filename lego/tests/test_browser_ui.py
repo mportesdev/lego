@@ -28,6 +28,12 @@ class TestBrowserUI(LiveServerTestCase):
     def setUp(self):
         self.driver.get(f"{self.live_server_url}/lego/")
 
+    def login_test_user(self):
+        self.driver.find_element(By.XPATH, "//a[text()='Log in']").click()
+        self.driver.find_element(By.ID, "id_username").send_keys("test-user")
+        self.driver.find_element(By.ID, "id_password").send_keys("test-password")
+        self.driver.find_element(By.ID, "login_submit").click()
+
     def test_detail_pages(self):
         # go to set detail
         self.driver.find_element(By.XPATH, "//a[text()='123-1']").click()
@@ -119,6 +125,7 @@ class TestBrowserUI(LiveServerTestCase):
         self.assertTrue(self.driver.find_element(By.ID, "id_mode_2").is_selected())
 
     def test_add_set(self):
+        self.login_test_user()
         self.driver.find_element(By.XPATH, "//a[text()='Add a New Lego Set']").click()
         self.assertEqual(self.driver.title, "Add a New Lego Set")
 
@@ -139,6 +146,7 @@ class TestBrowserUI(LiveServerTestCase):
         self.driver.find_element(By.XPATH, "//div[text()='Black']")
 
     def test_add_set_without_suffix(self):
+        self.login_test_user()
         self.driver.find_element(By.XPATH, "//a[text()='Add a New Lego Set']").click()
         self.assertEqual(self.driver.title, "Add a New Lego Set")
 

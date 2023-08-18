@@ -1,5 +1,6 @@
 import logging
 
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, render, redirect
@@ -87,6 +88,7 @@ def search(request):
     )
 
 
+@login_required(login_url="/lego/login")
 def add_set(request):
     if request.method == "GET":
         return render(

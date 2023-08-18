@@ -1,5 +1,6 @@
 import logging
 
+from django.contrib.auth.views import LoginView, LogoutView
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, render, redirect
 
@@ -130,3 +131,12 @@ def _log_get_or_create(model, **kwargs):
     if created:
         logger.info(f"Created new {model.__name__} object: {obj}")
     return obj
+
+
+login = LoginView.as_view(
+    template_name="lego/login.html",
+    next_page="/lego/",
+    extra_context={"search_form": lambda: SearchForm()},
+)
+
+logout = LogoutView.as_view(next_page="/lego/")

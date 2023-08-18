@@ -1,0 +1,12 @@
+{% extends "lego/base.html" %}
+{% block content %}
+  {% if user.is_authenticated %}
+    You are already logged in
+  {% else %}
+    <div>Log in</div>
+    <form action="{% url 'login' %}" method="post">{% csrf_token %}
+      {{ form }}
+      <input type="submit" value="OK" id="login_submit">
+    </form>
+  {% endif %}
+{% endblock %}

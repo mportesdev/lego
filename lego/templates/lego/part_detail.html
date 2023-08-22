@@ -1,12 +1,14 @@
 {% extends "lego/base.html" %}
 {% block content %}
   <div>{{ title }}</div>
+  {% if image_url %}<div><img src="{{ image_url }}"></div>{% endif %}
   Included in:
   {% for rel in relations %}
     <div>
       <div>{{ rel.quantity }}x in</div>
       <div><a href="{% url 'set_detail' rel.set.lego_id %}">{{ rel.set.lego_id }}</a></div>
       <div>{{ rel.set.name }}</div>
+      <div>{% if rel.set.image_url %}<a href="{% url 'set_detail' rel.set.lego_id %}"><img src="{{ rel.set.image_url }}"></a>{% endif %}</div>
     </div>
   {% endfor %}
 {% endblock %}

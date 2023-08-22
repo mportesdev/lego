@@ -32,6 +32,7 @@ def set_detail(request, lego_id):
         request,
         "lego/set_detail.html",
         context={
+            "image_url": set_.image_url,
             "relations": relations,
             "title": f"Lego Set {set_}",
             "search_form": SearchForm(),
@@ -46,6 +47,7 @@ def part_detail(request, lego_id, color_id=None):
         request,
         "lego/part_detail.html",
         context={
+            "image_url": part.image_url,
             "relations": relations,
             "title": f"Lego Part {part}",
             "search_form": SearchForm(),

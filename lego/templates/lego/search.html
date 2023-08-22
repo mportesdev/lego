@@ -6,6 +6,7 @@
       <div>
         <div><a href="{% url 'set_detail' set.lego_id %}">{{ set.lego_id }}</a></div>
         <div>{{ set.name }}</div>
+        <div>{% if set.image_url %}<a href="{% url 'set_detail' set.lego_id %}"><img src="{{ set.image_url }}"></a>{% endif %}</div>
       </div>
     {% endfor %}
     {% for part in parts %}
@@ -15,6 +16,7 @@
         <div><a href="{{ part_detail_url }}">{{ part.shape.lego_id }}</a></div>
         <div>{{ part.shape.name }}</div>
         <div>{% if part.color %}{{ part.color.name }}{% endif %}</div>
+        <div>{% if part.image_url %}<a href="{{ part_detail_url }}"><img src="{{ part.image_url }}"></a>{% endif %}</div>
       </div>
     {% endfor %}
   {% else %}

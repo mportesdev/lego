@@ -15,7 +15,7 @@ class TestGetResponse(TestCase):
             b"(?s)<title>Our Lego</title>"
             b".*Our Lego"
             b".*All Sets"
-            b".*123-1.*Brick House",
+            b'.*123-1.*Brick House.*src="img123-1.jpg"',
         )
 
     def test_set_detail(self):
@@ -25,9 +25,10 @@ class TestGetResponse(TestCase):
         self.assertRegex(
             response.content,
             b"(?s)Lego Set 123-1 Brick House"
+            b'.*src="img123-1.jpg"'
             b".*Contains:"
-            b".*1x.*234pr.*Brick 2 x 4.*Red",
-            b".*1x.*567.*Figure",
+            b'.*1x.*234pr.*Brick 2 x 4.*Red.*src="img234prR.jpg"',
+            b'.*1x.*567.*Figure.*src="img567.jpg"',
         )
 
     def test_set_detail_not_found(self):
@@ -42,8 +43,9 @@ class TestGetResponse(TestCase):
         self.assertRegex(
             response.content,
             b"(?s)Lego Part 567 Figure"
+            b'.*src="img567.jpg"'
             b".*Included in:"
-            b".*1x in.*123-1.*Brick House",
+            b'.*1x in.*123-1.*Brick House.*src="img123-1.jpg"',
         )
 
     def test_part_detail_with_color_id(self):
@@ -53,8 +55,9 @@ class TestGetResponse(TestCase):
         self.assertRegex(
             response.content,
             b"(?s)Lego Part 234pr Brick 2 x 4, Red"
+            b'.*src="img234prR.jpg"'
             b".*Included in:"
-            b".*1x in.*123-1.*Brick House",
+            b'.*1x in.*123-1.*Brick House.*src="img123-1.jpg"',
         )
 
     def test_part_detail_not_found_if_lego_id_invalid(self):
@@ -83,7 +86,7 @@ class TestSearch(TestCase):
         self.assertRegex(
             response.content,
             b"(?s)Search Results for.*house"
-            b".*123-1.*Brick House",
+            b'.*123-1.*Brick House.*src="img123-1.jpg"',
         )
 
     def test_part_found_by_name(self):
@@ -93,8 +96,8 @@ class TestSearch(TestCase):
         self.assertRegex(
             response.content,
             b"(?s)Search Results for.*2 x 4"
-            b".*234pr.*Brick 2 x 4.*Red",
-            b".*234pr.*Brick 2 x 4.*White",
+            b'.*234pr.*Brick 2 x 4.*Red.*src="img234prR.jpg"',
+            b'.*234pr.*Brick 2 x 4.*White.*src="img234prW.jpg"',
         )
 
     def test_multiple_results_found_by_name(self):
@@ -104,9 +107,9 @@ class TestSearch(TestCase):
         self.assertRegex(
             response.content,
             b"(?s)Search Results for.*brick"
-            b".*123-1.*Brick House"
-            b".*234pr.*Brick 2 x 4.*Red",
-            b".*234pr.*Brick 2 x 4.*White",
+            b'.*123-1.*Brick House.*src="img123-1.jpg"'
+            b'.*234pr.*Brick 2 x 4.*Red.*src="img234prR.jpg"',
+            b'.*234pr.*Brick 2 x 4.*White.*src="img234prW.jpg"',
         )
 
     def test_set_found_by_lego_id(self):
@@ -116,7 +119,7 @@ class TestSearch(TestCase):
         self.assertRegex(
             response.content,
             b"(?s)Search Results for.*123"
-            b".*123-1.*Brick House",
+            b'.*123-1.*Brick House.*src="img123-1.jpg"',
         )
 
     def test_part_found_by_lego_id(self):
@@ -126,8 +129,8 @@ class TestSearch(TestCase):
         self.assertRegex(
             response.content,
             b"(?s)Search Results for.*234"
-            b".*234pr.*Brick 2 x 4.*Red",
-            b".*234pr.*Brick 2 x 4.*White",
+            b'.*234pr.*Brick 2 x 4.*Red.*src="img234prR.jpg"',
+            b'.*234pr.*Brick 2 x 4.*White.*src="img234prW.jpg"',
         )
 
     def test_part_found_by_color(self):
@@ -230,9 +233,10 @@ class TestAddSet(TestCase):
         self.assertRegex(
             response.content,
             b"(?s)Lego Set 1234-1 Fighter Jet"
+            b'.*src="img1234-1.jpg"'
             b".*Contains:"
-            b".*1x.*111.*Jet Engine.*Blue"
-            b".*3x.*222.*Wheel.*Black",
+            b'.*1x.*111.*Jet Engine.*Blue.*src="img111b.jpg"'
+            b'.*3x.*222.*Wheel.*Black.*src="img222k.jpg"',
         )
 
     def test_add_set_without_suffix(self):

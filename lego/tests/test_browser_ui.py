@@ -38,23 +38,29 @@ class TestBrowserUI(LiveServerTestCase):
         # go to set detail
         self.driver.find_element(By.XPATH, "//a[text()='123-1']").click()
         self.assertEqual(self.driver.title, "Lego Set 123-1 Brick House")
+        self.driver.find_element(By.XPATH, "//img[@src='img123-1.jpg']")
         link = self.driver.find_element(By.XPATH, "//a[text()='234pr']")
         self.driver.find_element(By.XPATH, "//div[text()='Brick 2 x 4']")
         self.driver.find_element(By.XPATH, "//div[text()='Red']")
+        self.driver.find_element(By.XPATH, "//img[@src='img234prR.jpg']")
         self.driver.find_element(By.XPATH, "//a[text()='567']")
         self.driver.find_element(By.XPATH, "//div[text()='Figure']")
+        self.driver.find_element(By.XPATH, "//img[@src='img567.jpg']")
 
         # go to part detail
         link.click()
         self.assertEqual(self.driver.title, "Lego Part 234pr Brick 2 x 4, Red")
+        self.driver.find_element(By.XPATH, "//img[@src='img234prR.jpg']")
         self.driver.find_element(By.XPATH, "//a[text()='123-1']")
         self.driver.find_element(By.XPATH, "//div[text()='Brick House']")
+        self.driver.find_element(By.XPATH, "//img[@src='img123-1.jpg']")
 
         # go to index page
         self.driver.find_element(By.ID, "index_link").click()
         self.assertEqual(self.driver.title, "Our Lego")
         self.driver.find_element(By.XPATH, "//a[text()='123-1']")
         self.driver.find_element(By.XPATH, "//div[text()='Brick House']")
+        self.driver.find_element(By.XPATH, "//img[@src='img123-1.jpg']")
 
     def test_search(self):
         # search everywhere
@@ -64,12 +70,15 @@ class TestBrowserUI(LiveServerTestCase):
         self.assertEqual(self.driver.title, "Search Results for 'brick'")
         self.driver.find_element(By.XPATH, "//a[text()='123-1']")
         self.driver.find_element(By.XPATH, "//div[text()='Brick House']")
+        self.driver.find_element(By.XPATH, "//img[@src='img123-1.jpg']")
         self.driver.find_element(By.XPATH, "//a[text()='234pr']")
         self.driver.find_element(By.XPATH, "//div[text()='Brick 2 x 4']")
         self.driver.find_element(By.XPATH, "//div[text()='Red']")
+        self.driver.find_element(By.XPATH, "//img[@src='img234prR.jpg']")
         self.driver.find_element(By.XPATH, "//a[text()='234pr']")
         self.driver.find_element(By.XPATH, "//div[text()='Brick 2 x 4']")
         self.driver.find_element(By.XPATH, "//div[text()='White']")
+        self.driver.find_element(By.XPATH, "//img[@src='img234prW.jpg']")
 
         self.driver.find_element(By.ID, "id_q").send_keys("99")
         self.driver.find_element(By.ID, "search_submit").click()
@@ -85,6 +94,7 @@ class TestBrowserUI(LiveServerTestCase):
         self.assertEqual(self.driver.title, "Search Results for 'house'")
         self.driver.find_element(By.XPATH, "//a[text()='123-1']")
         self.driver.find_element(By.XPATH, "//div[text()='Brick House']")
+        self.driver.find_element(By.XPATH, "//img[@src='img123-1.jpg']")
 
         # search by lego_id
         search_field = self.driver.find_element(By.ID, "id_q")
@@ -97,9 +107,11 @@ class TestBrowserUI(LiveServerTestCase):
         self.driver.find_element(By.XPATH, "//a[text()='234pr']")
         self.driver.find_element(By.XPATH, "//div[text()='Brick 2 x 4']")
         self.driver.find_element(By.XPATH, "//div[text()='Red']")
+        self.driver.find_element(By.XPATH, "//img[@src='img234prR.jpg']")
         self.driver.find_element(By.XPATH, "//a[text()='234pr']")
         self.driver.find_element(By.XPATH, "//div[text()='Brick 2 x 4']")
         self.driver.find_element(By.XPATH, "//div[text()='White']")
+        self.driver.find_element(By.XPATH, "//img[@src='img234prW.jpg']")
 
         # search by color
         search_field = self.driver.find_element(By.ID, "id_q")
@@ -138,12 +150,15 @@ class TestBrowserUI(LiveServerTestCase):
             self.driver.find_element(By.ID, "add_set_submit").click()
 
         self.assertEqual(self.driver.title, "Lego Set 1234-1 Fighter Jet")
+        self.driver.find_element(By.XPATH, "//img[@src='img1234-1.jpg']")
         self.driver.find_element(By.XPATH, "//a[text()='111']")
         self.driver.find_element(By.XPATH, "//div[text()='Jet Engine']")
         self.driver.find_element(By.XPATH, "//div[text()='Blue']")
+        self.driver.find_element(By.XPATH, "//img[@src='img111b.jpg']")
         self.driver.find_element(By.XPATH, "//a[text()='222']")
         self.driver.find_element(By.XPATH, "//div[text()='Wheel']")
         self.driver.find_element(By.XPATH, "//div[text()='Black']")
+        self.driver.find_element(By.XPATH, "//img[@src='img222k.jpg']")
 
     def test_add_set_without_suffix(self):
         self.login_test_user()

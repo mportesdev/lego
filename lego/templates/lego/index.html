@@ -5,6 +5,7 @@
     <div>
       <div><a href="{% url 'set_detail' set.lego_id %}">{{ set.lego_id }}</a></div>
       <div>{{ set.name }}</div>
+      <div>{% if set.image_url %}<a href="{% url 'set_detail' set.lego_id %}"><img src="{{ set.image_url }}"></a>{% endif %}</div>
     </div>
   {% endfor %}
 {% endblock %}

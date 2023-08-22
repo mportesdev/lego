@@ -1,12 +1,14 @@
 {% extends "lego/base.html" %}
 {% block content %}
   <div>{{ title }}</div>
+  {% if image_url %}<div><img src="{{ image_url }}"></div>{% endif %}
   Included in:
   {% for item in set_items %}
     <div>
       <div>{{ item.quantity }}x in</div>
       <div><a href="{% url 'set_detail' item.set.lego_id %}">{{ item.set.lego_id }}</a></div>
       <div>{{ item.set.name }}</div>
+      <div>{% if item.set.image_url %}<a href="{% url 'set_detail' item.set.lego_id %}"><img src="{{ item.set.image_url }}"></a>{% endif %}</div>
     </div>
   {% endfor %}
 {% endblock %}

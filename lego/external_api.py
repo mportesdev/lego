@@ -16,7 +16,11 @@ def get_set_info(set_lego_id):
         f"{API_URL}/lego/sets/{set_lego_id}/", headers=headers, timeout=5
     )
     response.raise_for_status()
-    return {"name": response.json()["name"]}
+    data = response.json()
+    return {
+        "name": data["name"],
+        "image_url": data["set_img_url"],
+    }
 
 
 def _get_paginated_data(url):
@@ -42,5 +46,6 @@ def get_set_parts(set_lego_id):
             "lego_id": item["part"]["part_num"],
             "name": item["part"]["name"],
             "color_name": _color_name_or_none(item["color"]["name"]),
+            "image_url": item["part"]["part_img_url"],
             "quantity": item["quantity"],
         }

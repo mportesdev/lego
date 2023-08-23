@@ -5,7 +5,7 @@ from requests import HTTPError
 
 def _mock_func(set_lego_id):
     if set_lego_id == "1234-1":
-        return {"name": "Fighter Jet"}
+        return {"name": "Fighter Jet", "image_url": "img1234-1.jpg"}
     if set_lego_id == "999-1":
         raise HTTPError("404 Client Error: Not Found")
     raise ValueError("_mock_func: unexpected test argument")
@@ -21,12 +21,14 @@ def _mock_generator(set_lego_id):
             "lego_id": "111",
             "name": "Jet Engine",
             "color_name": "Blue",
+            "image_url": "img111b.jpg",
             "quantity": 1,
         }
         yield {
             "lego_id": "222",
             "name": "Wheel",
             "color_name": "Black",
+            "image_url": "img222k.jpg",
             "quantity": 3,
         }
     else:

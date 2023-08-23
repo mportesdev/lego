@@ -117,13 +117,16 @@ def add_set(request):
         return redirect("add_set")
 
     set_.name = set_info["name"]
+    set_.image_url = set_info["image_url"]
     set_.save()
     logger.info(f"Saved new LegoSet object: {set_}")
     for item in get_set_parts(set_lego_id):
         shape = _log_get_or_create(Shape, lego_id=item["lego_id"], name=item["name"])
         color_name = item["color_name"]
         color = _log_get_or_create(Color, name=color_name) if color_name else None
-        part = _log_get_or_create(LegoPart, shape=shape, color=color)
+        part = _log_get_or_create(
+            LegoPart, shape=shape, color=color, image_url=item["image_url"]
+        )
         set_.parts.add(part, through_defaults={"quantity": item["quantity"]})
     return redirect("set_detail", set_lego_id)
 

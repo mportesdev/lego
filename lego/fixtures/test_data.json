@@ -4,7 +4,8 @@
     "pk": 1,
     "fields": {
         "lego_id": "123-1",
-        "name": "Brick House"
+        "name": "Brick House",
+        "image_url": "img123-1.jpg"
     }
 },
 {
@@ -42,7 +43,8 @@
     "pk": 1,
     "fields": {
         "shape": 1,
-        "color": 1
+        "color": 1,
+        "image_url": "img234prR.jpg"
     }
 },
 {
@@ -50,7 +52,8 @@
     "pk": 2,
     "fields": {
         "shape": 1,
-        "color": 2
+        "color": 2,
+        "image_url": "img234prW.jpg"
     }
 },
 {
@@ -58,7 +61,8 @@
     "pk": 3,
     "fields": {
         "shape": 2,
-        "color": null
+        "color": null,
+        "image_url": "img567.jpg"
     }
 },
 {

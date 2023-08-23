@@ -19,6 +19,7 @@ class Color(models.Model):
 class LegoPart(models.Model):
     shape = models.ForeignKey(Shape, on_delete=models.CASCADE)
     color = models.ForeignKey(Color, on_delete=models.SET_NULL, null=True)
+    image_url = models.URLField(null=True)
 
     def __str__(self):
         return f"{self.shape}, {self.color}" if self.color else f"{self.shape}"
@@ -27,6 +28,7 @@ class LegoPart(models.Model):
 class LegoSet(models.Model):
     lego_id = models.CharField(max_length=30, unique=True)
     name = models.CharField(max_length=150)
+    image_url = models.URLField(null=True)
 
     parts = models.ManyToManyField(LegoPart, through="SetItem", related_name="sets")
 

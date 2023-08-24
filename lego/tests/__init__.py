@@ -18,6 +18,12 @@ def get_set_info_mock():
 def _mock_generator(set_lego_id):
     if set_lego_id == "1234-1":
         yield {
+            "lego_id": "333",
+            "name": "Pilot",
+            "image_url": "img333.jpg",
+            "quantity": 1,
+        }
+        yield {
             "lego_id": "111",
             "name": "Jet Engine",
             "color_name": "Blue",

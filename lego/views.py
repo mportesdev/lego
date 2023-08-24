@@ -124,7 +124,7 @@ def add_set(request):
     logger.info(f"Saved new LegoSet object: {set_}")
     for item in get_set_parts(set_lego_id):
         shape = _log_get_or_create(Shape, lego_id=item["lego_id"], name=item["name"])
-        color_name = item["color_name"]
+        color_name = item.get("color_name")
         color = _log_get_or_create(Color, name=color_name) if color_name else None
         part = _log_get_or_create(
             LegoPart, shape=shape, color=color, image_url=item["image_url"]

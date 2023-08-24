@@ -151,6 +151,9 @@ class TestBrowserUI(LiveServerTestCase):
 
         self.assertEqual(self.driver.title, "Lego Set 1234-1 Fighter Jet")
         self.driver.find_element(By.XPATH, "//img[@src='img1234-1.jpg']")
+        self.driver.find_element(By.XPATH, "//a[text()='333']")
+        self.driver.find_element(By.XPATH, "//div[text()='Pilot']")
+        self.driver.find_element(By.XPATH, "//img[@src='img333.jpg']")
         self.driver.find_element(By.XPATH, "//a[text()='111']")
         self.driver.find_element(By.XPATH, "//div[text()='Jet Engine']")
         self.driver.find_element(By.XPATH, "//div[text()='Blue']")

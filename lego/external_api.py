@@ -41,6 +41,13 @@ def _color_name_or_none(color_name):
 
 
 def get_set_parts(set_lego_id):
+    for item in _get_paginated_data(f"{API_URL}/lego/sets/{set_lego_id}/minifigs/"):
+        yield {
+            "lego_id": item["set_num"],
+            "name": item["set_name"],
+            "image_url": item["set_img_url"],
+            "quantity": item["quantity"],
+        }
     for item in _get_paginated_data(f"{API_URL}/lego/sets/{set_lego_id}/parts/"):
         yield {
             "lego_id": item["part"]["part_num"],

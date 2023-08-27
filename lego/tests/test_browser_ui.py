@@ -56,6 +56,18 @@ class TestBrowserUI(LiveServerTestCase):
         home_link.click()
         self.assertIn("Home", self.driver.title)
 
+    def test_hide_show_in_set_detail(self):
+        # go to set detail
+        self.driver.find_element(By.XPATH, "//a[text()='123-1']").click()
+        item = self.driver.find_element(By.ID, "item_1")
+        toggle = self.driver.find_element(By.ID, "hide_show_1")
+        # hide
+        toggle.click()
+        self.assertEqual(float(item.get_property("style")["opacity"]), 0.25)
+        # show
+        toggle.click()
+        self.assertEqual(float(item.get_property("style")["opacity"]), 1.0)
+
     def test_search(self):
         # search everywhere
         self.driver.find_element(By.ID, "id_q").send_keys("brick")

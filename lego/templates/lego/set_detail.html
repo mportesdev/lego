@@ -1,6 +1,15 @@
 {% extends "lego/base.html" %}
 {% load static %}
 {% load lego_extras %}
+{% block append_head %}
+<script type="text/javascript">
+function toggleHideShow(partPk) {
+    const itemId = `item_${partPk}`;
+    const item = document.getElementById(itemId);
+    item.style.opacity = (item.style.opacity == 0.25) ? 1.0 : 0.25;
+}
+</script>
+{% endblock %}
 {% block content %}
   <div class="title is-4">{{ title }}</div>
   {% if legoset.image|is_static_file %}<div><img src="{% static legoset.image %}"></div>
@@ -9,7 +18,8 @@
   <div class="subtitle">Contains:</div>
   <div class="grid">
   {% for item in legoset.setitem_set.all %}
-    <div class="box">
+    <div id="item_{{ item.part.pk }}" class="box">
+      <div><button onclick="toggleHideShow({{ item.part.pk }})" title="Hide/Show" id="hide_show_{{ item.part.pk }}">hide/show</button></div>
       <div>{{ item.quantity }}x</div>
       <div><a href="{{ item.part.get_absolute_url }}">{{ item.part.shape.lego_id }}</a></div>
       <div>{{ item.part.shape.name }}</div>

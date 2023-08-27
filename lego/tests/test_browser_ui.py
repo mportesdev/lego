@@ -62,6 +62,13 @@ class TestBrowserUI(LiveServerTestCase):
         self.driver.find_element(By.XPATH, "//div[text()='Brick House']")
         self.driver.find_element(By.XPATH, "//img[@src='img123-1.jpg']")
 
+    def test_hide_part_in_set_detail(self):
+        self.driver.find_element(By.XPATH, "//a[text()='123-1']").click()
+        row = self.driver.find_element(By.ID, "row_1")
+        self.assertTrue(row.is_displayed())
+        self.driver.find_element(By.ID, "hide_1").click()
+        self.assertFalse(row.is_displayed())
+
     def test_search(self):
         # search everywhere
         self.driver.find_element(By.ID, "id_q").send_keys("brick")

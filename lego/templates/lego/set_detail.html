@@ -1,4 +1,12 @@
 {% extends "lego/base.html" %}
+{% block script %}
+  <script>
+    function hideRow(partPk) {
+      const RowId = `row_${partPk}`;
+      document.getElementById(RowId).style.display = "none";
+    }
+  </script>
+{% endblock %}
 {% block content %}
   <div>{{ title }}</div>
   {% if image_url %}<div><img src="{{ image_url }}"></div>{% endif %}
@@ -6,7 +14,8 @@
   {% for rel in relations %}
     {% if rel.part.color %}{% url 'part_detail' rel.part.shape.lego_id rel.part.color.id as part_detail_url %}
     {% else %}{% url 'part_detail' rel.part.shape.lego_id as part_detail_url %}{% endif %}
-    <div>
+    <div id="row_{{ rel.part.pk }}">
+      <div><button onclick="hideRow({{ rel.part.pk }})" title="Hide this part" id="hide_{{ rel.part.pk }}">❌</button></div>
       <div>{{ rel.quantity }}x</div>
       <div><a href="{{ part_detail_url }}">{{ rel.part.shape.lego_id }}</a></div>
       <div>{{ rel.part.shape.name }}</div>

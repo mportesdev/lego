@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ title }}</title>
+  {% block script %}
+  {% endblock %}
 </head>
 <body>
   <div><a href="{% url 'index' %}" id="index_link">Our Lego</a></div>

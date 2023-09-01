@@ -245,9 +245,10 @@ class TestAddSet(TestCase):
 
     def test_add_set_existing_lego_id(self):
         with get_set_info_mock() as mock_1, get_set_parts_mock() as mock_2:
-            response = self.client.post(
-                "/lego/set/add/", data={"set_lego_id": "123-1"}, follow=True
-            )
+            with self.assertLogs("lego.views", "WARNING"):
+                response = self.client.post(
+                    "/lego/set/add/", data={"set_lego_id": "123-1"}, follow=True
+                )
             mock_1.assert_not_called()
             mock_2.assert_not_called()
 
@@ -255,9 +256,10 @@ class TestAddSet(TestCase):
 
     def test_add_set_existing_lego_id_without_suffix(self):
         with get_set_info_mock() as mock_1, get_set_parts_mock() as mock_2:
-            response = self.client.post(
-                "/lego/set/add/", data={"set_lego_id": "123"}, follow=True
-            )
+            with self.assertLogs("lego.views", "WARNING"):
+                response = self.client.post(
+                    "/lego/set/add/", data={"set_lego_id": "123"}, follow=True
+                )
             mock_1.assert_not_called()
             mock_2.assert_not_called()
 
@@ -265,9 +267,10 @@ class TestAddSet(TestCase):
 
     def test_add_set_invalid_lego_id(self):
         with get_set_info_mock() as mock_1, get_set_parts_mock() as mock_2:
-            response = self.client.post(
-                "/lego/set/add/", data={"set_lego_id": "999-1"}, follow=True
-            )
+            with self.assertLogs("lego.views", "ERROR"):
+                response = self.client.post(
+                    "/lego/set/add/", data={"set_lego_id": "999-1"}, follow=True
+                )
             mock_1.assert_called_once_with("999-1")
             mock_2.assert_not_called()
 

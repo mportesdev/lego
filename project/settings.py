@@ -108,3 +108,40 @@ STATIC_URL = "static/"
 # Default primary key field type
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# Logging
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "loggers": {
+        "lego": {
+            "level": "DEBUG",
+            "handlers": ["console", "file"],
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "level": "WARNING",
+            "formatter": "brief",
+        },
+        "file": {
+            "class": "logging.FileHandler",
+            "filename": BASE_DIR / "lego.log",
+            "level": "DEBUG",
+            "formatter": "detailed",
+        },
+    },
+    "formatters": {
+        "brief": {
+            "format": "{levelname} | {message}",
+            "style": "{",
+        },
+        "detailed": {
+            "format": "{asctime} | {name} | {levelname} | {message}",
+            "style": "{",
+        },
+    },
+}

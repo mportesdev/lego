@@ -1,9 +1,13 @@
+import logging
+
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, render, redirect
 
 from .external_api import get_set_info, get_set_parts
 from .forms import SearchForm, AddSetForm
 from .models import Shape, Color, LegoPart, LegoSet
+
+logger = logging.getLogger(__name__)
 
 
 def index(request):
@@ -100,11 +104,13 @@ def add_set(request):
 
     set_, created = LegoSet.objects.get_or_create(lego_id=set_lego_id)
     if not created:
+        logger.warning(f"{set_} already exists")
         return redirect("add_set")
 
     try:
         set_info = get_set_info(set_lego_id)
-    except OSError:
+    except OSError as err:
+        logger.error(f"Error calling external API: {err}")
         return redirect("add_set")
 
     set_.name = set_info["name"]

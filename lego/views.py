@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 def index(request):
-    sets = LegoSet.objects.all()
+    sets = LegoSet.objects.order_by("-pk")[:5]
     return render(
         request,
         "lego/index.html",

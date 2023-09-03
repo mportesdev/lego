@@ -1,6 +1,6 @@
 {% extends "lego/base.html" %}
 {% block content %}
-  <div>All Sets</div>
+  <div>Latest Additions</div>
   {% for set in sets %}
     <div>
       <div><a href="{% url 'set_detail' set.lego_id %}">{{ set.lego_id }}</a></div>

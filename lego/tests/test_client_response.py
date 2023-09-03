@@ -14,7 +14,7 @@ class TestGetResponse(TestCase):
             response.content,
             b"(?s)<title>Our Lego</title>"
             b".*Our Lego"
-            b".*All Sets"
+            b".*Latest Additions"
             b'.*123-1.*Brick House.*src="img123-1.jpg"',
         )
 

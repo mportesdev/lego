@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load i18n %}
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,19 +9,19 @@
   {% endblock %}
 </head>
 <body>
-  <div><a href="{% url 'index' %}" id="index_link">Our Lego</a></div>
+  <div><a href="{% url 'index' %}" id="index_link">{% translate "Our Lego" %}</a></div>
   <form action="{% url 'search' %}" method="get">
     {{ search_form }}
-    <input type="submit" value="OK" id="search_submit">
+    <input type="submit" value="{% translate 'OK' %}" id="search_submit">
   </form>
   {% if user.is_authenticated %}
-    <div><a href="{% url 'add_set' %}">Add a New Lego Set</a></div>
+    <div><a href="{% url 'add_set' %}">{% translate "Add a New Lego Set" %}</a></div>
   {% endif %}
   {% if user.is_authenticated %}
     <div>{{ user.username }}</div>
-    <div><a href="{% url 'logout' %}">Log out</a></div>
+    <div><a href="{% url 'logout' %}">{% translate "Log out" %}</a></div>
   {% else %}
-    <div><a href="{% url 'login' %}">Log in</a></div>
+    <div><a href="{% url 'login' %}">{% translate "Log in" %}</a></div>
   {% endif %}
   {% block content %}
   {% endblock %}

@@ -1,13 +1,14 @@
 {% extends "lego/base.html" %}
+{% load i18n %}
 {% block content %}
   {% if user.is_authenticated %}
-    You are already logged in
+    {% translate "You are already logged in" %}
   {% else %}
-    <div>Log in</div>
+    <div>{% translate "Log in" %}</div>
     <form action="{% url 'login' %}" method="post">{% csrf_token %}
       {{ form }}
       <input type="hidden" name="next" value="{{ request.headers.Referer }}">
-      <input type="submit" value="OK" id="login_submit">
+      <input type="submit" value="{% translate 'OK' %}" id="login_submit">
     </form>
   {% endif %}
 {% endblock %}

@@ -1,8 +1,9 @@
 {% extends "lego/base.html" %}
+{% load i18n %}
 {% block content %}
   <div>{{ title }}</div>
   <form action="{% url 'add_set' %}" method="post">{% csrf_token %}
     {{ add_set_form }}
-    <input type="submit" value="OK" id="add_set_submit">
+    <input type="submit" value="{% translate 'OK' %}" id="add_set_submit">
   </form>
 {% endblock %}

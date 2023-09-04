@@ -1,4 +1,5 @@
 {% extends "lego/base.html" %}
+{% load i18n %}
 {% block script %}
   <script>
     function hideRow(partPk) {
@@ -10,12 +11,12 @@
 {% block content %}
   <div>{{ title }}</div>
   {% if image_url %}<div><img src="{{ image_url }}"></div>{% endif %}
-  Contains:
+  {% translate "Contains" %}:
   {% for rel in relations %}
     {% if rel.part.color %}{% url 'part_detail' rel.part.shape.lego_id rel.part.color.id as part_detail_url %}
     {% else %}{% url 'part_detail' rel.part.shape.lego_id as part_detail_url %}{% endif %}
     <div id="row_{{ rel.part.pk }}">
-      <div><button onclick="hideRow({{ rel.part.pk }})" title="Hide this part" id="hide_{{ rel.part.pk }}">❌</button></div>
+      <div><button onclick="hideRow({{ rel.part.pk }})" title="{% translate 'Hide this part' %}" id="hide_{{ rel.part.pk }}">❌</button></div>
       <div>{{ rel.quantity }}x</div>
       <div><a href="{{ part_detail_url }}">{{ rel.part.shape.lego_id }}</a></div>
       <div>{{ rel.part.shape.name }}</div>

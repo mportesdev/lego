@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, render, redirect
+from django.utils.translation import gettext as _
 
 from .external_api import get_set_info, get_set_parts
 from .forms import SearchForm, AddSetForm
@@ -19,7 +20,7 @@ def index(request):
         "lego/index.html",
         context={
             "sets": sets,
-            "title": "Our Lego",
+            "title": _("Our Lego"),
             "search_form": SearchForm(),
         },
     )
@@ -34,7 +35,7 @@ def set_detail(request, lego_id):
         context={
             "image_url": set_.image_url,
             "relations": relations,
-            "title": f"Lego Set {set_}",
+            "title": _("Lego Set") + f" {set_}",
             "search_form": SearchForm(),
         },
     )
@@ -49,7 +50,7 @@ def part_detail(request, lego_id, color_id=None):
         context={
             "image_url": part.image_url,
             "relations": relations,
-            "title": f"Lego Part {part}",
+            "title": _("Lego Part") + f" {part}",
             "search_form": SearchForm(),
         },
     )
@@ -84,7 +85,7 @@ def search(request):
         context={
             "sets": sets,
             "parts": parts,
-            "title": f"Search Results for {search_string!r}",
+            "title": _("Search Results for") + f" {search_string!r}",
             "search_form": SearchForm(request.GET),
         },
     )
@@ -98,7 +99,7 @@ def add_set(request):
             "lego/add_set.html",
             context={
                 "add_set_form": AddSetForm(),
-                "title": "Add a New Lego Set",
+                "title": _("Add a New Lego Set"),
                 "search_form": SearchForm(),
             },
         )

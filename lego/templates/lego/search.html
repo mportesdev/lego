@@ -1,4 +1,5 @@
 {% extends "lego/base.html" %}
+{% load i18n %}
 {% block content %}
   <div>{{ title }}</div>
   {% if sets.exists or parts.exists %}
@@ -20,6 +21,6 @@
       </div>
     {% endfor %}
   {% else %}
-    <div>Nothing Found</div>
+    <div>{% translate "Nothing Found" %}</div>
   {% endif %}
 {% endblock %}

@@ -318,3 +318,19 @@ class TestAuth(TestCase):
         self.assertRedirects(response, "/lego/")
         self.assertIn(b"Log in", response.content)
         self.assertNotIn(b"Add a New Lego Set", response.content)
+
+
+class TestInternationalization(TestCase):
+    def test_default_language(self):
+        response = self.client.get("/lego/")
+
+        self.assertIn(b"Our Lego", response.content)
+        self.assertIn(b"Log in", response.content)
+        self.assertIn(b"Latest Additions", response.content)
+
+    def test_language_in_headers(self):
+        response = self.client.get("/lego/", headers={"Accept-Language": "cs"})
+
+        self.assertIn("Naše Lego", response.content.decode())
+        self.assertIn("Přihlášení", response.content.decode())
+        self.assertIn("Naposled přidáno", response.content.decode())

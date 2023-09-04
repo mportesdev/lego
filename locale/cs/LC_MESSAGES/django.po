@@ -1,0 +1,113 @@
+# Czech translation for `lego`.
+# Copyright (C) 2023 Michal Porteš
+# This file is distributed under the same license as the `lego` package.
+# Michal Porteš <michalportes1@gmail.com>, 2023.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-10-03 12:32+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n "
+"<= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
+
+#: lego/forms.py:6
+msgid "Search"
+msgstr ""
+
+#: lego/forms.py:9
+msgid "everywhere"
+msgstr "všude"
+
+#: lego/forms.py:10
+msgid "in names"
+msgstr "v názvech"
+
+#: lego/forms.py:11
+msgid "Lego ID"
+msgstr "identifikátor Lego"
+
+#: lego/forms.py:12
+msgid "in colors"
+msgstr "v barvách"
+
+#: lego/forms.py:24
+msgid "Lego Set ID"
+msgstr "Číslo sady"
+
+#: lego/templates/lego/add_set.html:7 lego/templates/lego/base.html:15
+#: lego/templates/lego/login.html:11
+msgid "OK"
+msgstr ""
+
+#: lego/templates/lego/base.html:12 lego/views.py:23
+msgid "Our Lego"
+msgstr "Naše Lego"
+
+#: lego/templates/lego/base.html:18 lego/views.py:102
+msgid "Add a New Lego Set"
+msgstr "Přidat nové Lego"
+
+#: lego/templates/lego/base.html:22
+msgid "Log out"
+msgstr ""
+
+#: lego/templates/lego/base.html:24 lego/templates/lego/login.html:7
+msgid "Log in"
+msgstr ""
+
+#: lego/templates/lego/index.html:4
+msgid "Latest Additions"
+msgstr "Naposled přidáno"
+
+#: lego/templates/lego/login.html:5
+msgid "You are already logged in"
+msgstr "Jste již přihlášeni"
+
+#: lego/templates/lego/part_detail.html:6
+msgid "Included in"
+msgstr "Obsaženo v"
+
+#: lego/templates/lego/part_detail.html:9
+msgid "in"
+msgstr "v"
+
+#: lego/templates/lego/search.html:24
+msgid "Nothing Found"
+msgstr "Nic nenalezeno"
+
+#: lego/templates/lego/set_detail.html:14
+msgid "Contains"
+msgstr "Obsahuje"
+
+#: lego/templates/lego/set_detail.html:19
+msgid "Hide this part"
+msgstr "Skrýt tento dílek"
+
+#: lego/views.py:38
+msgid "Lego Set"
+msgstr "Sada Lego"
+
+#: lego/views.py:53
+msgid "Lego Part"
+msgstr "Dílek Lego"
+
+#: lego/views.py:88
+msgid "Search Results for"
+msgstr "Výsledky vyhledávání"
+
+#: project/settings.py:113
+msgid "English"
+msgstr ""
+
+#: project/settings.py:114
+msgid "Czech"
+msgstr ""

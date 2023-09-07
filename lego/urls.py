@@ -1,4 +1,5 @@
 from django.urls import path
+from django.views.i18n import set_language
 
 from .views import index, set_detail, part_detail, search, add_set, login, logout
 
@@ -11,4 +12,5 @@ urlpatterns = [
     path("search/", search, name="search"),
     path("login/", login, name="login"),
     path("logout/", logout, name="logout"),
+    path("language/", set_language, name="set_language"),
 ]

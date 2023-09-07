@@ -334,3 +334,13 @@ class TestInternationalization(TestCase):
         self.assertIn("Naše Lego", response.content.decode())
         self.assertIn("Přihlášení", response.content.decode())
         self.assertIn("Naposled přidáno", response.content.decode())
+
+    def test_set_language(self):
+        response = self.client.post(
+            "/lego/language/", data={"language": "cs", "next": "/lego/"}, follow=True
+        )
+
+        self.assertRedirects(response, "/lego/")
+        self.assertIn("Přihlášení", response.content.decode())
+        self.assertIn("Naše Lego", response.content.decode())
+        self.assertIn("Naposled přidáno", response.content.decode())

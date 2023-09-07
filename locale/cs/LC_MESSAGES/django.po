@@ -52,15 +52,23 @@ msgstr ""
 msgid "Our Lego"
 msgstr "Naše Lego"
 
-#: lego/templates/lego/base.html:18 lego/views.py:102
+#: lego/templates/lego/base.html:19 project/settings.py:113
+msgid "English"
+msgstr ""
+
+#: lego/templates/lego/base.html:20 project/settings.py:114
+msgid "Czech"
+msgstr ""
+
+#: lego/templates/lego/base.html:23 lego/views.py:102
 msgid "Add a New Lego Set"
 msgstr "Přidat nové Lego"
 
-#: lego/templates/lego/base.html:22
+#: lego/templates/lego/base.html:27
 msgid "Log out"
 msgstr ""
 
-#: lego/templates/lego/base.html:24 lego/templates/lego/login.html:7
+#: lego/templates/lego/base.html:29 lego/templates/lego/login.html:7
 msgid "Log in"
 msgstr ""
 
@@ -103,11 +111,3 @@ msgstr "Dílek Lego"
 #: lego/views.py:88
 msgid "Search Results for"
 msgstr "Výsledky vyhledávání"
-
-#: project/settings.py:113
-msgid "English"
-msgstr ""
-
-#: project/settings.py:114
-msgid "Czech"
-msgstr ""

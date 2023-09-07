@@ -221,3 +221,12 @@ class TestBrowserUI(LiveServerTestCase):
 
         # redirected to index page
         self.assertTrue(self.driver.current_url.endswith("/lego/"))
+
+    def test_change_language(self):
+        self.driver.find_element(By.ID, "language_cs").click()
+        self.driver.find_element(By.XPATH, "//a[text()='Naše Lego']")
+        self.assertFalse(self.driver.find_element(By.ID, "language_cs").is_enabled())
+
+        self.driver.find_element(By.ID, "language_en").click()
+        self.driver.find_element(By.XPATH, "//a[text()='Our Lego']")
+        self.assertFalse(self.driver.find_element(By.ID, "language_en").is_enabled())

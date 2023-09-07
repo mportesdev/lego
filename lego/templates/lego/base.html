@@ -14,6 +14,11 @@
     {{ search_form }}
     <input type="submit" value="{% translate 'OK' %}" id="search_submit">
   </form>
+  <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
+    {% get_current_language as lang %}
+    <button type="submit" name="language" value="en" id="language_en" {% if lang == "en" %}disabled{% endif %}>{% translate 'English' %}</button>
+    <button type="submit" name="language" value="cs" id="language_cs" {% if lang == "cs" %}disabled{% endif %}>{% translate 'Czech' %}</button>
+  </form>
   {% if user.is_authenticated %}
     <div><a href="{% url 'add_set' %}">{% translate "Add a New Lego Set" %}</a></div>
   {% endif %}

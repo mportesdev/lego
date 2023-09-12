@@ -133,3 +133,14 @@ class TestBrowserUI(LiveServerTestCase):
         self.driver.find_element(By.XPATH, "//a[text()='222']")
         self.driver.find_element(By.XPATH, "//div[text()='Wheel']")
         self.driver.find_element(By.XPATH, "//div[text()='Black']")
+
+    def test_add_set_without_suffix(self):
+        self.driver.find_element(By.XPATH, "//a[text()='Add a New Lego Set']").click()
+        self.assertEqual(self.driver.title, "Add a New Lego Set")
+
+        with get_set_info_mock(), get_set_parts_mock():
+            self.driver.find_element(By.ID, "id_set_lego_id").send_keys("1234")
+            self.driver.find_element(By.ID, "add_set_submit").click()
+
+        self.assertTrue(self.driver.current_url.endswith("/lego/set/1234-1/"))
+        self.assertEqual(self.driver.title, "Lego Set 1234-1 Fighter Jet")

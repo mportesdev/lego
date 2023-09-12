@@ -95,6 +95,9 @@ def add_set(request):
         )
 
     set_lego_id = request.POST["set_lego_id"]
+    if "-" not in set_lego_id:
+        set_lego_id += "-1"
+
     set_, created = LegoSet.objects.get_or_create(lego_id=set_lego_id)
     if not created:
         return redirect("add_set")

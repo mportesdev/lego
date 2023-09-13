@@ -115,12 +115,18 @@ def add_set(request):
 
     set_.name = set_info["name"]
     set_.save()
+    logger.info(f"Saved new LegoSet object: {set_}")
     for item in get_set_parts(set_lego_id):
-        shape = Shape.objects.get_or_create(
-            lego_id=item["lego_id"], name=item["name"]
-        )[0]
+        shape = _log_get_or_create(Shape, lego_id=item["lego_id"], name=item["name"])
         color_name = item["color_name"]
-        color = Color.objects.get_or_create(name=color_name)[0] if color_name else None
-        part = LegoPart.objects.get_or_create(shape=shape, color=color)[0]
+        color = _log_get_or_create(Color, name=color_name) if color_name else None
+        part = _log_get_or_create(LegoPart, shape=shape, color=color)
         set_.parts.add(part, through_defaults={"quantity": item["quantity"]})
     return redirect("set_detail", set_lego_id)
+
+
+def _log_get_or_create(model, **kwargs):
+    obj, created = model.objects.get_or_create(**kwargs)
+    if created:
+        logger.info(f"Created new {model.__name__} object: {obj}")
+    return obj

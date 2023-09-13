@@ -218,9 +218,10 @@ class TestAddSet(TestCase):
 
     def test_add_set(self):
         with get_set_info_mock() as mock_1, get_set_parts_mock() as mock_2:
-            response = self.client.post(
-                "/lego/set/add/", data={"set_lego_id": "1234-1"}, follow=True
-            )
+            with self.assertLogs("lego.views", "INFO"):
+                response = self.client.post(
+                    "/lego/set/add/", data={"set_lego_id": "1234-1"}, follow=True
+                )
             mock_1.assert_called_once_with("1234-1")
             mock_2.assert_called_once_with("1234-1")
 
@@ -235,9 +236,10 @@ class TestAddSet(TestCase):
 
     def test_add_set_without_suffix(self):
         with get_set_info_mock() as mock_1, get_set_parts_mock() as mock_2:
-            response = self.client.post(
-                "/lego/set/add/", data={"set_lego_id": "1234"}, follow=True
-            )
+            with self.assertLogs("lego.views", "INFO"):
+                response = self.client.post(
+                    "/lego/set/add/", data={"set_lego_id": "1234"}, follow=True
+                )
             mock_1.assert_called_once_with("1234-1")
             mock_2.assert_called_once_with("1234-1")
 

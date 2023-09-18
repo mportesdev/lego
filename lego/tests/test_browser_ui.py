@@ -171,3 +171,28 @@ class TestBrowserUI(LiveServerTestCase):
         self.driver.find_element(By.XPATH, "//div[text()='test-user']")
         self.driver.find_element(By.XPATH, "//a[text()='Log out']").click()
         self.driver.find_element(By.XPATH, "//a[text()='Log in']")
+
+    def test_login_redirects_to_referer(self):
+        # go to set detail page
+        self.driver.find_element(By.XPATH, "//a[text()='123-1']").click()
+
+        # log in
+        self.driver.find_element(By.XPATH, "//a[text()='Log in']").click()
+        self.driver.find_element(By.ID, "id_username").send_keys("test-user")
+        self.driver.find_element(By.ID, "id_password").send_keys("test-password")
+        self.driver.find_element(By.ID, "login_submit").click()
+
+        # redirected back to set detail page
+        self.assertTrue(self.driver.current_url.endswith("/lego/set/123-1/"))
+
+    def test_login_redirects_to_index_if_referer_is_missing(self):
+        # go directly to login page
+        self.driver.get(f"{self.live_server_url}/lego/login/")
+
+        # log in
+        self.driver.find_element(By.ID, "id_username").send_keys("test-user")
+        self.driver.find_element(By.ID, "id_password").send_keys("test-password")
+        self.driver.find_element(By.ID, "login_submit").click()
+
+        # redirected to index page
+        self.assertTrue(self.driver.current_url.endswith("/lego/"))

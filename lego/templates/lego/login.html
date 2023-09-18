@@ -6,6 +6,7 @@
     <div>Log in</div>
     <form action="{% url 'login' %}" method="post">{% csrf_token %}
       {{ form }}
+      <input type="hidden" name="next" value="{{ request.headers.Referer }}">
       <input type="submit" value="OK" id="login_submit">
     </form>
   {% endif %}

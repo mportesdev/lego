@@ -85,6 +85,18 @@ class TestBrowserUI(LiveServerTestCase):
         self.driver.find_element(By.XPATH, "//div[text()='Brick 2 x 4']")
         self.driver.find_element(By.XPATH, "//div[text()='Red']")
 
+        # search by color
+        search_field = self.driver.find_element(By.ID, "id_q")
+        search_field.clear()
+        search_field.send_keys("red")
+        self.driver.find_element(By.ID, "id_mode_3").click()
+        self.driver.find_element(By.ID, "search_submit").click()
+
+        self.assertEqual(self.driver.title, "Search Results for 'red'")
+        self.driver.find_element(By.XPATH, "//a[text()='234pr']")
+        self.driver.find_element(By.XPATH, "//div[text()='Brick 2 x 4']")
+        self.driver.find_element(By.XPATH, "//div[text()='Red']")
+
     def test_search_form_populated_from_get(self):
         self.driver.find_element(By.ID, "id_q").send_keys("123")
         self.driver.find_element(By.ID, "id_mode_2").click()

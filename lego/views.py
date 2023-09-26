@@ -48,12 +48,20 @@ def part_detail(request, lego_id):
 
 def search(request):
     search_string = request.GET["q"]
+    search_mode = request.GET["mode"]
 
     name_q = Q(name__icontains=search_string)
     lego_id_q = Q(lego_id__startswith=search_string)
 
-    sets = LegoSet.objects.filter(name_q | lego_id_q)
-    parts = LegoPart.objects.filter(name_q | lego_id_q)
+    if search_mode == "name":
+        sets = LegoSet.objects.filter(name_q)
+        parts = LegoPart.objects.filter(name_q)
+    elif search_mode == "id":
+        sets = LegoSet.objects.filter(lego_id_q)
+        parts = LegoPart.objects.filter(lego_id_q)
+    else:
+        sets = LegoSet.objects.filter(name_q | lego_id_q)
+        parts = LegoPart.objects.filter(name_q | lego_id_q)
 
     return render(
         request,

@@ -8,6 +8,7 @@ class SearchForm(forms.Form):
             ("all", "everywhere"),
             ("name", "in names"),
             ("id", "Lego ID"),
+            ("color", "in colors"),
         ),
         widget=forms.RadioSelect,
         initial="all",

@@ -3,20 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
   <title>{{ title }}</title>
 </head>
 <body>
+<div class="container">
+<div class="columns">
+<div class="column">
   <div><a href="{% url 'index' %}" id="index_link">Our Lego</a></div>
+</div>
+<div class="column">
   <form action="{% url 'search' %}" method="get">
     {{ search_form }}
     <input type="submit" value="OK" id="search_submit">
   </form>
-  {% if user.is_authenticated %}
-    <div><a href="{% url 'add_set' %}">Add a New Lego Set</a></div>
-  {% endif %}
-  {% if user.is_staff %}
-    <div><a href="{% url 'admin:index' %}">Admin Page</a></div>
-  {% endif %}
+</div>
+<div class="column">
   {% if user.is_authenticated %}
     <div>{{ user.username }}</div>
     <form action="{% url 'logout' %}" method="post">{% csrf_token %}
@@ -25,7 +27,18 @@
   {% else %}
     <div><a href="{% url 'login' %}">Log in</a></div>
   {% endif %}
+  {% if user.is_staff %}
+    <div><a href="{% url 'admin:index' %}">Admin Page</a></div>
+  {% endif %}
+  {% if user.is_authenticated %}
+    <div><a href="{% url 'add_set' %}">Add a New Lego Set</a></div>
+  {% endif %}
+</div>
+</div>
+</div>
+<div class="container">
   {% block content %}
   {% endblock %}
+</div>
 </body>
 </html>

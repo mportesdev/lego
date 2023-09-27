@@ -3,10 +3,11 @@
   <div>{{ title }}</div>
   {% if image_url %}<div><img src="{{ image_url }}"></div>{% endif %}
   Contains:
+  <div class="grid">
   {% for item in set_items %}
     {% if item.part.color %}{% url 'part_detail' item.part.shape.lego_id item.part.color.id as part_detail_url %}
     {% else %}{% url 'part_detail' item.part.shape.lego_id as part_detail_url %}{% endif %}
-    <div>
+    <div class="box">
       <div>{{ item.quantity }}x</div>
       <div><a href="{{ part_detail_url }}">{{ item.part.shape.lego_id }}</a></div>
       <div>{{ item.part.shape.name }}</div>
@@ -14,4 +15,5 @@
       <div>{% if item.part.image_url %}<a href="{{ part_detail_url }}"><img src="{{ item.part.image_url }}"></a>{% endif %}</div>
     </div>
   {% endfor %}
+  </div>
 {% endblock %}

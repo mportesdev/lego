@@ -2,8 +2,9 @@
 {% block content %}
   <div>{{ title }}</div>
   {% if sets.exists or parts.exists %}
+  <div class="grid">
     {% for set in sets %}
-      <div>
+      <div class="box">
         <div><a href="{% url 'set_detail' set.lego_id %}">{{ set.lego_id }}</a></div>
         <div>{{ set.name }}</div>
         <div>{% if set.image_url %}<a href="{% url 'set_detail' set.lego_id %}"><img src="{{ set.image_url }}"></a>{% endif %}</div>
@@ -12,13 +13,14 @@
     {% for part in parts %}
       {% if part.color %}{% url 'part_detail' part.shape.lego_id part.color.id as part_detail_url %}
       {% else %}{% url 'part_detail' part.shape.lego_id as part_detail_url %}{% endif %}
-      <div>
+      <div class="box">
         <div><a href="{{ part_detail_url }}">{{ part.shape.lego_id }}</a></div>
         <div>{{ part.shape.name }}</div>
         <div>{% if part.color %}{{ part.color.name }}{% endif %}</div>
         <div>{% if part.image_url %}<a href="{{ part_detail_url }}"><img src="{{ part.image_url }}"></a>{% endif %}</div>
       </div>
     {% endfor %}
+  </div>
   {% else %}
     <div>Nothing Found</div>
   {% endif %}

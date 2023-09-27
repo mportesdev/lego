@@ -1,13 +1,13 @@
 {% extends "lego/base.html" %}
 {% block content %}
-  <div>{{ title }}</div>
+  <div class="title">{{ title }}</div>
   {% if sets.exists or parts.exists %}
   <div class="grid">
     {% for set in sets %}
       <div class="box">
         <div><a href="{% url 'set_detail' set.lego_id %}">{{ set.lego_id }}</a></div>
         <div>{{ set.name }}</div>
-        <div>{% if set.image_url %}<a href="{% url 'set_detail' set.lego_id %}"><img src="{{ set.image_url }}"></a>{% endif %}</div>
+        <div>{% if set.image_url %}<figure class="image is-128x128"><a href="{% url 'set_detail' set.lego_id %}"><img src="{{ set.image_url }}"></a></figure>{% endif %}</div>
       </div>
     {% endfor %}
     {% for part in parts %}
@@ -17,7 +17,7 @@
         <div><a href="{{ part_detail_url }}">{{ part.shape.lego_id }}</a></div>
         <div>{{ part.shape.name }}</div>
         <div>{% if part.color %}{{ part.color.name }}{% endif %}</div>
-        <div>{% if part.image_url %}<a href="{{ part_detail_url }}"><img src="{{ part.image_url }}"></a>{% endif %}</div>
+        <div>{% if part.image_url %}<figure class="image is-128x128"><a href="{{ part_detail_url }}"><img src="{{ part.image_url }}"></a></figure>{% endif %}</div>
       </div>
     {% endfor %}
   </div>

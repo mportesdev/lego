@@ -10,28 +10,28 @@
 <div class="container">
 <div class="columns">
 <div class="column">
-  <div><a href="{% url 'index' %}" id="index_link">Our Lego</a></div>
+  <div class="subtitle"><a href="{% url 'index' %}" id="index_link">Our Lego</a></div>
 </div>
 <div class="column">
   <form action="{% url 'search' %}" method="get">
     {{ search_form }}
-    <input type="submit" value="OK" id="search_submit">
+    <input type="submit" value="OK" id="search_submit" class="button">
   </form>
 </div>
 <div class="column">
   {% if user.is_authenticated %}
     <div>{{ user.username }}</div>
     <form action="{% url 'logout' %}" method="post">{% csrf_token %}
-      <input type="submit" value="Log out" id="log_out">
+      <input type="submit" value="Log out" id="log_out" class="button">
     </form>
   {% else %}
-    <div><a href="{% url 'login' %}">Log in</a></div>
+    <div><a href="{% url 'login' %}" class="button">Log in</a></div>
   {% endif %}
   {% if user.is_staff %}
-    <div><a href="{% url 'admin:index' %}">Admin Page</a></div>
+    <div><a href="{% url 'admin:index' %}" class="button">Admin Page</a></div>
   {% endif %}
   {% if user.is_authenticated %}
-    <div><a href="{% url 'add_set' %}">Add a New Lego Set</a></div>
+    <div><a href="{% url 'add_set' %}" class="button">Add a New Lego Set</a></div>
   {% endif %}
 </div>
 </div>

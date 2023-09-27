@@ -1,8 +1,8 @@
 {% extends "lego/base.html" %}
 {% block content %}
-  <div>{{ title }}</div>
-  {% if image_url %}<div><img src="{{ image_url }}"></div>{% endif %}
-  Contains:
+  <div class="title">{{ title }}</div>
+  {% if image_url %}<div><figure class="image is-128x128"><img src="{{ image_url }}"></figure></div>{% endif %}
+  <div class="subtitle">Contains:</div>
   <div class="grid">
   {% for item in set_items %}
     {% if item.part.color %}{% url 'part_detail' item.part.shape.lego_id item.part.color.id as part_detail_url %}
@@ -12,7 +12,7 @@
       <div><a href="{{ part_detail_url }}">{{ item.part.shape.lego_id }}</a></div>
       <div>{{ item.part.shape.name }}</div>
       <div>{% if item.part.color %}{{ item.part.color.name }}{% endif %}</div>
-      <div>{% if item.part.image_url %}<a href="{{ part_detail_url }}"><img src="{{ item.part.image_url }}"></a>{% endif %}</div>
+      <div>{% if item.part.image_url %}<figure class="image is-128x128"><a href="{{ part_detail_url }}"><img src="{{ item.part.image_url }}"></a></figure>{% endif %}</div>
     </div>
   {% endfor %}
   </div>

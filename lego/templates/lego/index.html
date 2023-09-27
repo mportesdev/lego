@@ -1,12 +1,12 @@
 {% extends "lego/base.html" %}
 {% block content %}
-  <div>All Sets</div>
+  <div class="title">All Sets</div>
   <div class="grid">
   {% for set in sets %}
     <div class="box">
       <div><a href="{% url 'set_detail' set.lego_id %}">{{ set.lego_id }}</a></div>
       <div>{{ set.name }}</div>
-      <div>{% if set.image_url %}<a href="{% url 'set_detail' set.lego_id %}"><img src="{{ set.image_url }}"></a>{% endif %}</div>
+      <div>{% if set.image_url %}<figure class="image is-128x128"><a href="{% url 'set_detail' set.lego_id %}"><img src="{{ set.image_url }}"></a></figure>{% endif %}</div>
     </div>
   {% endfor %}
   </div>

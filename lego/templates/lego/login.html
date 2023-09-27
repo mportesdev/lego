@@ -3,11 +3,11 @@
   {% if user.is_authenticated %}
     You are already logged in
   {% else %}
-    <div>Log in</div>
+    <div class="title">Log in</div>
     <form action="{% url 'login' %}" method="post">{% csrf_token %}
       {{ form }}
       <input type="hidden" name="next" value="{{ request.headers.Referer }}">
-      <input type="submit" value="OK" id="login_submit">
+      <input type="submit" value="OK" id="login_submit" class="button">
     </form>
   {% endif %}
 {% endblock %}

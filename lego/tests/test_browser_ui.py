@@ -187,6 +187,7 @@ class TestBrowserUI(LiveServerTestCase):
         self.driver.find_element(By.ID, "login_submit").click()
         # log out
         self.driver.find_element(By.XPATH, "//div[text()='test-user']")
+        self.driver.find_element(By.XPATH, "//a[text()='Admin Page']")
         self.driver.find_element(By.ID, "log_out").click()
         self.driver.find_element(By.XPATH, "//a[text()='Log in']")
 

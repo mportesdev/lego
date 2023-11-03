@@ -14,6 +14,9 @@
   {% if user.is_authenticated %}
     <div><a href="{% url 'add_set' %}">Add a New Lego Set</a></div>
   {% endif %}
+  {% if user.is_staff %}
+    <div><a href="{% url 'admin:index' %}">Admin Page</a></div>
+  {% endif %}
   {% if user.is_authenticated %}
     <div>{{ user.username }}</div>
     <form action="{% url 'logout' %}" method="post">{% csrf_token %}

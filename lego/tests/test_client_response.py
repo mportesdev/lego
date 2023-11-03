@@ -302,6 +302,7 @@ class TestAuth(TestCase):
         response = self.client.get("/lego/")
         self.assertIn(b"Log in", response.content)
         self.assertNotIn(b"Add a New Lego Set", response.content)
+        self.assertNotIn(b"Admin Page", response.content)
 
         # log in
         response = self.client.post(
@@ -312,12 +313,14 @@ class TestAuth(TestCase):
         self.assertRedirects(response, "/lego/")
         self.assertRegex(response.content, b"(?s)test-user.*Log out")
         self.assertIn(b"Add a New Lego Set", response.content)
+        self.assertIn(b"Admin Page", response.content)
 
         # log out
         response = self.client.post("/lego/logout/", follow=True)
         self.assertRedirects(response, "/lego/")
         self.assertIn(b"Log in", response.content)
         self.assertNotIn(b"Add a New Lego Set", response.content)
+        self.assertNotIn(b"Admin Page", response.content)
 
 
 class TestInternationalization(TestCase):

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-03 12:32+0200\n"
+"POT-Creation-Date: 2023-11-06 11:08+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -64,11 +64,15 @@ msgstr ""
 msgid "Add a New Lego Set"
 msgstr "Přidat nové Lego"
 
-#: lego/templates/lego/base.html:27
+#: lego/templates/lego/base.html:26
+msgid "Admin Page"
+msgstr "Administrace"
+
+#: lego/templates/lego/base.html:30
 msgid "Log out"
 msgstr ""
 
-#: lego/templates/lego/base.html:29 lego/templates/lego/login.html:7
+#: lego/templates/lego/base.html:32 lego/templates/lego/login.html:7
 msgid "Log in"
 msgstr ""
 

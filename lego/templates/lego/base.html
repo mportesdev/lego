@@ -27,7 +27,9 @@
   {% endif %}
   {% if user.is_authenticated %}
     <div>{{ user.username }}</div>
-    <div><a href="{% url 'logout' %}">{% translate "Log out" %}</a></div>
+    <form action="{% url 'logout' %}" method="post">{% csrf_token %}
+      <input type="submit" value="{% translate 'Log out' %}" id="log_out">
+    </form>
   {% else %}
     <div><a href="{% url 'login' %}">{% translate "Log in" %}</a></div>
   {% endif %}

@@ -195,7 +195,7 @@ class TestBrowserUI(LiveServerTestCase):
         # log out
         self.driver.find_element(By.XPATH, "//div[text()='test-user']")
         self.driver.find_element(By.XPATH, "//a[text()='Admin Page']")
-        self.driver.find_element(By.XPATH, "//a[text()='Log out']").click()
+        self.driver.find_element(By.ID, "log_out").click()
         self.driver.find_element(By.XPATH, "//a[text()='Log in']")
 
     def test_login_redirects_to_referer(self):

@@ -1,0 +1,4 @@
+Django==5.*
+requests==2.*
+selenium==4.*
+coverage==7.*

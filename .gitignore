@@ -1,0 +1,14 @@
+.idea/
+.venv/
+
+db.sqlite3
+
+.key
+.rebrickable-key
+
+lego.log
+geckodriver.log
+
+locale/cs/LC_MESSAGES/django.mo
+
+.coverage

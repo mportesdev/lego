@@ -2,6 +2,7 @@
 .hosts
 
 db.sqlite3
+.pg-pass
 
 .idea/
 .venv/

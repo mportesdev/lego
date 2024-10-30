@@ -1,3 +1,5 @@
+import logging
+
 import requests
 
 from project.settings import BASE_DIR
@@ -9,6 +11,8 @@ headers = {
     "Authorization": f"key {API_KEY}",
     "Accept": "application/json",
 }
+
+logger = logging.getLogger(__name__)
 
 
 def get_set_info(set_lego_id):
@@ -42,17 +46,22 @@ def _color_name_or_none(color_name):
 
 def get_set_parts(set_lego_id):
     for item in _get_paginated_data(f"{API_URL}/lego/sets/{set_lego_id}/minifigs/"):
-        yield {
+        entry = {
             "lego_id": item["set_num"],
             "name": item["set_name"],
             "image_url": item["set_img_url"],
             "quantity": item["quantity"],
         }
+        logger.debug(entry)
+        yield entry
+
     for item in _get_paginated_data(f"{API_URL}/lego/sets/{set_lego_id}/parts/"):
-        yield {
+        entry = {
             "lego_id": item["part"]["part_num"],
             "name": item["part"]["name"],
             "color_name": _color_name_or_none(item["color"]["name"]),
             "image_url": item["part"]["part_img_url"],
             "quantity": item["quantity"],
         }
+        logger.debug(entry)
+        yield entry

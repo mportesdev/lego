@@ -62,6 +62,7 @@ def get_set_parts(set_lego_id):
             "color_name": _color_name_or_none(item["color"]["name"]),
             "image_url": item["part"]["part_img_url"],
             "quantity": item["quantity"],
+            "is_spare": item["is_spare"],
         }
         logger.debug(entry)
         yield entry

@@ -35,7 +35,16 @@ def _mock_generator(set_lego_id):
             "name": "Wheel",
             "color_name": "Black",
             "image_url": "img222k.jpg",
+            "quantity": 1,
+            "is_spare": True,
+        }
+        yield {
+            "lego_id": "222",
+            "name": "Wheel",
+            "color_name": "Black",
+            "image_url": "img222k.jpg",
             "quantity": 3,
+            "is_spare": False,
         }
     else:
         raise ValueError("_mock_generator: unexpected test argument")

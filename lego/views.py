@@ -123,6 +123,9 @@ def add_set(request):
     set_.save()
     logger.info(f"Created: {set_!r}")
     for item in get_set_parts(set_lego_id):
+        if item.get("is_spare"):
+            logger.info(f"Skipping spare part: {item["name"]}, {item.get("color_name")}")
+            continue
         shape = _log_get_or_create(Shape, lego_id=item["lego_id"], name=item["name"])
         color_name = item.get("color_name")
         color = _log_get_or_create(Color, name=color_name) if color_name else None

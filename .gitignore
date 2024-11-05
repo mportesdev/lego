@@ -1,3 +1,5 @@
+staticfiles/
+
 .key
 .hosts
 .rebrickable-key

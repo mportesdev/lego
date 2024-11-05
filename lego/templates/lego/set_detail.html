@@ -2,10 +2,10 @@
 {% block content %}
   <div>{{ title }}</div>
   Contains:
-  {% for part in parts %}
+  {% for item in set_items %}
     <div>
-      <div><a href="{% url 'part_detail' part.lego_id %}">{{ part.lego_id }}</a></div>
-      <div>{{ part.name }}</div>
+      <div><a href="{% url 'part_detail' item.part.lego_id %}">{{ item.part.lego_id }}</a></div>
+      <div>{{ item.part.name }}</div>
     </div>
   {% endfor %}
 {% endblock %}

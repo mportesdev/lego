@@ -14,19 +14,19 @@ def index(request):
 
 def set_detail(request, lego_id):
     set_ = LegoSet.objects.get(lego_id=lego_id)
-    parts = set_.parts.all()
+    set_items = set_.setitem_set.all()
     return render(
         request,
         "lego/set_detail.html",
-        context={"parts": parts, "title": f"Lego Set {set_}"},
+        context={"set_items": set_items, "title": f"Lego Set {set_}"},
     )
 
 
 def part_detail(request, lego_id):
     part = LegoPart.objects.get(lego_id=lego_id)
-    sets = part.legoset_set.all()
+    set_items = part.setitem_set.all()
     return render(
         request,
         "lego/part_detail.html",
-        context={"sets": sets, "title": f"Lego Part {part}"},
+        context={"set_items": set_items, "title": f"Lego Part {part}"},
     )

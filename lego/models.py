@@ -8,12 +8,26 @@ class Shape(models.Model):
     def __str__(self):
         return f"{self.lego_id} {self.name}"
 
+    def __repr__(self):
+        fields_repr = ", ".join(
+            f"{field_name}={getattr(self, field_name)!r}"
+            for field_name in ("id", "lego_id", "name")
+        )
+        return f"{type(self).__name__}({fields_repr})"
+
 
 class Color(models.Model):
     name = models.CharField(max_length=30)
 
     def __str__(self):
         return self.name
+
+    def __repr__(self):
+        fields_repr = ", ".join(
+            f"{field_name}={getattr(self, field_name)!r}"
+            for field_name in ("id", "name")
+        )
+        return f"{type(self).__name__}({fields_repr})"
 
 
 class LegoPart(models.Model):
@@ -23,6 +37,13 @@ class LegoPart(models.Model):
 
     def __str__(self):
         return f"{self.shape}, {self.color}" if self.color else f"{self.shape}"
+
+    def __repr__(self):
+        fields_repr = ", ".join(
+            f"{field_name}={getattr(self, field_name)!r}"
+            for field_name in ("id", "shape", "color", "image_url")
+        )
+        return f"{type(self).__name__}({fields_repr})"
 
 
 class LegoSet(models.Model):
@@ -34,6 +55,13 @@ class LegoSet(models.Model):
 
     def __str__(self):
         return f"{self.lego_id} {self.name}"
+
+    def __repr__(self):
+        fields_repr = ", ".join(
+            f"{field_name}={getattr(self, field_name)!r}"
+            for field_name in ("id", "lego_id", "name", "image_url")
+        )
+        return f"{type(self).__name__}({fields_repr})"
 
 
 class SetItem(models.Model):

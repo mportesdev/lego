@@ -109,7 +109,7 @@ def add_set(request):
 
     set_, created = LegoSet.objects.get_or_create(lego_id=set_lego_id)
     if not created:
-        logger.warning(f"{set_} already exists")
+        logger.warning(f"Already exists: {set_!r}")
         return redirect("add_set")
 
     try:
@@ -121,7 +121,7 @@ def add_set(request):
     set_.name = set_info["name"]
     set_.image_url = set_info["image_url"]
     set_.save()
-    logger.info(f"Saved new LegoSet object: {set_}")
+    logger.info(f"Created: {set_!r}")
     for item in get_set_parts(set_lego_id):
         shape = _log_get_or_create(Shape, lego_id=item["lego_id"], name=item["name"])
         color_name = item.get("color_name")
@@ -136,7 +136,7 @@ def add_set(request):
 def _log_get_or_create(model, **kwargs):
     obj, created = model.objects.get_or_create(**kwargs)
     if created:
-        logger.info(f"Created new {model.__name__} object: {obj}")
+        logger.info(f"Created: {obj!r}")
     return obj
 
 

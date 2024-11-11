@@ -1,11 +1,6 @@
 staticfiles/
 
-.key
-.hosts
-.rebrickable-key
-
 db.sqlite3
-.pg-pass
 
 geckodriver.log
 lego.log

@@ -2,9 +2,6 @@
 
 set -eu
 
-python generate_key.py
-echo -n $RENDER_EXTERNAL_HOSTNAME > .hosts
-
 pip install -r requirements.txt
 
 python manage.py migrate

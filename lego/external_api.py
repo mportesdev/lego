@@ -1,11 +1,10 @@
 import logging
+import os
 
 import requests
 
-from project.settings import BASE_DIR
-
 API_URL = "https://rebrickable.com/api/v3"
-API_KEY = (BASE_DIR / ".rebrickable-key").read_text(encoding="utf8")
+API_KEY = os.getenv("REBRICKABLE_API_KEY")
 
 headers = {
     "Authorization": f"key {API_KEY}",

@@ -6,12 +6,12 @@ import dj_database_url
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = (BASE_DIR / ".key").read_text(encoding="utf8")
+SECRET_KEY = os.getenv("LEGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("LEGO_DEBUG", False) in ("1", "true")
 
-ALLOWED_HOSTS = (BASE_DIR / ".hosts").read_text(encoding="utf8").splitlines()
+ALLOWED_HOSTS = os.getenv("LEGO_ALLOWED_HOSTS", "").split(",")
 
 
 # Application definition

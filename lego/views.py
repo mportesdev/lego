@@ -20,7 +20,7 @@ def index(request):
         context={
             "sets": sets,
             "title": "Our Lego",
-            "search_form": SearchForm(),
+            "search_form": SearchForm,
         },
     )
 
@@ -35,7 +35,7 @@ def set_detail(request, lego_id):
             "image_url": set_.image_url,
             "set_items": set_items,
             "title": f"Lego Set {set_}",
-            "search_form": SearchForm(),
+            "search_form": SearchForm,
         },
     )
 
@@ -50,7 +50,7 @@ def part_detail(request, lego_id, color_id=None):
             "image_url": part.image_url,
             "set_items": set_items,
             "title": f"Lego Part {part}",
-            "search_form": SearchForm(),
+            "search_form": SearchForm,
         },
     )
 
@@ -97,9 +97,9 @@ def add_set(request):
             request,
             "lego/add_set.html",
             context={
-                "add_set_form": AddSetForm(),
+                "add_set_form": AddSetForm,
                 "title": "Add a New Lego Set",
-                "search_form": SearchForm(),
+                "search_form": SearchForm,
             },
         )
 
@@ -146,7 +146,7 @@ def _log_get_or_create(model, **kwargs):
 login = LoginView.as_view(
     template_name="lego/login.html",
     next_page="/lego/",
-    extra_context={"search_form": lambda: SearchForm()},
+    extra_context={"search_form": SearchForm},
 )
 
 logout = LogoutView.as_view(next_page="/lego/")

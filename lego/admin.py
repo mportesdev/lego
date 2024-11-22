@@ -3,18 +3,33 @@ from django.contrib import admin
 from .models import Shape, Color, LegoPart, LegoSet, SetItem
 
 
+class LegoAdminSite(admin.AdminSite):
+    site_url = "/lego/"
+    site_header = "Lego Administration"
+    site_title = "Lego Admin"
+
+
+admin_site = LegoAdminSite(name="lego_admin")
+
+from django.contrib.auth.models import Group, User
+from django.contrib.auth.admin import GroupAdmin, UserAdmin
+
+admin_site.register(Group, GroupAdmin)
+admin_site.register(User, UserAdmin)
+
+
 class ShapeAdmin(admin.ModelAdmin):
     list_display = ["lego_id", "name"]
 
 
-admin.site.register(Shape, ShapeAdmin)
+admin_site.register(Shape, ShapeAdmin)
 
 
 class ColorAdmin(admin.ModelAdmin):
     list_display = ["name"]
 
 
-admin.site.register(Color, ColorAdmin)
+admin_site.register(Color, ColorAdmin)
 
 
 class LegoPartAdmin(admin.ModelAdmin):
@@ -29,7 +44,7 @@ class LegoPartAdmin(admin.ModelAdmin):
         )
 
 
-admin.site.register(LegoPart, LegoPartAdmin)
+admin_site.register(LegoPart, LegoPartAdmin)
 
 
 class LegoSetAdmin(admin.ModelAdmin):
@@ -37,7 +52,7 @@ class LegoSetAdmin(admin.ModelAdmin):
     search_fields = ["lego_id", "name"]
 
 
-admin.site.register(LegoSet, LegoSetAdmin)
+admin_site.register(LegoSet, LegoSetAdmin)
 
 
 class SetItemAdmin(admin.ModelAdmin):
@@ -51,4 +66,4 @@ class SetItemAdmin(admin.ModelAdmin):
         return f"{obj.quantity}x {part_str} in {obj.set.lego_id}"
 
 
-admin.site.register(SetItem, SetItemAdmin)
+admin_site.register(SetItem, SetItemAdmin)

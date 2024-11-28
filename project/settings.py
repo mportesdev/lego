@@ -135,7 +135,7 @@ LOGGING = {
         "file": {
             "class": "logging.FileHandler",
             "filename": BASE_DIR / "lego.log",
-            "level": "DEBUG",
+            "level": "DEBUG" if DEBUG else "INFO",
             "formatter": "detailed",
         },
     },

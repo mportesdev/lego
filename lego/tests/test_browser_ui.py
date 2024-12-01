@@ -2,6 +2,7 @@ import os
 import shutil
 from pathlib import Path
 from tempfile import mkdtemp
+import unittest
 
 from django.test import LiveServerTestCase
 from selenium.webdriver import Firefox
@@ -10,6 +11,7 @@ from selenium.webdriver.common.by import By
 from . import get_set_info_mock, get_set_parts_mock
 
 
+@unittest.skipIf(os.getenv("CI"), reason="Browser tests not run in CI")
 class TestBrowserUI(LiveServerTestCase):
     fixtures = ["test_data", "test_user"]
 

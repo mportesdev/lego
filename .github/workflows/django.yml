@@ -1,0 +1,33 @@
+name: Django CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python 3.13
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.13"
+
+    - name: Install Dependencies
+      run: |
+        pip install -r requirements.txt -r test-requirements.txt
+
+    - name: Run Tests
+      env:
+        DATABASE_URL: "sqlite:///testdb.sqlite3"
+        LEGO_SECRET_KEY: ${{ secrets.TEST_LEGO_SECRET_KEY }}
+      run: |
+        python manage.py collectstatic --no-input
+        python manage.py check
+        python manage.py test --parallel --shuffle --durations=10 --verbosity=2 lego

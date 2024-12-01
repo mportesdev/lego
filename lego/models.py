@@ -74,3 +74,6 @@ class SetItem(models.Model):
     set = models.ForeignKey(LegoSet, on_delete=models.CASCADE)
     part = models.ForeignKey(LegoPart, on_delete=models.CASCADE)
     quantity = models.PositiveSmallIntegerField(default=1)
+
+    class Meta:
+        ordering = ["part__shape__name"]

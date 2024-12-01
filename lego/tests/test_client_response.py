@@ -235,10 +235,10 @@ class TestAddSet(TestCase):
             b"(?s)Lego Set 1234-1 Fighter Jet"
             b'.*src="img1234-1.jpg"'
             b".*Contains:"
-            b'.*1x.*333.*Pilot.*src="img333.jpg"'
-            b'.*1x.*111.*Jet Engine.*Blue.*src="img111b.jpg"'
-            b'.*3x.*222.*Wheel.*Black.*src="img222k.jpg"',
             b'.*1x.*234pr.*Brick 2 x 4 with studs.*Blue.*src="img234prB.jpg"'
+            b'.*1x.*111.*Jet Engine.*Blue.*src="img111b.jpg"'
+            b'.*1x.*333.*Pilot.*src="img333.jpg"'
+            b'.*3x.*222.*Wheel.*Black.*src="img222k.jpg"',
         )
 
     def test_add_set_without_suffix(self):

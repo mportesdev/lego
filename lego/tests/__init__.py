@@ -46,6 +46,15 @@ def _mock_generator(set_lego_id):
             "quantity": 3,
             "is_spare": False,
         }
+        yield {
+            "lego_id": "234pr",
+            # shape name for this lego_id differs from db, must be updated
+            "name": "Brick 2 x 4 with studs",
+            "color_name": "Blue",
+            "image_url": "img234prB.jpg",
+            "quantity": 1,
+            "is_spare": False,
+        }
     else:
         raise ValueError("_mock_generator: unexpected test argument")
 

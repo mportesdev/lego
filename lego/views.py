@@ -126,7 +126,7 @@ def add_set(request):
         if item.get("is_spare"):
             logger.info(f"Skipping spare part: {item["name"]}, {item.get("color_name")}")
             continue
-        shape = _log_get_or_create(Shape, lego_id=item["lego_id"], name=item["name"])
+        shape = _get_shape(lego_id=item["lego_id"], name=item["name"])
         color_name = item.get("color_name")
         color = _log_get_or_create(Color, name=color_name) if color_name else None
         part = _log_get_or_create(
@@ -141,6 +141,20 @@ def _log_get_or_create(model, **kwargs):
     if created:
         logger.info(f"Created: {obj!r}")
     return obj
+
+
+def _get_shape(lego_id, name):
+    try:
+        shape = Shape.objects.get(lego_id=lego_id)
+        if shape.name != name:
+            logger.info(f"Outdated: {shape!r}")
+            shape.name = name
+            shape.save()
+            logger.info(f"Updated: {shape!r}")
+    except Shape.DoesNotExist:
+        shape = Shape.objects.create(lego_id=lego_id, name=name)
+        logger.info(f"Created: {shape!r}")
+    return shape
 
 
 login = LoginView.as_view(

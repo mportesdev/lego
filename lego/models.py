@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import UniqueConstraint
 
 
 class Shape(models.Model):
@@ -34,6 +35,11 @@ class LegoPart(models.Model):
     shape = models.ForeignKey(Shape, on_delete=models.CASCADE)
     color = models.ForeignKey(Color, on_delete=models.SET_NULL, null=True)
     image_url = models.URLField(null=True)
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(fields=["shape", "color"], name="unique_shape_color"),
+        ]
 
     def __str__(self):
         return f"{self.shape}, {self.color}" if self.color else f"{self.shape}"

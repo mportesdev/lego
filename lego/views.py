@@ -129,9 +129,7 @@ def add_set(request):
         shape = _get_shape(lego_id=item["lego_id"], name=item["name"])
         color_name = item.get("color_name")
         color = _log_get_or_create(Color, name=color_name) if color_name else None
-        part = _log_get_or_create(
-            LegoPart, shape=shape, color=color, image_url=item["image_url"]
-        )
+        part = _get_part(shape=shape, color=color, image_url=item["image_url"])
         set_.parts.add(part, through_defaults={"quantity": item["quantity"]})
     return redirect("set_detail", set_lego_id)
 
@@ -155,6 +153,20 @@ def _get_shape(lego_id, name):
         shape = Shape.objects.create(lego_id=lego_id, name=name)
         logger.info(f"Created: {shape!r}")
     return shape
+
+
+def _get_part(shape, color, image_url):
+    try:
+        part = LegoPart.objects.get(shape=shape, color=color)
+        if part.image_url != image_url:
+            logger.info(f"Outdated: {part!r}")
+            part.image_url = image_url
+            part.save()
+            logger.info(f"Updated: {part!r}")
+    except LegoPart.DoesNotExist:
+        part = LegoPart.objects.create(shape=shape, color=color, image_url=image_url)
+        logger.info(f"Created: {part!r}")
+    return part
 
 
 login = LoginView.as_view(

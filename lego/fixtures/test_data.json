@@ -25,6 +25,14 @@
     }
 },
 {
+    "model": "lego.shape",
+    "pk": 3,
+    "fields": {
+        "lego_id": "102",
+        "name": "Plate 1 x 3"
+    }
+},
+{
     "model": "lego.color",
     "pk": 1,
     "fields": {
@@ -63,6 +71,15 @@
         "shape": 2,
         "color": null,
         "image_url": "img567.jpg"
+    }
+},
+{
+    "model": "lego.legopart",
+    "pk": 4,
+    "fields": {
+        "shape": 3,
+        "color": 2,
+        "image_url": "img102W.jpg"
     }
 },
 {

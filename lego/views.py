@@ -122,23 +122,23 @@ def add_set(request):
     set_.image_url = set_info["image_url"]
     set_.save()
     logger.info(f"Created: {set_!r}")
+
     for item in get_set_parts(set_lego_id):
         if item.get("is_spare"):
             logger.info(f"Skipping spare part: {item["name"]}, {item.get("color_name")}")
             continue
         shape = _get_shape(lego_id=item["lego_id"], name=item["name"])
         color_name = item.get("color_name")
-        color = _log_get_or_create(Color, name=color_name) if color_name else None
+        if color_name:
+            color, created = Color.objects.get_or_create(name=color_name)
+            if created:
+                logger.info(f"Created: {color!r}")
+        else:
+            color = None
         part = _get_part(shape=shape, color=color, image_url=item["image_url"])
         set_.parts.add(part, through_defaults={"quantity": item["quantity"]})
+
     return redirect("set_detail", set_lego_id)
-
-
-def _log_get_or_create(model, **kwargs):
-    obj, created = model.objects.get_or_create(**kwargs)
-    if created:
-        logger.info(f"Created: {obj!r}")
-    return obj
 
 
 def _get_shape(lego_id, name):

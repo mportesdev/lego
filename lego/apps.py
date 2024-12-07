@@ -1,4 +1,9 @@
 from django.apps import AppConfig
+from django.contrib.admin.apps import SimpleAdminConfig
+
+
+class LegoAdminConfig(SimpleAdminConfig):
+    default_site = "lego.admin.LegoAdminSite"
 
 
 class LegoConfig(AppConfig):

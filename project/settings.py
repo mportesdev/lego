@@ -17,7 +17,7 @@ ALLOWED_HOSTS = os.getenv("LEGO_ALLOWED_HOSTS", "").split(",")
 # Application definition
 
 INSTALLED_APPS = [
-    "django.contrib.admin",
+    "lego.apps.LegoAdminConfig",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",

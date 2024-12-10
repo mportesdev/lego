@@ -18,7 +18,8 @@ class SearchForm(forms.Form):
 
 class AddSetForm(forms.Form):
     set_lego_id = forms.CharField(
-        max_length=30,
+        max_length=28,    # after optionally adding the `-1` suffix, must not exceed
+                          # max length 30 of the `LegoSet.lego_id` field
         widget=forms.TextInput(attrs={"autofocus": True}),
         label="Lego Set ID",
     )

@@ -9,6 +9,8 @@ from .external_api import get_set_info, get_set_parts
 from .forms import SearchForm, AddSetForm
 from .models import Shape, Color, LegoPart, LegoSet
 
+COMMON_CONTEXT = {"site_name": "Our Lego", "search_form": SearchForm}
+
 logger = logging.getLogger(__name__)
 
 
@@ -17,10 +19,9 @@ def index(request):
     return render(
         request,
         "lego/index.html",
-        context={
+        context=COMMON_CONTEXT | {
             "sets": sets,
             "title": "Our Lego",
-            "search_form": SearchForm,
         },
     )
 
@@ -31,11 +32,10 @@ def set_detail(request, lego_id):
     return render(
         request,
         "lego/set_detail.html",
-        context={
+        context=COMMON_CONTEXT | {
             "image_url": set_.image_url,
             "set_items": set_items,
             "title": f"Lego Set {set_}",
-            "search_form": SearchForm,
         },
     )
 
@@ -46,11 +46,10 @@ def part_detail(request, lego_id, color_id=None):
     return render(
         request,
         "lego/part_detail.html",
-        context={
+        context=COMMON_CONTEXT | {
             "image_url": part.image_url,
             "set_items": set_items,
             "title": f"Lego Part {part}",
-            "search_form": SearchForm,
         },
     )
 
@@ -61,7 +60,7 @@ def search(request):
         return render(
             request,
             "lego/search.html",
-            context={"title": "Search", "search_form": form},
+            context=COMMON_CONTEXT | {"title": "Search", "search_form": form},
         )
 
     search_string = form.cleaned_data["q"]
@@ -89,7 +88,7 @@ def search(request):
     return render(
         request,
         "lego/search.html",
-        context={
+        context=COMMON_CONTEXT | {
             "sets": sets,
             "parts": parts,
             "title": f"Search Results for {search_string!r}",
@@ -104,10 +103,9 @@ def add_set(request):
         return render(
             request,
             "lego/add_set.html",
-            context={
+            context=COMMON_CONTEXT | {
                 "add_set_form": AddSetForm,
                 "title": "Add a New Lego Set",
-                "search_form": SearchForm,
             },
         )
 
@@ -116,10 +114,9 @@ def add_set(request):
         return render(
             request,
             "lego/add_set.html",
-            context={
+            context=COMMON_CONTEXT | {
                 "add_set_form": form,
                 "title": "Add a New Lego Set",
-                "search_form": SearchForm,
             },
         )
 
@@ -192,7 +189,7 @@ def _get_part(shape, color, image_url):
 login = LoginView.as_view(
     template_name="lego/login.html",
     next_page="/lego/",
-    extra_context={"search_form": SearchForm},
+    extra_context=COMMON_CONTEXT,
 )
 
 logout = LogoutView.as_view(next_page="/lego/")

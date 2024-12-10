@@ -56,8 +56,16 @@ def part_detail(request, lego_id, color_id=None):
 
 
 def search(request):
-    search_string = request.GET["q"]
-    search_mode = request.GET["mode"]
+    form = SearchForm(request.GET)
+    if not form.is_valid():
+        return render(
+            request,
+            "lego/search.html",
+            context={"title": "Search", "search_form": form},
+        )
+
+    search_string = form.cleaned_data["q"]
+    search_mode = form.cleaned_data["mode"]
 
     name_q = Q(name__icontains=search_string)
     lego_id_q = Q(lego_id__startswith=search_string)
@@ -85,7 +93,7 @@ def search(request):
             "sets": sets,
             "parts": parts,
             "title": f"Search Results for {search_string!r}",
-            "search_form": SearchForm(request.GET),
+            "search_form": form,
         },
     )
 
@@ -103,7 +111,19 @@ def add_set(request):
             },
         )
 
-    set_lego_id = request.POST["set_lego_id"]
+    form = AddSetForm(request.POST)
+    if not form.is_valid():
+        return render(
+            request,
+            "lego/add_set.html",
+            context={
+                "add_set_form": form,
+                "title": "Add a New Lego Set",
+                "search_form": SearchForm,
+            },
+        )
+
+    set_lego_id = form.cleaned_data["set_lego_id"]
     if "-" not in set_lego_id:
         set_lego_id += "-1"
 

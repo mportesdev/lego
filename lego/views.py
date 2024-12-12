@@ -9,7 +9,7 @@ from .external_api import get_set_info, get_set_parts
 from .forms import SearchForm, AddSetForm
 from .models import Shape, Color, LegoPart, LegoSet
 
-COMMON_CONTEXT = {"site_name": "Our Lego", "search_form": SearchForm}
+COMMON_CONTEXT = {"site_name": "O&F Lego", "search_form": SearchForm}
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +21,7 @@ def index(request):
         "lego/index.html",
         context=COMMON_CONTEXT | {
             "sets": sets,
-            "title": "Our Lego",
+            "title": "Home",
         },
     )
 

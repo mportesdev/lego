@@ -39,7 +39,7 @@ class TestBrowserUI(LiveServerTestCase):
     def test_detail_pages(self):
         # go to set detail
         self.driver.find_element(By.XPATH, "//a[text()='123-1']").click()
-        self.assertEqual(self.driver.title, "Lego Set 123-1 Brick House")
+        self.assertEqual(self.driver.title, "Lego Set 123-1 Brick House | O&F Lego")
         self.driver.find_element(By.XPATH, "//img[@src='img123-1.jpg']")
         link = self.driver.find_element(By.XPATH, "//a[text()='234pr']")
         self.driver.find_element(By.XPATH, "//div[text()='Brick 2 x 4']")
@@ -51,7 +51,7 @@ class TestBrowserUI(LiveServerTestCase):
 
         # go to part detail
         link.click()
-        self.assertEqual(self.driver.title, "Lego Part 234pr Brick 2 x 4, Red")
+        self.assertEqual(self.driver.title, "Lego Part 234pr Brick 2 x 4, Red | O&F Lego")
         self.driver.find_element(By.XPATH, "//img[@src='img234prR.jpg']")
         self.driver.find_element(By.XPATH, "//a[text()='123-1']")
         self.driver.find_element(By.XPATH, "//div[text()='Brick House']")
@@ -59,7 +59,7 @@ class TestBrowserUI(LiveServerTestCase):
 
         # go to index page
         self.driver.find_element(By.ID, "index_link").click()
-        self.assertEqual(self.driver.title, "Our Lego")
+        self.assertEqual(self.driver.title, "Home | O&F Lego")
         self.driver.find_element(By.XPATH, "//a[text()='123-1']")
         self.driver.find_element(By.XPATH, "//div[text()='Brick House']")
         self.driver.find_element(By.XPATH, "//img[@src='img123-1.jpg']")
@@ -69,7 +69,7 @@ class TestBrowserUI(LiveServerTestCase):
         self.driver.find_element(By.ID, "id_q").send_keys("brick")
         self.driver.find_element(By.ID, "search_submit").click()
 
-        self.assertEqual(self.driver.title, "Search Results for 'brick'")
+        self.assertEqual(self.driver.title, "Search Results for 'brick' | O&F Lego")
         self.driver.find_element(By.XPATH, "//a[text()='123-1']")
         self.driver.find_element(By.XPATH, "//div[text()='Brick House']")
         self.driver.find_element(By.XPATH, "//img[@src='img123-1.jpg']")
@@ -93,7 +93,7 @@ class TestBrowserUI(LiveServerTestCase):
         self.driver.find_element(By.ID, "id_mode_1").click()
         self.driver.find_element(By.ID, "search_submit").click()
 
-        self.assertEqual(self.driver.title, "Search Results for 'house'")
+        self.assertEqual(self.driver.title, "Search Results for 'house' | O&F Lego")
         self.driver.find_element(By.XPATH, "//a[text()='123-1']")
         self.driver.find_element(By.XPATH, "//div[text()='Brick House']")
         self.driver.find_element(By.XPATH, "//img[@src='img123-1.jpg']")
@@ -105,7 +105,7 @@ class TestBrowserUI(LiveServerTestCase):
         self.driver.find_element(By.ID, "id_mode_2").click()
         self.driver.find_element(By.ID, "search_submit").click()
 
-        self.assertEqual(self.driver.title, "Search Results for '234'")
+        self.assertEqual(self.driver.title, "Search Results for '234' | O&F Lego")
         self.driver.find_element(By.XPATH, "//a[text()='234pr']")
         self.driver.find_element(By.XPATH, "//div[text()='Brick 2 x 4']")
         self.driver.find_element(By.XPATH, "//div[text()='Red']")
@@ -122,7 +122,7 @@ class TestBrowserUI(LiveServerTestCase):
         self.driver.find_element(By.ID, "id_mode_3").click()
         self.driver.find_element(By.ID, "search_submit").click()
 
-        self.assertEqual(self.driver.title, "Search Results for 'red'")
+        self.assertEqual(self.driver.title, "Search Results for 'red' | O&F Lego")
         self.driver.find_element(By.XPATH, "//a[text()='234pr']")
         self.driver.find_element(By.XPATH, "//div[text()='Brick 2 x 4']")
         self.driver.find_element(By.XPATH, "//div[text()='Red']")
@@ -141,7 +141,7 @@ class TestBrowserUI(LiveServerTestCase):
     def test_add_set(self):
         self.login_test_user()
         self.driver.find_element(By.XPATH, "//a[text()='Add a New Lego Set']").click()
-        self.assertEqual(self.driver.title, "Add a New Lego Set")
+        self.assertEqual(self.driver.title, "Add a New Lego Set | O&F Lego")
 
         with (
             get_set_info_mock(),
@@ -151,7 +151,7 @@ class TestBrowserUI(LiveServerTestCase):
             self.driver.find_element(By.ID, "id_set_lego_id").send_keys("1234-1")
             self.driver.find_element(By.ID, "add_set_submit").click()
 
-        self.assertEqual(self.driver.title, "Lego Set 1234-1 Fighter Jet")
+        self.assertEqual(self.driver.title, "Lego Set 1234-1 Fighter Jet | O&F Lego")
         self.driver.find_element(By.XPATH, "//img[@src='img1234-1.jpg']")
         self.driver.find_element(By.XPATH, "//a[text()='234pr']")
         self.driver.find_element(By.XPATH, "//div[text()='Brick 2 x 4 with studs']")
@@ -176,7 +176,7 @@ class TestBrowserUI(LiveServerTestCase):
     def test_add_set_without_suffix(self):
         self.login_test_user()
         self.driver.find_element(By.XPATH, "//a[text()='Add a New Lego Set']").click()
-        self.assertEqual(self.driver.title, "Add a New Lego Set")
+        self.assertEqual(self.driver.title, "Add a New Lego Set | O&F Lego")
 
         with (
             get_set_info_mock(),
@@ -187,7 +187,7 @@ class TestBrowserUI(LiveServerTestCase):
             self.driver.find_element(By.ID, "add_set_submit").click()
 
         self.assertTrue(self.driver.current_url.endswith("/lego/set/1234-1/"))
-        self.assertEqual(self.driver.title, "Lego Set 1234-1 Fighter Jet")
+        self.assertEqual(self.driver.title, "Lego Set 1234-1 Fighter Jet | O&F Lego")
 
     def test_login_and_logout(self):
         # log in

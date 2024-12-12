@@ -12,8 +12,8 @@ class TestGetResponse(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
             response.content,
-            b"(?s)<title>Our Lego</title>"
-            b".*Our Lego"
+            rb"(?s)<title>Home \| O&amp;F Lego</title>"
+            b".*O&amp;F Lego"
             b".*All Sets"
             b'.*123-1.*Brick House.*src="img123-1.jpg"',
         )

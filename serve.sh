@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-python -m gunicorn project.asgi:application -k uvicorn.workers.UvicornWorker
+python -m gunicorn --worker-class uvicorn.workers.UvicornWorker --reload --access-logfile - --error-logfile - project.asgi:application

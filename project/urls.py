@@ -7,6 +7,6 @@ urlpatterns = [
     path("lego/", include("lego.urls")),
 ]
 
-from debug_toolbar.toolbar import debug_toolbar_urls
+from django.shortcuts import redirect
 
-urlpatterns.extend(debug_toolbar_urls())
+urlpatterns.append(path("", lambda r: redirect("/lego/")))

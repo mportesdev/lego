@@ -13,7 +13,6 @@ SECRET_KEY = os.getenv("LEGO_SECRET_KEY")
 DEBUG = os.getenv("LEGO_DEBUG") in ("1", "true")
 
 ALLOWED_HOSTS = os.getenv("LEGO_ALLOWED_HOSTS", "").split(",")
-INTERNAL_IPS = ["127.0.0.1"]
 
 
 # Application definition
@@ -28,11 +27,9 @@ INSTALLED_APPS = [
     "lego.apps.LegoConfig",
     "django_tasks",
     "django_tasks_db",
-    "debug_toolbar",
 ]
 
 MIDDLEWARE = [
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -52,7 +49,6 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
-                "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",

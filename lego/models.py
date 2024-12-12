@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models import UniqueConstraint
 
 
 class Shape(models.Model):
@@ -38,7 +37,9 @@ class LegoPart(models.Model):
 
     class Meta:
         constraints = [
-            UniqueConstraint(fields=["shape", "color"], name="unique_shape_color"),
+            models.UniqueConstraint(
+                fields=["shape", "color"], name="unique_shape_color"
+            ),
         ]
 
     def __str__(self):

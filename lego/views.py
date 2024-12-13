@@ -162,10 +162,10 @@ def _get_shape(lego_id, name):
     try:
         shape = Shape.objects.get(lego_id=lego_id)
         if shape.name != name:
-            logger.info(f"Outdated: {shape!r}")
+            logger.warning(f"Outdated: {shape!r}")
             shape.name = name
             shape.save()
-            logger.info(f"Updated: {shape!r}")
+            logger.warning(f"Updated: {shape!r}")
     except Shape.DoesNotExist:
         shape = Shape.objects.create(lego_id=lego_id, name=name)
         logger.info(f"Created: {shape!r}")
@@ -176,10 +176,10 @@ def _get_part(shape, color, image_url):
     try:
         part = LegoPart.objects.get(shape=shape, color=color)
         if part.image_url != image_url:
-            logger.info(f"Outdated: {part!r}")
+            logger.warning(f"Outdated: {part!r}")
             part.image_url = image_url
             part.save()
-            logger.info(f"Updated: {part!r}")
+            logger.warning(f"Updated: {part!r}")
     except LegoPart.DoesNotExist:
         part = LegoPart.objects.create(shape=shape, color=color, image_url=image_url)
         logger.info(f"Created: {part!r}")

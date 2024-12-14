@@ -1,9 +1,7 @@
 staticfiles/
-
-db.sqlite3
-
-geckodriver.log
-lego.log
-
+.env
+*.log
+*.sqlite3
+__pycache__
 .idea/
 .venv/

@@ -1,6 +1,6 @@
 {% extends "lego/base.html" %}
 {% block content %}
-  <div class="title">{{ title }}</div>
+  <div class="title is-4">{{ title }}</div>
   <form action="{% url 'add_set' %}" method="post">{% csrf_token %}
     {{ add_set_form }}
     <input type="submit" value="OK" id="add_set_submit" class="button">

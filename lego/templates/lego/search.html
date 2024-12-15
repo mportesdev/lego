@@ -1,6 +1,6 @@
 {% extends "lego/base.html" %}
 {% block content %}
-  <div class="title">{{ title }}</div>
+  <div class="title is-4">{{ title }}</div>
   {% if sets.exists or parts.exists %}
   <div class="grid">
     {% for set in sets %}

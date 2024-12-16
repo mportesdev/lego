@@ -1,9 +1,9 @@
 from django.urls import path
 
-from .views import index, set_detail, part_detail, search, add_set, login, logout
+from .views import IndexView, set_detail, part_detail, search, add_set, login, logout
 
 urlpatterns = [
-    path("", index, name="index"),
+    path("", IndexView.as_view(), name="index"),
     path("set/add/", add_set, name="add_set"),
     path("set/<lego_id>/", set_detail, name="set_detail"),
     path("part/<lego_id>/", part_detail, name="part_detail"),

@@ -2,7 +2,7 @@
 {% block content %}
   <div class="title is-4">All Sets</div>
   <div class="grid">
-  {% for set in sets %}
+  {% for set in object_list %}
     <div class="box">
       <div><a href="{% url 'set_detail' set.lego_id %}">{{ set.lego_id }}</a></div>
       <div>{{ set.name }}</div>

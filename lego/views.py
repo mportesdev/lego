@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, render, redirect
+from django.views.generic import ListView
 
 from .external_api import get_set_info, get_set_parts
 from .forms import SearchForm, AddSetForm
@@ -14,16 +15,10 @@ COMMON_CONTEXT = {"site_name": "O&F Lego", "search_form": SearchForm}
 logger = logging.getLogger(__name__)
 
 
-def index(request):
-    sets = LegoSet.objects.all()
-    return render(
-        request,
-        "lego/index.html",
-        context=COMMON_CONTEXT | {
-            "sets": sets,
-            "title": "Home",
-        },
-    )
+class IndexView(ListView):
+    model = LegoSet
+    template_name = "lego/index.html"
+    extra_context = COMMON_CONTEXT | {"title": "Home"}
 
 
 def set_detail(request, lego_id):

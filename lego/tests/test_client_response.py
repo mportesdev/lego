@@ -17,7 +17,7 @@ class TestGetResponse(TestCase):
             _ordered_regex(
                 "<title>Home | O&amp;F Lego</title>",
                 "O&amp;F Lego",
-                "All Sets",
+                "Latest Additions",
                 "123-1", "Brick House", 'src="img123-1.jpg"',
             ),
         )

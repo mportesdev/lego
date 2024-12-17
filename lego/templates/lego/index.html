@@ -2,7 +2,7 @@
 {% block content %}
   <div class="title is-4">All Sets</div>
   <div class="grid">
-  {% for set in object_list %}
+  {% for set in page_obj %}
     <div class="box">
       <div><a href="{% url 'set_detail' set.lego_id %}">{{ set.lego_id }}</a></div>
       <div>{{ set.name }}</div>
@@ -10,4 +10,12 @@
     </div>
   {% endfor %}
   </div>
+  <nav class="pagination">
+    {% if page_obj.has_previous %}
+      <a href="?page={{ page_obj.previous_page_number }}" class="pagination-previous">Previous</a>
+    {% endif %}
+    {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}" class="pagination-next">Next</a>
+    {% endif %}
+  </nav>
 {% endblock %}

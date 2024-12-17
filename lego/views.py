@@ -18,6 +18,8 @@ logger = logging.getLogger(__name__)
 class IndexView(ListView):
     model = LegoSet
     template_name = "lego/index.html"
+    paginate_by = 24
+    ordering = "-pk"
     extra_context = COMMON_CONTEXT | {"title": "Home"}
 
 

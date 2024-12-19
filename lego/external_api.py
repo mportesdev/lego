@@ -2,21 +2,27 @@ import logging
 import os
 
 import requests
+from requests.auth import AuthBase
 
 API_URL = "https://rebrickable.com/api/v3"
 API_KEY = os.getenv("REBRICKABLE_API_KEY")
 
-headers = {
-    "Authorization": f"key {API_KEY}",
-    "Accept": "application/json",
-}
+
+class ApiAuth(AuthBase):
+    def __call__(self, request):
+        request.headers["Authorization"] = f"key {API_KEY}"
+        return request
+
+
+auth = ApiAuth()
+headers = {"Accept": "application/json"}
 
 logger = logging.getLogger(__name__)
 
 
 def get_set_info(set_lego_id):
     response = requests.get(
-        f"{API_URL}/lego/sets/{set_lego_id}/", headers=headers, timeout=5
+        f"{API_URL}/lego/sets/{set_lego_id}/", auth=auth, headers=headers, timeout=5
     )
     response.raise_for_status()
     data = response.json()
@@ -27,7 +33,7 @@ def get_set_info(set_lego_id):
 
 
 def _get_paginated_data(url):
-    response = requests.get(url, headers=headers, timeout=5)
+    response = requests.get(url, auth=auth, headers=headers, timeout=5)
     response.raise_for_status()
     data = response.json()
     yield from data["results"]

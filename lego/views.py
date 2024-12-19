@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, render, redirect
-from django.views.generic import ListView
+from django.views.generic import DetailView, ListView
 
 from .external_api import get_set_info, get_set_parts
 from .forms import SearchForm, AddSetForm
@@ -23,18 +23,15 @@ class IndexView(ListView):
     extra_context = COMMON_CONTEXT | {"title": "Home"}
 
 
-def set_detail(request, lego_id):
-    set_ = get_object_or_404(LegoSet, lego_id=lego_id)
-    set_items = set_.setitem_set.all()
-    return render(
-        request,
-        "lego/set_detail.html",
-        context=COMMON_CONTEXT | {
-            "image_url": set_.image_url,
-            "set_items": set_items,
-            "title": f"Lego Set {set_}",
-        },
-    )
+class SetDetail(DetailView):
+    template_name = "lego/set_detail.html"
+
+    def get_object(self, **kwargs):
+        return get_object_or_404(LegoSet, lego_id=self.kwargs["lego_id"])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context | COMMON_CONTEXT | {"title": f"Lego Set {self.object}"}
 
 
 def part_detail(request, lego_id, color_id=None):

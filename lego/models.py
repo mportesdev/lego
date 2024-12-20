@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 
 class Shape(models.Model):
@@ -59,6 +60,9 @@ class LegoSet(models.Model):
     image_url = models.URLField(null=True)
 
     parts = models.ManyToManyField(LegoPart, through="SetItem", related_name="sets")
+
+    def get_absolute_url(self):
+        return reverse("set_detail", kwargs={"lego_id": self.lego_id})
 
     def __str__(self):
         return f"{self.lego_id} {self.name}"

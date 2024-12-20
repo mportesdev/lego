@@ -7,9 +7,9 @@
   {% for item in set_items %}
     <div class="box">
       <div>{{ item.quantity }}x in</div>
-      <div><a href="{% url 'set_detail' item.set.lego_id %}">{{ item.set.lego_id }}</a></div>
+      <div><a href="{{ item.set.get_absolute_url }}">{{ item.set.lego_id }}</a></div>
       <div>{{ item.set.name }}</div>
-      <div>{% if item.set.image_url %}<figure class="image is-128x128"><a href="{% url 'set_detail' item.set.lego_id %}"><img src="{{ item.set.image_url }}"></a></figure>{% endif %}</div>
+      <div>{% if item.set.image_url %}<figure class="image is-128x128"><a href="{{ item.set.get_absolute_url }}"><img src="{{ item.set.image_url }}"></a></figure>{% endif %}</div>
     </div>
   {% endfor %}
   </div>

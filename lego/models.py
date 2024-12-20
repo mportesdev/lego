@@ -43,6 +43,12 @@ class LegoPart(models.Model):
             ),
         ]
 
+    def get_absolute_url(self):
+        kwargs = {"lego_id": self.shape.lego_id}
+        if self.color:
+            kwargs["color_id"] = self.color.id
+        return reverse("part_detail", kwargs=kwargs)
+
     def __str__(self):
         return f"{self.shape}, {self.color}" if self.color else f"{self.shape}"
 

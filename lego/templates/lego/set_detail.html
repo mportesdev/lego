@@ -5,14 +5,12 @@
   <div class="subtitle">Contains:</div>
   <div class="grid">
   {% for item in legoset.setitem_set.all %}
-    {% if item.part.color %}{% url 'part_detail' item.part.shape.lego_id item.part.color.id as part_detail_url %}
-    {% else %}{% url 'part_detail' item.part.shape.lego_id as part_detail_url %}{% endif %}
     <div class="box">
       <div>{{ item.quantity }}x</div>
-      <div><a href="{{ part_detail_url }}">{{ item.part.shape.lego_id }}</a></div>
+      <div><a href="{{ item.part.get_absolute_url }}">{{ item.part.shape.lego_id }}</a></div>
       <div>{{ item.part.shape.name }}</div>
       <div>{% if item.part.color %}{{ item.part.color.name }}{% endif %}</div>
-      <div>{% if item.part.image_url %}<figure class="image is-128x128"><a href="{{ part_detail_url }}"><img src="{{ item.part.image_url }}"></a></figure>{% endif %}</div>
+      <div>{% if item.part.image_url %}<figure class="image is-128x128"><a href="{{ item.part.get_absolute_url }}"><img src="{{ item.part.image_url }}"></a></figure>{% endif %}</div>
     </div>
   {% endfor %}
   </div>

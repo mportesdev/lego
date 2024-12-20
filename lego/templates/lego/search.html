@@ -11,13 +11,11 @@
       </div>
     {% endfor %}
     {% for part in parts %}
-      {% if part.color %}{% url 'part_detail' part.shape.lego_id part.color.id as part_detail_url %}
-      {% else %}{% url 'part_detail' part.shape.lego_id as part_detail_url %}{% endif %}
       <div class="box">
-        <div><a href="{{ part_detail_url }}">{{ part.shape.lego_id }}</a></div>
+        <div><a href="{{ part.get_absolute_url }}">{{ part.shape.lego_id }}</a></div>
         <div>{{ part.shape.name }}</div>
         <div>{% if part.color %}{{ part.color.name }}{% endif %}</div>
-        <div>{% if part.image_url %}<figure class="image is-128x128"><a href="{{ part_detail_url }}"><img src="{{ part.image_url }}"></a></figure>{% endif %}</div>
+        <div>{% if part.image_url %}<figure class="image is-128x128"><a href="{{ part.get_absolute_url }}"><img src="{{ part.image_url }}"></a></figure>{% endif %}</div>
       </div>
     {% endfor %}
   </div>

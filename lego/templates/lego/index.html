@@ -4,9 +4,9 @@
   <div class="grid">
   {% for set in page_obj %}
     <div class="box">
-      <div><a href="{% url 'set_detail' set.lego_id %}">{{ set.lego_id }}</a></div>
+      <div><a href="{{ set.get_absolute_url }}">{{ set.lego_id }}</a></div>
       <div>{{ set.name }}</div>
-      <div>{% if set.image_url %}<figure class="image is-128x128"><a href="{% url 'set_detail' set.lego_id %}"><img src="{{ set.image_url }}"></a></figure>{% endif %}</div>
+      <div>{% if set.image_url %}<figure class="image is-128x128"><a href="{{ set.get_absolute_url }}"><img src="{{ set.image_url }}"></a></figure>{% endif %}</div>
     </div>
   {% endfor %}
   </div>

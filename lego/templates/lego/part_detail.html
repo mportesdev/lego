@@ -7,6 +7,9 @@
   {% elif legopart.image_url %}<div><figure class="image is-128x128"><img src="{{ legopart.image_url }}"></figure></div>
   {% else %}<div class="ti ti-lego icon-96"></div>
   {% endif %}
+  {% if legopart.color and legopart.shape.num_code %}
+    <div class="subtitle"><a href="{% url 'search' %}?q={{ legopart.shape.num_code }}&mode=id" id="all_colors">All colors</a></div>
+  {% endif %}
   <div class="subtitle">Included in:</div>
   <div class="grid">
   {% for item in legopart.setitem_set.all %}

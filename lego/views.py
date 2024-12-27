@@ -34,18 +34,19 @@ class SetDetail(DetailView):
         return context | COMMON_CONTEXT | {"title": f"Lego Set {self.object}"}
 
 
-def part_detail(request, lego_id, color_id=None):
-    part = get_object_or_404(LegoPart, shape__lego_id=lego_id, color=color_id)
-    set_items = part.setitem_set.all()
-    return render(
-        request,
-        "lego/part_detail.html",
-        context=COMMON_CONTEXT | {
-            "image_url": part.image_url,
-            "set_items": set_items,
-            "title": f"Lego Part {part}",
-        },
-    )
+class PartDetail(DetailView):
+    template_name = "lego/part_detail.html"
+
+    def get_object(self, **kwargs):
+        return get_object_or_404(
+            LegoPart,
+            shape__lego_id=self.kwargs["lego_id"],
+            color=self.kwargs.get("color_id"),
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context | COMMON_CONTEXT | {"title": f"Lego Part {self.object}"}
 
 
 def search(request):

@@ -1,10 +1,10 @@
 {% extends "lego/base.html" %}
 {% block content %}
   <div class="title is-4">{{ title }}</div>
-  {% if image_url %}<div><figure class="image is-128x128"><img src="{{ image_url }}"></figure></div>{% endif %}
+  {% if legopart.image_url %}<div><figure class="image is-128x128"><img src="{{ legopart.image_url }}"></figure></div>{% endif %}
   <div class="subtitle">Included in:</div>
   <div class="grid">
-  {% for item in set_items %}
+  {% for item in legopart.setitem_set.all %}
     <div class="box">
       <div>{{ item.quantity }}x in</div>
       <div><a href="{{ item.set.get_absolute_url }}">{{ item.set.lego_id }}</a></div>

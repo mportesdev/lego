@@ -17,7 +17,7 @@ class TestGetResponse(TestCase):
             _ordered_regex(
                 "Latest Additions",
                 "111-1", "Airport", 'src="img111-1.jpg"',
-                "123-1", "Brick House", 'src="img123-1.jpg"',
+                "123-1", "Brick House", "/img/sets/1.jpg",
             ),
         )
 
@@ -28,10 +28,10 @@ class TestGetResponse(TestCase):
         self.assertRegex(
             response.content.decode(),
             _ordered_regex(
-                "Lego Set 123-1 Brick House", 'src="img123-1.jpg"',
+                "Lego Set 123-1 Brick House", "/img/sets/1.jpg",
                 "Contains:",
-                "1x", "234pr", "Brick 2 x 4", "Red", 'src="img234prR.jpg"',
-                "1x", "567", "Figure", 'src="img567.jpg"',
+                "1x", "234pr", "Brick 2 x 4", "Red", "/img/parts/1.jpg",
+                "1x", "567", "Figure", "/img/parts/3.jpg",
             ),
         )
 
@@ -47,9 +47,9 @@ class TestGetResponse(TestCase):
         self.assertRegex(
             response.content.decode(),
             _ordered_regex(
-                "Lego Part 567 Figure", 'src="img567.jpg"',
+                "Lego Part 567 Figure", "/img/parts/3.jpg",
                 "Included in:",
-                "1x in", "123-1", "Brick House", 'src="img123-1.jpg"',
+                "1x in", "123-1", "Brick House", "/img/sets/1.jpg",
             ),
         )
 
@@ -60,9 +60,9 @@ class TestGetResponse(TestCase):
         self.assertRegex(
             response.content.decode(),
             _ordered_regex(
-                "Lego Part 234pr Brick 2 x 4, Red", 'src="img234prR.jpg"',
+                "Lego Part 234pr Brick 2 x 4, Red", "/img/parts/1.jpg",
                 "Included in:",
-                "1x in", "123-1", "Brick House", 'src="img123-1.jpg"',
+                "1x in", "123-1", "Brick House", "/img/sets/1.jpg",
              ),
         )
 
@@ -93,7 +93,7 @@ class TestSearch(TestCase):
             response.content.decode(),
             _ordered_regex(
                 "Search Results for", "house",
-                "123-1", "Brick House", 'src="img123-1.jpg"',
+                "123-1", "Brick House", "/img/sets/1.jpg",
             ),
         )
 
@@ -105,8 +105,8 @@ class TestSearch(TestCase):
             response.content.decode(),
             _ordered_regex(
                 "Search Results for", "2 x 4",
-                "234pr", "Brick 2 x 4", "Red", 'src="img234prR.jpg"',
-                "234pr", "Brick 2 x 4", "White", 'src="img234prW.jpg"',
+                "234pr", "Brick 2 x 4", "Red", "/img/parts/1.jpg",
+                "234pr", "Brick 2 x 4", "White", "/img/parts/2.jpg",
             ),
         )
 
@@ -118,9 +118,9 @@ class TestSearch(TestCase):
             response.content.decode(),
             _ordered_regex(
                 "Search Results for", "brick",
-                "123-1", "Brick House", 'src="img123-1.jpg"',
-                "234pr", "Brick 2 x 4", "Red", 'src="img234prR.jpg"',
-                "234pr", "Brick 2 x 4", "White", 'src="img234prW.jpg"',
+                "123-1", "Brick House", "/img/sets/1.jpg",
+                "234pr", "Brick 2 x 4", "Red", "/img/parts/1.jpg",
+                "234pr", "Brick 2 x 4", "White", "/img/parts/2.jpg",
             ),
         )
 
@@ -132,7 +132,7 @@ class TestSearch(TestCase):
             response.content.decode(),
             _ordered_regex(
                 "Search Results for", "123",
-                "123-1", "Brick House", 'src="img123-1.jpg"',
+                "123-1", "Brick House", "/img/sets/1.jpg",
             ),
         )
 
@@ -144,8 +144,8 @@ class TestSearch(TestCase):
             response.content.decode(),
             _ordered_regex(
                 "Search Results for", "234",
-                "234pr", "Brick 2 x 4", "Red", 'src="img234prR.jpg"',
-                "234pr", "Brick 2 x 4", "White", 'src="img234prW.jpg"',
+                "234pr", "Brick 2 x 4", "Red", "/img/parts/1.jpg",
+                "234pr", "Brick 2 x 4", "White", "/img/parts/2.jpg",
             ),
         )
 

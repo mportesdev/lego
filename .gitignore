@@ -1,3 +1,4 @@
+static/
 staticfiles/
 .env
 *.log

@@ -5,3 +5,4 @@ dj-database-url==2.3.0
 whitenoise[brotli]==6.8.2
 gunicorn==23.0.0
 uvicorn==0.34.0
+pillow==11.1.0

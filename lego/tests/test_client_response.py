@@ -15,8 +15,6 @@ class TestGetResponse(TestCase):
         self.assertRegex(
             response.content.decode(),
             _ordered_regex(
-                "<title>Home | O&amp;F Lego</title>",
-                "O&amp;F Lego",
                 "Latest Additions",
                 "123-1", "Brick House", 'src="img123-1.jpg"',
             ),

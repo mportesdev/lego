@@ -171,7 +171,6 @@ class TestBrowserUI(LiveServerTestCase):
         self.driver.find_element(By.XPATH, "//a[text()='222']")
         self.driver.find_element(By.XPATH, "//div[text()='Wheel']")
         self.driver.find_element(By.XPATH, "//div[text()='Black']")
-        self.driver.find_element(By.XPATH, "//img[@src='img222k.jpg']")
 
     def test_add_set_without_suffix(self):
         self.login_test_user()

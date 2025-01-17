@@ -261,10 +261,10 @@ class TestAddSet(TestCase):
                 "Lego Set 1234-1 Fighter Jet", 'src="img1234-1.jpg"',
                 "Contains:",
                 "1x", "234pr", "Brick 2 x 4 with studs", "Blue", 'src="img234prB.jpg"',
-                "1x", "111", "Jet Engine", "Blue", 'src="img111b.jpg"',
+                "2x", "111", "Jet Engine", "Blue", 'src="img111b.jpg"',
                 "1x", "333", "Pilot", 'src="img333.jpg"',
                 "1x", "102", "Plate 1 x 3", "White", 'src="img102W2.jpg"',
-                "3x", "222", "Wheel", "Black", 'src="img222k.jpg"',
+                "3x", "222", "Wheel", "Black",
             ),
         )
 

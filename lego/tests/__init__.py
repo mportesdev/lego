@@ -3,21 +3,21 @@ from unittest.mock import patch
 from requests import HTTPError
 
 
-def _mock_func(set_lego_id):
+def _set_info_mock(set_lego_id):
     if set_lego_id == "1234-1":
         return {"name": "Fighter Jet", "image_url": "img1234-1.jpg"}
     if set_lego_id == "999-1":
         raise HTTPError("404 Client Error: Not Found")
-    raise ValueError("_mock_func: unexpected test argument")
+    raise ValueError("_set_info_mock: unexpected test argument")
 
 
 def get_set_info_mock():
-    return patch("lego.views.get_set_info", side_effect=_mock_func)
+    return patch("lego.views.get_set_info", side_effect=_set_info_mock)
 
 
-def _mock_generator(set_lego_id):
+def _set_parts_mock(set_lego_id):
     if set_lego_id == "1234-1":
-        yield {
+        yield {  # part without color
             "lego_id": "333",
             "name": "Pilot",
             "image_url": "img333.jpg",
@@ -28,9 +28,9 @@ def _mock_generator(set_lego_id):
             "name": "Jet Engine",
             "color_name": "Blue",
             "image_url": "img111b.jpg",
-            "quantity": 1,
+            "quantity": 2,
         }
-        yield {
+        yield {  # spare part
             "lego_id": "222",
             "name": "Wheel",
             "color_name": "Black",
@@ -38,35 +38,33 @@ def _mock_generator(set_lego_id):
             "quantity": 1,
             "is_spare": True,
         }
-        yield {
+        yield {  # part without image
             "lego_id": "222",
             "name": "Wheel",
             "color_name": "Black",
-            "image_url": "img222k.jpg",
+            "image_url": None,
             "quantity": 3,
             "is_spare": False,
         }
-        yield {
+        yield {  # part with an updated shape name compared to db
             "lego_id": "234pr",
-            # shape name for this lego_id differs from db, must be updated
             "name": "Brick 2 x 4 with studs",
             "color_name": "Blue",
             "image_url": "img234prB.jpg",
             "quantity": 1,
             "is_spare": False,
         }
-        yield {
+        yield {  # part with an updated image url compared to db
             "lego_id": "102",
             "name": "Plate 1 x 3",
             "color_name": "White",
-            # image url for this part differs from db, must be updated
             "image_url": "img102W2.jpg",
             "quantity": 1,
             "is_spare": False,
         }
     else:
-        raise ValueError("_mock_generator: unexpected test argument")
+        raise ValueError("_set_parts_mock: unexpected test argument")
 
 
 def get_set_parts_mock():
-    return patch("lego.views.get_set_parts", side_effect=_mock_generator)
+    return patch("lego.views.get_set_parts", side_effect=_set_parts_mock)

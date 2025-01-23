@@ -5,7 +5,7 @@
     "fields": {
         "lego_id": "123-1",
         "name": "Brick House",
-        "image_url": "img123-1.jpg",
+        "image_url": "test://cdn.test/img/123.jpg",
         "image": "lego/img/sets/1.jpg"
     }
 },
@@ -15,7 +15,7 @@
     "fields": {
         "lego_id": "111-1",
         "name": "Airport",
-        "image_url": "img111-1.jpg",
+        "image_url": "test://cdn.test/img/111.jpg",
         "image": null
     }
 },
@@ -63,7 +63,7 @@
     "fields": {
         "shape": 1,
         "color": 1,
-        "image_url": "img234prR.jpg",
+        "image_url": "test://cdn.test/img/234prR.jpg",
         "image": "lego/img/parts/1.jpg"
     }
 },
@@ -73,7 +73,7 @@
     "fields": {
         "shape": 1,
         "color": 2,
-        "image_url": "img234prW.jpg",
+        "image_url": "test://cdn.test/img/234prW.jpg",
         "image": "lego/img/parts/2.jpg"
     }
 },
@@ -83,7 +83,7 @@
     "fields": {
         "shape": 2,
         "color": null,
-        "image_url": "img567.jpg",
+        "image_url": "test://cdn.test/img/567.jpg",
         "image": "lego/img/parts/3.jpg"
     }
 },
@@ -93,7 +93,7 @@
     "fields": {
         "shape": 3,
         "color": 2,
-        "image_url": "img102W.jpg",
+        "image_url": "test://cdn.test/img/102W.jpg",
         "image": null
     }
 },

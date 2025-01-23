@@ -5,7 +5,7 @@ from requests import HTTPError
 
 def _set_info_mock(set_lego_id):
     if set_lego_id == "1234-1":
-        return {"name": "Fighter Jet", "image_url": "img1234-1.jpg"}
+        return {"name": "Fighter Jet", "image_url": "test://cdn.test/img/1234.jpg"}
     if set_lego_id == "999-1":
         raise HTTPError("404 Client Error: Not Found")
     raise ValueError("_set_info_mock: unexpected test argument")
@@ -20,21 +20,21 @@ def _set_parts_mock(set_lego_id):
         yield {  # part without color
             "lego_id": "333",
             "name": "Pilot",
-            "image_url": "img333.jpg",
+            "image_url": "test://cdn.test/img/333.jpg",
             "quantity": 1,
         }
         yield {
             "lego_id": "111",
             "name": "Jet Engine",
             "color_name": "Blue",
-            "image_url": "img111b.jpg",
+            "image_url": "test://cdn.test/img/111b.jpg",
             "quantity": 2,
         }
         yield {  # spare part
             "lego_id": "222",
             "name": "Wheel",
             "color_name": "Black",
-            "image_url": "img222k.jpg",
+            "image_url": "test://cdn.test/img/222k.jpg",
             "quantity": 1,
             "is_spare": True,
         }
@@ -50,7 +50,7 @@ def _set_parts_mock(set_lego_id):
             "lego_id": "234pr",
             "name": "Brick 2 x 4 with studs",
             "color_name": "Blue",
-            "image_url": "img234prB.jpg",
+            "image_url": "test://cdn.test/img/234prB.jpg",
             "quantity": 1,
             "is_spare": False,
         }
@@ -58,7 +58,7 @@ def _set_parts_mock(set_lego_id):
             "lego_id": "102",
             "name": "Plate 1 x 3",
             "color_name": "White",
-            "image_url": "img102W2.jpg",
+            "image_url": "test://cdn.test/img/102W2.jpg",
             "quantity": 1,
             "is_spare": False,
         }

@@ -16,7 +16,7 @@ class TestGetResponse(TestCase):
             response.content.decode(),
             _ordered_regex(
                 "Latest Additions",
-                "111-1", "Airport", 'src="img111-1.jpg"',
+                "111-1", "Airport", "test://cdn.test/img/111.jpg",
                 "123-1", "Brick House", "/img/sets/1.jpg",
             ),
         )
@@ -257,12 +257,12 @@ class TestAddSet(TestCase):
         self.assertRegex(
             response.content.decode(),
             _ordered_regex(
-                "Lego Set 1234-1 Fighter Jet", 'src="img1234-1.jpg"',
+                "Lego Set 1234-1 Fighter Jet", "test://cdn.test/img/1234.jpg",
                 "Contains:",
-                "1x", "234pr", "Brick 2 x 4 with studs", "Blue", 'src="img234prB.jpg"',
-                "2x", "111", "Jet Engine", "Blue", 'src="img111b.jpg"',
-                "1x", "333", "Pilot", 'src="img333.jpg"',
-                "1x", "102", "Plate 1 x 3", "White", 'src="img102W2.jpg"',
+                "1x", "234pr", "Brick 2 x 4 with studs", "Blue", "test://cdn.test/img/234prB.jpg",
+                "2x", "111", "Jet Engine", "Blue", "test://cdn.test/img/111b.jpg",
+                "1x", "333", "Pilot", "test://cdn.test/img/333.jpg",
+                "1x", "102", "Plate 1 x 3", "White", "test://cdn.test/img/102W2.jpg",
                 "3x", "222", "Wheel", "Black",
             ),
         )

@@ -16,6 +16,7 @@ class TestGetResponse(TestCase):
             response.content.decode(),
             _ordered_regex(
                 "Latest Additions",
+                "111-1", "Airport", 'src="img111-1.jpg"',
                 "123-1", "Brick House", 'src="img123-1.jpg"',
             ),
         )

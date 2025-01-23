@@ -1,4 +1,5 @@
 {% extends "lego/base.html" %}
+{% load static %}
 {% block content %}
   <div class="title is-4">Latest Additions</div>
   <div class="grid">
@@ -6,7 +7,9 @@
     <div class="box">
       <div><a href="{{ set.get_absolute_url }}">{{ set.lego_id }}</a></div>
       <div>{{ set.name }}</div>
-      <div>{% if set.image_url %}<figure class="image is-128x128"><a href="{{ set.get_absolute_url }}"><img src="{{ set.image_url }}"></a></figure>{% endif %}</div>
+      {% if set.image %}<div><figure class="image is-128x128"><a href="{{ set.get_absolute_url }}"><img src="{% static set.image %}"></a></figure></div>
+      {% elif set.image_url %}<div><figure class="image is-128x128"><a href="{{ set.get_absolute_url }}"><img src="{{ set.image_url }}"></a></figure></div>
+      {% endif %}
     </div>
   {% endfor %}
   </div>

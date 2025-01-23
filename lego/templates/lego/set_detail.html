@@ -1,7 +1,10 @@
 {% extends "lego/base.html" %}
+{% load static %}
 {% block content %}
   <div class="title is-4">{{ title }}</div>
-  {% if legoset.image_url %}<div><figure class="image is-128x128"><img src="{{ legoset.image_url }}"></figure></div>{% endif %}
+  {% if legoset.image %}<div><img src="{% static legoset.image %}"></div>
+  {% elif legoset.image_url %}<div><figure class="image is-128x128"><img src="{{ legoset.image_url }}"></figure></div>
+  {% endif %}
   <div class="subtitle">Contains:</div>
   <div class="grid">
   {% for item in legoset.setitem_set.all %}
@@ -10,7 +13,9 @@
       <div><a href="{{ item.part.get_absolute_url }}">{{ item.part.shape.lego_id }}</a></div>
       <div>{{ item.part.shape.name }}</div>
       <div>{% if item.part.color %}{{ item.part.color.name }}{% endif %}</div>
-      <div>{% if item.part.image_url %}<figure class="image is-128x128"><a href="{{ item.part.get_absolute_url }}"><img src="{{ item.part.image_url }}"></a></figure>{% endif %}</div>
+      {% if item.part.image %}<div><figure class="image is-128x128"><a href="{{ item.part.get_absolute_url }}"><img src="{% static item.part.image %}"></a></figure></div>
+      {% elif item.part.image_url %}<div><figure class="image is-128x128"><a href="{{ item.part.get_absolute_url }}"><img src="{{ item.part.image_url }}"></a></figure></div>
+      {% endif %}
     </div>
   {% endfor %}
   </div>

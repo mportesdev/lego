@@ -33,7 +33,7 @@ admin_site.register(Color, ColorAdmin)
 
 
 class LegoPartAdmin(admin.ModelAdmin):
-    list_display = ["short_name", "shape", "color", "image_url"]
+    list_display = ["short_name", "shape", "color", "image_url", "image"]
     list_filter = ["color"]
     search_fields = ["shape__lego_id", "shape__name", "color__name"]
 
@@ -48,7 +48,7 @@ admin_site.register(LegoPart, LegoPartAdmin)
 
 
 class LegoSetAdmin(admin.ModelAdmin):
-    list_display = ["lego_id", "name", "image_url"]
+    list_display = ["lego_id", "name", "image_url", "image"]
     search_fields = ["lego_id", "name"]
 
 

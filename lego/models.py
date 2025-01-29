@@ -56,7 +56,7 @@ class LegoPart(models.Model):
     def __repr__(self):
         fields_repr = ", ".join(
             f"{field_name}={getattr(self, field_name)!r}"
-            for field_name in ("id", "shape", "color", "image_url")
+            for field_name in ("id", "shape", "color", "image_url", "image")
         )
         return f"{type(self).__name__}({fields_repr})"
 
@@ -78,7 +78,7 @@ class LegoSet(models.Model):
     def __repr__(self):
         fields_repr = ", ".join(
             f"{field_name}={getattr(self, field_name)!r}"
-            for field_name in ("id", "lego_id", "name", "image_url")
+            for field_name in ("id", "lego_id", "name", "image_url", "image")
         )
         return f"{type(self).__name__}({fields_repr})"
 

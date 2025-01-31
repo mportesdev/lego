@@ -31,7 +31,7 @@ def _scaled_image_for_url(url):
 
 def _suffix_and_params(format):
     match format:
-        case "JPEG":
+        case "JPEG" | "MPO":
             suffix = "jpg"
             params = {"quality": 92}
         case "PNG":

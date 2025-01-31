@@ -31,12 +31,15 @@ def _scaled_image_for_url(url):
 
 def _suffix_and_params(format):
     match format:
-        case "JPEG":
+        case "JPEG" | "MPO":
             suffix = "jpg"
             params = {"quality": 92}
         case "PNG":
             suffix = "png"
             params = {"compress_level": 3}
+        case _:
+            suffix = None
+            params = {}
     return suffix, params
 
 
@@ -50,6 +53,9 @@ def _store_image(model, subdir):
 
     image = _scaled_image_for_url(obj.image_url)
     suffix, params = _suffix_and_params(image.format)
+    if suffix is None:
+        logger.warning(f"Unexpected image format {image.format!r} for {obj!r}")
+        return
 
     rel_path = Path("lego") / "img" / subdir / f"{obj.pk}.{suffix}"
     logger.info(f"Saving to static: {rel_path}")

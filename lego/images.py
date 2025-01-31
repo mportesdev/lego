@@ -3,6 +3,7 @@ import logging
 from pathlib import Path
 
 import requests
+from django_tasks import task
 from PIL import Image
 
 from .models import LegoPart, LegoSet
@@ -65,9 +66,11 @@ def _store_image(model, subdir):
     obj.save()
 
 
+@task
 def store_set_image():
     _store_image(LegoSet, "sets")
 
 
+@task
 def store_part_image():
     _store_image(LegoPart, "parts")

@@ -24,6 +24,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "lego.apps.LegoConfig",
+    "django_tasks",
+    "django_tasks.backends.database",
 ]
 
 MIDDLEWARE = [
@@ -66,6 +68,9 @@ DATABASES = {
         conn_health_checks=True,
     ),
 }
+
+if os.getenv("CI"):
+    DATABASES["default"].setdefault("OPTIONS", {})["transaction_mode"] = "EXCLUSIVE"
 
 
 # Password validation
@@ -145,4 +150,10 @@ LOGGING = {
             "style": "{",
         },
     },
+}
+
+TASKS = {
+    "default": {
+        "BACKEND": "django_tasks.backends.database.DatabaseBackend"
+    }
 }

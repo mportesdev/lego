@@ -27,6 +27,7 @@ jobs:
       env:
         DATABASE_URL: "sqlite:///testdb.sqlite3"
         LEGO_SECRET_KEY: ${{ secrets.TEST_LEGO_SECRET_KEY }}
+        LEGO_TEST: true
       run: |
         python manage.py collectstatic --no-input
         python manage.py check

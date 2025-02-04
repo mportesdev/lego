@@ -106,9 +106,17 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
-if not DEBUG:
-    STATIC_ROOT = BASE_DIR / "staticfiles"
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+if not os.getenv("LEGO_TEST"):
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
 
 
 # Default primary key field type

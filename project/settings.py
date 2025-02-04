@@ -132,7 +132,11 @@ LOGGING = {
     "loggers": {
         "lego": {
             "level": "DEBUG",
-            "handlers": ["console", "file"],
+            "handlers": ["console", "lego-logfile"],
+        },
+        "django": {
+            "level": "ERROR",
+            "handlers": ["django-logfile"],
         },
     },
     "handlers": {
@@ -141,10 +145,16 @@ LOGGING = {
             "level": "WARNING",
             "formatter": "brief",
         },
-        "file": {
+        "lego-logfile": {
             "class": "logging.FileHandler",
             "filename": BASE_DIR / "lego.log",
             "level": "DEBUG" if DEBUG else "INFO",
+            "formatter": "detailed",
+        },
+        "django-logfile": {
+            "class": "logging.FileHandler",
+            "filename": BASE_DIR / "django.log",
+            "level": "ERROR",
             "formatter": "detailed",
         },
     },

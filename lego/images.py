@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 
 def _scaled_image_for_url(url):
     with requests.get(url) as response:
+        response.raise_for_status()
         img = Image.open(io.BytesIO(response.content))
 
     scale_factor = min(MAX_WIDTH / img.width, MAX_HEIGHT / img.height)
@@ -52,7 +53,12 @@ def _store_image(model, subdir):
         logger.info(f"No {model.__name__} candidate to process")
         return
 
-    image = _scaled_image_for_url(obj.image_url)
+    try:
+        image = _scaled_image_for_url(obj.image_url)
+    except OSError as err:    # e.g. requests.HTTPError, PIL.UnidentifiedImageError
+        logger.error(f"{err!r} reading image URL for {obj!r}")
+        return
+
     suffix, params = _suffix_and_params(image.format)
     if suffix is None:
         logger.warning(f"Unexpected image format {image.format!r} for {obj!r}")

@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 
 def _scaled_image_for_url(url):
     with requests.get(url) as response:
+        response.raise_for_status()
         img = Image.open(io.BytesIO(response.content))
 
     scale_factor = min(MAX_WIDTH / img.width, MAX_HEIGHT / img.height)
@@ -44,6 +45,12 @@ def _suffix_and_params(format):
     return suffix, params
 
 
+def _delete_image_url(obj):
+    obj.image_url = None
+    obj.save()
+    logger.info(f"Deleted `image_url`: {obj!r}")
+
+
 def _store_image(model, subdir):
     obj = model.objects.filter(
         image__isnull=True, image_url__isnull=False
@@ -52,10 +59,17 @@ def _store_image(model, subdir):
         logger.info(f"No {model.__name__} candidate to process")
         return
 
-    image = _scaled_image_for_url(obj.image_url)
+    try:
+        image = _scaled_image_for_url(obj.image_url)
+    except OSError as err:    # e.g. requests.HTTPError, PIL.UnidentifiedImageError
+        logger.error(f"{err!r} reading image URL for {obj!r}")
+        _delete_image_url(obj)
+        return
+
     suffix, params = _suffix_and_params(image.format)
     if suffix is None:
         logger.warning(f"Unexpected image format {image.format!r} for {obj!r}")
+        _delete_image_url(obj)
         return
 
     rel_path = Path("lego") / "img" / subdir / f"{obj.pk}.{suffix}"

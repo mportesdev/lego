@@ -45,6 +45,12 @@ def _suffix_and_params(format):
     return suffix, params
 
 
+def _delete_image_url(obj):
+    obj.image_url = None
+    obj.save()
+    logger.info(f"Deleted `image_url`: {obj!r}")
+
+
 def _store_image(model, subdir):
     obj = model.objects.filter(
         image__isnull=True, image_url__isnull=False
@@ -57,11 +63,13 @@ def _store_image(model, subdir):
         image = _scaled_image_for_url(obj.image_url)
     except OSError as err:    # e.g. requests.HTTPError, PIL.UnidentifiedImageError
         logger.error(f"{err!r} reading image URL for {obj!r}")
+        _delete_image_url(obj)
         return
 
     suffix, params = _suffix_and_params(image.format)
     if suffix is None:
         logger.warning(f"Unexpected image format {image.format!r} for {obj!r}")
+        _delete_image_url(obj)
         return
 
     rel_path = Path("lego") / "img" / subdir / f"{obj.pk}.{suffix}"

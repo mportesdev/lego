@@ -8,6 +8,7 @@ from django.views.generic import DetailView, ListView
 
 from .external_api import get_set_info, get_set_parts
 from .forms import SearchForm, AddSetForm
+from .images import store_set_image, store_part_image
 from .models import Shape, Color, LegoPart, LegoSet
 
 COMMON_CONTEXT = {"site_name": "O&F Lego", "search_form": SearchForm}
@@ -134,6 +135,7 @@ def add_set(request):
     set_.image_url = set_info["image_url"]
     set_.save()
     logger.info(f"Created: {set_!r}")
+    store_set_image.enqueue(pk=set_.pk)
 
     for item in get_set_parts(set_lego_id):
         if item.get("is_spare"):
@@ -175,9 +177,11 @@ def _get_part(shape, color, image_url):
             part.image_url = image_url
             part.save()
             logger.warning(f"Updated: {part!r}")
+            store_part_image.enqueue(pk=part.pk)
     except LegoPart.DoesNotExist:
         part = LegoPart.objects.create(shape=shape, color=color, image_url=image_url)
         logger.info(f"Created: {part!r}")
+        store_part_image.enqueue(pk=part.pk)
     return part
 
 

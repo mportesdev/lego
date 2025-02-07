@@ -51,13 +51,16 @@ def _delete_image_url(obj):
     logger.info(f"Deleted `image_url`: {obj!r}")
 
 
-def _store_image(model, subdir):
-    obj = model.objects.filter(
-        image__isnull=True, image_url__isnull=False
-    ).order_by("-pk").first()
-    if obj is None:
-        logger.info(f"No {model.__name__} candidate to process")
-        return
+def _store_image(model, pk, subdir):
+    if pk is not None:
+        obj = model.objects.get(pk=pk)
+    else:
+        obj = model.objects.filter(
+            image__isnull=True, image_url__isnull=False
+        ).order_by("-pk").first()
+        if obj is None:
+            logger.info(f"No {model.__name__} candidate to process")
+            return
 
     try:
         image = _scaled_image_for_url(obj.image_url)
@@ -81,10 +84,10 @@ def _store_image(model, subdir):
 
 
 @task
-def store_set_image():
-    _store_image(LegoSet, "sets")
+def store_set_image(pk=None):
+    _store_image(LegoSet, pk, "sets")
 
 
 @task
-def store_part_image():
-    _store_image(LegoPart, "parts")
+def store_part_image(pk=None):
+    _store_image(LegoPart, pk, "parts")

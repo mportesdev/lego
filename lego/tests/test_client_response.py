@@ -108,7 +108,7 @@ class TestSearch(TestCase):
             _ordered_regex(
                 "Search Results for", "2 x 4",
                 "234pr", "Brick 2 x 4", "Red", "/img/parts/1.jpg",
-                "234pr", "Brick 2 x 4", "White", "/img/parts/2.jpg",
+                "234pr", "Brick 2 x 4", "White", "test://cdn.test/img/234prW.jpg",
             ),
         )
 
@@ -122,7 +122,7 @@ class TestSearch(TestCase):
                 "Search Results for", "brick",
                 "123-1", "Brick House", "/img/sets/1.jpg",
                 "234pr", "Brick 2 x 4", "Red", "/img/parts/1.jpg",
-                "234pr", "Brick 2 x 4", "White", "/img/parts/2.jpg",
+                "234pr", "Brick 2 x 4", "White", "test://cdn.test/img/234prW.jpg",
             ),
         )
 
@@ -147,7 +147,7 @@ class TestSearch(TestCase):
             _ordered_regex(
                 "Search Results for", "234",
                 "234pr", "Brick 2 x 4", "Red", "/img/parts/1.jpg",
-                "234pr", "Brick 2 x 4", "White", "/img/parts/2.jpg",
+                "234pr", "Brick 2 x 4", "White", "test://cdn.test/img/234prW.jpg",
             ),
         )
 

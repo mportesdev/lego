@@ -1,5 +1,6 @@
 {% extends "lego/base.html" %}
 {% load static %}
+{% load lego_extras %}
 {% block content %}
   <div class="title is-4">{{ title }}</div>
   {% if sets.exists or parts.exists %}
@@ -8,7 +9,7 @@
       <div class="box">
         <div><a href="{{ set.get_absolute_url }}">{{ set.lego_id }}</a></div>
         <div>{{ set.name }}</div>
-        {% if set.image %}<div><figure class="image is-128x128"><a href="{{ set.get_absolute_url }}"><img src="{% static set.image %}"></a></figure></div>
+        {% if set.image|is_static_file %}<div><figure class="image is-128x128"><a href="{{ set.get_absolute_url }}"><img src="{% static set.image %}"></a></figure></div>
         {% elif set.image_url %}<div><figure class="image is-128x128"><a href="{{ set.get_absolute_url }}"><img src="{{ set.image_url }}"></a></figure></div>
         {% endif %}
       </div>
@@ -18,7 +19,7 @@
         <div><a href="{{ part.get_absolute_url }}">{{ part.shape.lego_id }}</a></div>
         <div>{{ part.shape.name }}</div>
         <div>{% if part.color %}{{ part.color.name }}{% endif %}</div>
-        {% if part.image %}<div><figure class="image is-128x128"><a href="{{ part.get_absolute_url }}"><img src="{% static part.image %}"></a></figure></div>
+        {% if part.image|is_static_file %}<div><figure class="image is-128x128"><a href="{{ part.get_absolute_url }}"><img src="{% static part.image %}"></a></figure></div>
         {% elif part.image_url %}<div><figure class="image is-128x128"><a href="{{ part.get_absolute_url }}"><img src="{{ part.image_url }}"></a></figure></div>
         {% endif %}
       </div>

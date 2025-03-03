@@ -2,9 +2,10 @@ import re
 
 from django.test import TestCase
 
-from . import get_set_info_mock, get_set_parts_mock
+from . import test_settings, get_set_info_mock, get_set_parts_mock
 
 
+@test_settings
 class TestGetResponse(TestCase):
     fixtures = ["test_data"]
 
@@ -82,6 +83,7 @@ class TestGetResponse(TestCase):
         self.assertEqual(response.status_code, 404)
 
 
+@test_settings
 class TestSearch(TestCase):
     fixtures = ["test_data"]
 

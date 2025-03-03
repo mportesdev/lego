@@ -8,10 +8,11 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver import Firefox
 from selenium.webdriver.common.by import By
 
-from . import get_set_info_mock, get_set_parts_mock
+from . import test_settings, get_set_info_mock, get_set_parts_mock
 
 
 @unittest.skipIf(os.getenv("CI"), reason="Browser tests not run in CI")
+@test_settings
 class TestBrowserUI(StaticLiveServerTestCase):
     fixtures = ["test_data", "test_user"]
 

@@ -1,6 +1,18 @@
 from unittest.mock import patch
 
+from django.test import override_settings
 from requests import HTTPError
+
+test_settings = override_settings(
+    STORAGES={
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    },
+)
 
 
 def _set_info_mock(set_lego_id):

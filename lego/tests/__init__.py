@@ -1,9 +1,11 @@
+from pathlib import Path
 from unittest.mock import patch
 
 from django.test import override_settings
 from requests import HTTPError
 
 test_settings = override_settings(
+    STATIC_ROOT=Path(__file__).parent / "teststatic",
     STORAGES={
         "default": {
             "BACKEND": "django.core.files.storage.FileSystemStorage",

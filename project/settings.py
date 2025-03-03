@@ -5,11 +5,9 @@ import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("LEGO_SECRET_KEY")
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("LEGO_DEBUG", False) in ("1", "true")
+DEBUG = os.getenv("LEGO_DEBUG", "False") in ("1", "True", "true")
 
 ALLOWED_HOSTS = os.getenv("LEGO_ALLOWED_HOSTS", "").split(",")
 
@@ -102,7 +100,7 @@ USE_I18N = False
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
+# Static files
 
 STATIC_URL = "/static/"
 
@@ -117,6 +115,15 @@ if not os.getenv("LEGO_TEST"):
             "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
         },
     }
+
+
+# Background tasks
+
+TASKS = {
+    "default": {
+        "BACKEND": "django_tasks.backends.database.DatabaseBackend",
+    },
+}
 
 
 # Default primary key field type
@@ -168,10 +175,4 @@ LOGGING = {
             "style": "{",
         },
     },
-}
-
-TASKS = {
-    "default": {
-        "BACKEND": "django_tasks.backends.database.DatabaseBackend"
-    }
 }

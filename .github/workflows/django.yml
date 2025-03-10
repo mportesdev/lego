@@ -1,20 +1,20 @@
-name: Django CI
+name: Django tests
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
 
-    - name: Set up Python 3.13
+    - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: "3.13"
@@ -27,7 +27,6 @@ jobs:
       env:
         DATABASE_URL: "sqlite:///testdb.sqlite3"
         LEGO_SECRET_KEY: ${{ secrets.TEST_LEGO_SECRET_KEY }}
-        LEGO_TEST: true
       run: |
         python manage.py collectstatic --no-input
         python manage.py check

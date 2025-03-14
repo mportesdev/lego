@@ -62,6 +62,10 @@ def _store_image(model, pk, subdir):
             logger.info(f"No {model.__name__} candidate to process")
             return
 
+    if obj.image_url is None:
+        logger.info(f"No image URL: {obj!r}")
+        return
+
     try:
         image = _scaled_image_for_url(obj.image_url)
     except OSError as err:    # e.g. requests.HTTPError, PIL.UnidentifiedImageError

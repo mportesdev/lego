@@ -1,8 +1,14 @@
 static/
 staticfiles/
+
+.coverage
+coverage.*
+htmlcov/
+
 .env
 *.log
 *.sqlite3
+
 __pycache__
 .idea/
 .venv/

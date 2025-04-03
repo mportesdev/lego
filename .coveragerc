@@ -1,0 +1,6 @@
+[run]
+source_dirs = lego
+omit =
+    lego/migrations/*
+    lego/tests/*
+branch = true

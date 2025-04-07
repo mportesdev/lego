@@ -242,6 +242,7 @@ class TestSearch(TestCase):
         self.assertIn(b"Nothing Found", response.content)
 
 
+@test_settings
 class TestAddSet(TestCase):
     fixtures = ["test_data", "test_user"]
 
@@ -324,6 +325,7 @@ class TestAddSet(TestCase):
         self.assertRedirects(response, "/lego/login/?next=/lego/set/add/")
 
 
+@test_settings
 class TestAuth(TestCase):
     fixtures = ["test_user"]
 

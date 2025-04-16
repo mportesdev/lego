@@ -1,9 +1,10 @@
-from django.test import TestCase
+from django.test import TestCase, tag
 
 
 class TestSessionAuth(TestCase):
     fixtures = ["test_user"]
 
+    @tag("login")
     def test_login_and_logout(self):
         # not logged in
         self.assertNotIn("_auth_user_id", self.client.session)

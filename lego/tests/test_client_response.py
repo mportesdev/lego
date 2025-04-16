@@ -1,6 +1,6 @@
 import re
 
-from django.test import TestCase
+from django.test import TestCase, tag
 
 from . import test_settings, get_set_info_mock, get_set_parts_mock
 
@@ -246,6 +246,7 @@ class TestSearch(TestCase):
 class TestAddSet(TestCase):
     fixtures = ["test_data", "test_user"]
 
+    @tag("write-db")
     def test_add_set(self):
         self.client.login(username="test-user", password="test-password")
         with get_set_info_mock() as mock_1, get_set_parts_mock() as mock_2:
@@ -270,6 +271,7 @@ class TestAddSet(TestCase):
             ),
         )
 
+    @tag("write-db")
     def test_add_set_without_suffix(self):
         self.client.login(username="test-user", password="test-password")
         with get_set_info_mock() as mock_1, get_set_parts_mock() as mock_2:
@@ -329,6 +331,7 @@ class TestAddSet(TestCase):
 class TestAuth(TestCase):
     fixtures = ["test_user"]
 
+    @tag("login")
     def test_login_and_logout(self):
         response = self.client.get("/lego/")
         self.assertIn(b"Log in", response.content)

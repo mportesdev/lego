@@ -5,6 +5,7 @@ from tempfile import mkdtemp
 import unittest
 
 from django.contrib.staticfiles.testing import LiveServerTestCase
+from django.test import tag
 from selenium.webdriver import Firefox
 from selenium.webdriver.common.by import By
 
@@ -12,6 +13,7 @@ from . import test_settings, get_set_info_mock, get_set_parts_mock
 
 
 @unittest.skipIf(os.getenv("CI"), reason="Browser tests not run in CI")
+@tag("browser")
 @test_settings
 class TestBrowserUI(LiveServerTestCase):
     fixtures = ["test_data", "test_user"]
@@ -108,6 +110,7 @@ class TestBrowserUI(LiveServerTestCase):
         )
         self.assertTrue(self.driver.find_element(By.ID, "id_mode_2").is_selected())
 
+    @tag("write-db")
     def test_add_set(self):
         self.login_test_user()
         self.driver.find_element(By.LINK_TEXT, "Add a New Lego Set").click()
@@ -128,6 +131,7 @@ class TestBrowserUI(LiveServerTestCase):
         self.driver.find_element(By.LINK_TEXT, "102")
         self.driver.find_element(By.LINK_TEXT, "222")
 
+    @tag("write-db")
     def test_add_set_without_suffix(self):
         self.login_test_user()
         self.driver.find_element(By.LINK_TEXT, "Add a New Lego Set").click()
@@ -143,6 +147,7 @@ class TestBrowserUI(LiveServerTestCase):
         self.assertTrue(self.driver.current_url.endswith("/lego/set/1234-1/"))
         self.assertEqual(self.driver.title, "Lego Set 1234-1 Fighter Jet | O&F Lego")
 
+    @tag("login")
     def test_login_and_logout(self):
         # log in
         self.driver.find_element(By.LINK_TEXT, "Log in").click()
@@ -155,6 +160,7 @@ class TestBrowserUI(LiveServerTestCase):
         self.driver.find_element(By.ID, "log_out").click()
         self.driver.find_element(By.LINK_TEXT, "Log in")
 
+    @tag("login")
     def test_login_redirects_to_referer(self):
         # go to set detail page
         self.driver.find_element(By.LINK_TEXT, "123-1").click()
@@ -168,6 +174,7 @@ class TestBrowserUI(LiveServerTestCase):
         # redirected back to set detail page
         self.assertTrue(self.driver.current_url.endswith("/lego/set/123-1/"))
 
+    @tag("login")
     def test_login_redirects_to_index_if_referer_is_missing(self):
         # go directly to login page
         self.driver.get(f"{self.live_server_url}/lego/login/")

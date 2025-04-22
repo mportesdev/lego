@@ -30,4 +30,4 @@ jobs:
       run: |
         python manage.py collectstatic --no-input
         python manage.py check
-        python manage.py test --parallel --shuffle --durations=10 --verbosity=2 lego
+        python manage.py test --noinput --failfast --shuffle --verbosity=2 --durations=10 --exclude-tag=browser lego

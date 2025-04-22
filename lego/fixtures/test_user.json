@@ -3,7 +3,7 @@
     "model": "auth.user",
     "pk": 1,
     "fields": {
-        "password": "pbkdf2_sha256$600000$aUniejf4dOQTTANataEPmh$nFIAXFgUFBakajxTOvWvE/7bA1VgwWUFkR4G/ycAPiI=",
+        "password": "md5$yEp1MhBSdmeYpcN95cxoQf$13d8b2a7d363ea28dbcd67eb93c85d3e",
         "last_login": null,
         "is_superuser": false,
         "username": "test-user",

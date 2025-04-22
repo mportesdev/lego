@@ -1,6 +1,9 @@
 from django.test import TestCase, tag
 
+from . import test_settings
 
+
+@test_settings
 class TestSessionAuth(TestCase):
     fixtures = ["test_user"]
 

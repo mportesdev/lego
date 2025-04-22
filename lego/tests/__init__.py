@@ -14,6 +14,9 @@ test_settings = override_settings(
             "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
         },
     },
+    PASSWORD_HASHERS = [
+        "django.contrib.auth.hashers.MD5PasswordHasher",
+    ],
 )
 
 

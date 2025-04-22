@@ -2,7 +2,6 @@ import os
 import shutil
 from pathlib import Path
 from tempfile import mkdtemp
-import unittest
 
 from django.contrib.staticfiles.testing import LiveServerTestCase
 from django.test import tag
@@ -12,7 +11,6 @@ from selenium.webdriver.common.by import By
 from . import test_settings, get_set_info_mock, get_set_parts_mock
 
 
-@unittest.skipIf(os.getenv("CI"), reason="Browser tests not run in CI")
 @tag("browser")
 @test_settings
 class TestBrowserUI(LiveServerTestCase):

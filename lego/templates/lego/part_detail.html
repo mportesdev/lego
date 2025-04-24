@@ -13,8 +13,14 @@
       <div>{{ item.quantity }}x in</div>
       <div><a href="{{ item.set.get_absolute_url }}">{{ item.set.lego_id }}</a></div>
       <div>{{ item.set.name }}</div>
-      {% if item.set.image|is_static_file %}<div><figure class="image is-128x128"><a href="{{ item.set.get_absolute_url }}"><img src="{% static item.set.image %}"></a></figure></div>
-      {% elif item.set.image_url %}<div><figure class="image is-128x128"><a href="{{ item.set.get_absolute_url }}"><img src="{{ item.set.image_url }}"></a></figure></div>
+      {% if item.set.image|is_static_file %}
+        <div><figure class="image is-128x128">
+          <a href="{{ item.set.get_absolute_url }}"><img src="{% static item.set.image %}" loading="lazy"></a>
+        </figure></div>
+      {% elif item.set.image_url %}
+        <div><figure class="image is-128x128">
+          <a href="{{ item.set.get_absolute_url }}"><img src="{{ item.set.image_url }}" loading="lazy"></a>
+        </figure></div>
       {% endif %}
     </div>
   {% endfor %}

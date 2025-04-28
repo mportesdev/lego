@@ -67,9 +67,6 @@ DATABASES = {
     ),
 }
 
-if os.getenv("CI"):
-    DATABASES["default"].setdefault("OPTIONS", {})["transaction_mode"] = "EXCLUSIVE"
-
 
 # Password validation
 

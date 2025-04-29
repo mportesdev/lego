@@ -1,3 +1,5 @@
+import logging.config
+import os
 from pathlib import Path
 from unittest.mock import patch
 
@@ -17,6 +19,34 @@ test_settings = override_settings(
     PASSWORD_HASHERS = [
         "django.contrib.auth.hashers.MD5PasswordHasher",
     ],
+)
+
+# note: logging settings cannot be simply overridden with `override_settings`
+logging.config.dictConfig(
+    {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "loggers": {
+            "lego": {
+                "level": "DEBUG",
+                "handlers": ["test-logfile"],
+            },
+        },
+        "handlers": {
+            "test-logfile": {
+                "class": "logging.FileHandler",
+                "filename": os.getenv("LEGO_TEST_LOGFILE", os.devnull),
+                "level": "DEBUG",
+                "formatter": "detailed",
+            },
+        },
+        "formatters": {
+            "detailed": {
+                "format": "{asctime} | {name} | {levelname} | {message}",
+                "style": "{",
+            },
+        },
+    }
 )
 
 

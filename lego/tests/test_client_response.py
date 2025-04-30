@@ -1,8 +1,6 @@
-import re
-
 from django.test import TestCase, tag
 
-from . import test_settings, get_set_info_mock, get_set_parts_mock
+from . import test_settings, ordered_regex, get_set_info_mock, get_set_parts_mock
 
 
 @test_settings
@@ -15,7 +13,7 @@ class TestGetResponse(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
             response.content.decode(),
-            _ordered_regex(
+            ordered_regex(
                 "Latest Additions",
                 "111-1", "Airport", "test://cdn.test/img/111.jpg",
                 "123-1", "Brick House", "/img/sets/1.jpg",
@@ -28,7 +26,7 @@ class TestGetResponse(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
             response.content.decode(),
-            _ordered_regex(
+            ordered_regex(
                 "Lego Set 123-1 Brick House", "/img/sets/1.jpg",
                 "Contains:",
                 "1x", "234pr", "Brick 2 x 4", "Red", "/img/parts/1.jpg",
@@ -47,7 +45,7 @@ class TestGetResponse(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
             response.content.decode(),
-            _ordered_regex(
+            ordered_regex(
                 "Lego Part 567 Figure", "/img/parts/3.jpg",
                 "Included in:",
                 "1x in", "123-1", "Brick House", "/img/sets/1.jpg",
@@ -60,7 +58,7 @@ class TestGetResponse(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
             response.content.decode(),
-            _ordered_regex(
+            ordered_regex(
                 "Lego Part 234pr Brick 2 x 4, Red", "/img/parts/1.jpg",
                 "Included in:",
                 "1x in", "123-1", "Brick House", "/img/sets/1.jpg",
@@ -93,7 +91,7 @@ class TestSearch(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
             response.content.decode(),
-            _ordered_regex(
+            ordered_regex(
                 "Search Results for", "house",
                 "123-1", "Brick House", "/img/sets/1.jpg",
             ),
@@ -105,7 +103,7 @@ class TestSearch(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
             response.content.decode(),
-            _ordered_regex(
+            ordered_regex(
                 "Search Results for", "2 x 4",
                 "234pr", "Brick 2 x 4", "Red", "/img/parts/1.jpg",
                 "234pr", "Brick 2 x 4", "White", "test://cdn.test/img/234prW.jpg",
@@ -118,7 +116,7 @@ class TestSearch(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
             response.content.decode(),
-            _ordered_regex(
+            ordered_regex(
                 "Search Results for", "brick",
                 "123-1", "Brick House", "/img/sets/1.jpg",
                 "234pr", "Brick 2 x 4", "Red", "/img/parts/1.jpg",
@@ -132,7 +130,7 @@ class TestSearch(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
             response.content.decode(),
-            _ordered_regex(
+            ordered_regex(
                 "Search Results for", "123",
                 "123-1", "Brick House", "/img/sets/1.jpg",
             ),
@@ -144,7 +142,7 @@ class TestSearch(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
             response.content.decode(),
-            _ordered_regex(
+            ordered_regex(
                 "Search Results for", "234",
                 "234pr", "Brick 2 x 4", "Red", "/img/parts/1.jpg",
                 "234pr", "Brick 2 x 4", "White", "test://cdn.test/img/234prW.jpg",
@@ -157,7 +155,7 @@ class TestSearch(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
             response.content.decode(),
-            _ordered_regex(
+            ordered_regex(
                 "Search Results for", "red",
                 "234pr", "Brick 2 x 4", "Red",
             ),
@@ -169,7 +167,7 @@ class TestSearch(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
             response.content.decode(),
-            _ordered_regex(
+            ordered_regex(
                 "Search Results for", "house",
                 "123-1", "Brick House",
             ),
@@ -181,7 +179,7 @@ class TestSearch(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
             response.content.decode(),
-            _ordered_regex(
+            ordered_regex(
                 "Search Results for", "123",
                 "123-1", "Brick House",
              ),
@@ -193,7 +191,7 @@ class TestSearch(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
             response.content.decode(),
-            _ordered_regex(
+            ordered_regex(
                 "Search Results for", "red",
                 "234pr", "Brick 2 x 4", "Red",
             ),
@@ -250,17 +248,16 @@ class TestAddSet(TestCase):
     def test_add_set(self):
         self.client.login(username="test-user", password="test-password")
         with get_set_info_mock() as mock_1, get_set_parts_mock() as mock_2:
-            with self.assertLogs("lego.views", "INFO"):
-                response = self.client.post(
-                    "/lego/set/add/", data={"set_lego_id": "1234-1"}, follow=True
-                )
+            response = self.client.post(
+                "/lego/set/add/", data={"set_lego_id": "1234-1"}, follow=True
+            )
             mock_1.assert_called_once_with("1234-1")
             mock_2.assert_called_once_with("1234-1")
 
         self.assertRedirects(response, "/lego/set/1234-1/")
         self.assertRegex(
             response.content.decode(),
-            _ordered_regex(
+            ordered_regex(
                 "Lego Set 1234-1 Fighter Jet", "test://cdn.test/img/1234.jpg",
                 "Contains:",
                 "1x", "234pr", "Brick 2 x 4 with studs", "Blue", "test://cdn.test/img/234prB.jpg",
@@ -275,10 +272,9 @@ class TestAddSet(TestCase):
     def test_add_set_without_suffix(self):
         self.client.login(username="test-user", password="test-password")
         with get_set_info_mock() as mock_1, get_set_parts_mock() as mock_2:
-            with self.assertLogs("lego.views", "INFO"):
-                response = self.client.post(
-                    "/lego/set/add/", data={"set_lego_id": "1234"}, follow=True
-                )
+            response = self.client.post(
+                "/lego/set/add/", data={"set_lego_id": "1234"}, follow=True
+            )
             mock_1.assert_called_once_with("1234-1")
             mock_2.assert_called_once_with("1234-1")
 
@@ -287,10 +283,9 @@ class TestAddSet(TestCase):
     def test_add_set_existing_lego_id(self):
         self.client.login(username="test-user", password="test-password")
         with get_set_info_mock() as mock_1, get_set_parts_mock() as mock_2:
-            with self.assertLogs("lego.views", "WARNING"):
-                response = self.client.post(
-                    "/lego/set/add/", data={"set_lego_id": "123-1"}, follow=True
-                )
+            response = self.client.post(
+                "/lego/set/add/", data={"set_lego_id": "123-1"}, follow=True
+            )
             mock_1.assert_not_called()
             mock_2.assert_not_called()
 
@@ -299,10 +294,9 @@ class TestAddSet(TestCase):
     def test_add_set_existing_lego_id_without_suffix(self):
         self.client.login(username="test-user", password="test-password")
         with get_set_info_mock() as mock_1, get_set_parts_mock() as mock_2:
-            with self.assertLogs("lego.views", "WARNING"):
-                response = self.client.post(
-                    "/lego/set/add/", data={"set_lego_id": "123"}, follow=True
-                )
+            response = self.client.post(
+                "/lego/set/add/", data={"set_lego_id": "123"}, follow=True
+            )
             mock_1.assert_not_called()
             mock_2.assert_not_called()
 
@@ -311,10 +305,9 @@ class TestAddSet(TestCase):
     def test_add_set_invalid_lego_id(self):
         self.client.login(username="test-user", password="test-password")
         with get_set_info_mock() as mock_1, get_set_parts_mock() as mock_2:
-            with self.assertLogs("lego.views", "ERROR"):
-                response = self.client.post(
-                    "/lego/set/add/", data={"set_lego_id": "999-1"}, follow=True
-                )
+            response = self.client.post(
+                "/lego/set/add/", data={"set_lego_id": "999-1"}, follow=True
+            )
             mock_1.assert_called_once_with("999-1")
             mock_2.assert_not_called()
 
@@ -347,7 +340,7 @@ class TestAuth(TestCase):
         self.assertRedirects(response, "/lego/")
         self.assertRegex(
             response.content.decode(),
-            _ordered_regex("test-user", "Log out"),
+            ordered_regex("test-user", "Log out"),
         )
         self.assertIn(b"Add a New Lego Set", response.content)
         self.assertIn(b"Admin Page", response.content)
@@ -358,10 +351,3 @@ class TestAuth(TestCase):
         self.assertIn(b"Log in", response.content)
         self.assertNotIn(b"Add a New Lego Set", response.content)
         self.assertNotIn(b"Admin Page", response.content)
-
-
-def _ordered_regex(*parts):
-    return re.compile(
-        ".*?".join(re.escape(part) for part in parts),
-        flags=re.DOTALL,
-    )

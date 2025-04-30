@@ -1,5 +1,6 @@
 import logging.config
 import os
+import re
 from pathlib import Path
 from unittest.mock import patch
 
@@ -48,6 +49,13 @@ logging.config.dictConfig(
         },
     }
 )
+
+
+def ordered_regex(*parts):
+    return re.compile(
+        ".*?".join(re.escape(part) for part in parts),
+        flags=re.DOTALL,
+    )
 
 
 def _set_info_mock(set_lego_id):

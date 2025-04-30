@@ -117,3 +117,62 @@ class TestStoreImage(TestCase):
                 "INFO", "Deleted `image_url`: LegoPart",
             ),
         )
+
+
+@test_settings
+class TestAuth(TestCase):
+    fixtures = ["test_user"]
+
+    @tag("login")
+    def test_login(self):
+        with self.assertLogs("lego.views", "INFO") as log_obj:
+            self.client.post(
+                "/lego/login/",
+                data={"username": "test-user", "password": "test-password"},
+            )
+
+        log_output = "\n".join(log_obj.output)
+        self.assertRegex(
+            log_output,
+            ordered_regex("INFO", "User logged in: test-user"),
+        )
+
+    @tag("login")
+    def test_login_with_incorrect_password(self):
+        with self.assertLogs("lego.views", "INFO") as log_obj:
+            self.client.post(
+                "/lego/login/",
+                data={"username": "test-user", "password": "bad-password"},
+            )
+
+        log_output = "\n".join(log_obj.output)
+        self.assertRegex(
+            log_output,
+            ordered_regex("INFO", "Failed user login: test-user"),
+        )
+
+    @tag("login")
+    def test_login_with_incorrect_username(self):
+        with self.assertLogs("lego.views", "INFO") as log_obj:
+            self.client.post(
+                "/lego/login/",
+                data={"username": "unknown-user", "password": "test-password"},
+            )
+
+        log_output = "\n".join(log_obj.output)
+        self.assertRegex(
+            log_output,
+            ordered_regex("INFO", "Failed user login: unknown-user"),
+        )
+
+    @tag("login")
+    def test_logout(self):
+        self.client.login(username="test-user", password="test-password")
+        with self.assertLogs("lego.views", "INFO") as log_obj:
+            self.client.post("/lego/logout/")
+
+        log_output = "\n".join(log_obj.output)
+        self.assertRegex(
+            log_output,
+            ordered_regex("INFO", "User logged out: test-user"),
+        )

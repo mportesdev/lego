@@ -2,7 +2,7 @@ from django import forms
 
 
 class SearchForm(forms.Form):
-    q = forms.CharField(max_length=150, label="Search")
+    q = forms.CharField(max_length=150, label="Search", widget=forms.SearchInput)
     mode = forms.ChoiceField(
         choices=(
             ("all", "everywhere"),

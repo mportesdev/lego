@@ -12,7 +12,7 @@ class TestGetResponse(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
-            response.content.decode(),
+            response.text,
             ordered_regex(
                 "Latest Additions",
                 "111-1", "Airport", "test://cdn.test/img/111.jpg",
@@ -25,7 +25,7 @@ class TestGetResponse(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
-            response.content.decode(),
+            response.text,
             ordered_regex(
                 "Lego Set 123-1 Brick House", "/img/sets/1.jpg",
                 "Contains:",
@@ -44,7 +44,7 @@ class TestGetResponse(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
-            response.content.decode(),
+            response.text,
             ordered_regex(
                 "Lego Part 567 Figure", "/img/parts/3.jpg",
                 "Included in:",
@@ -57,7 +57,7 @@ class TestGetResponse(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
-            response.content.decode(),
+            response.text,
             ordered_regex(
                 "Lego Part 234pr Brick 2 x 4, Red", "/img/parts/1.jpg",
                 "Included in:",
@@ -90,7 +90,7 @@ class TestSearch(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
-            response.content.decode(),
+            response.text,
             ordered_regex(
                 "Search Results for", "house",
                 "123-1", "Brick House", "/img/sets/1.jpg",
@@ -102,7 +102,7 @@ class TestSearch(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
-            response.content.decode(),
+            response.text,
             ordered_regex(
                 "Search Results for", "2 x 4",
                 "234pr", "Brick 2 x 4", "Red", "/img/parts/1.jpg",
@@ -115,7 +115,7 @@ class TestSearch(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
-            response.content.decode(),
+            response.text,
             ordered_regex(
                 "Search Results for", "brick",
                 "123-1", "Brick House", "/img/sets/1.jpg",
@@ -129,7 +129,7 @@ class TestSearch(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
-            response.content.decode(),
+            response.text,
             ordered_regex(
                 "Search Results for", "123",
                 "123-1", "Brick House", "/img/sets/1.jpg",
@@ -141,7 +141,7 @@ class TestSearch(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
-            response.content.decode(),
+            response.text,
             ordered_regex(
                 "Search Results for", "234",
                 "234pr", "Brick 2 x 4", "Red", "/img/parts/1.jpg",
@@ -154,7 +154,7 @@ class TestSearch(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
-            response.content.decode(),
+            response.text,
             ordered_regex(
                 "Search Results for", "red",
                 "234pr", "Brick 2 x 4", "Red",
@@ -166,7 +166,7 @@ class TestSearch(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
-            response.content.decode(),
+            response.text,
             ordered_regex(
                 "Search Results for", "house",
                 "123-1", "Brick House",
@@ -178,7 +178,7 @@ class TestSearch(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
-            response.content.decode(),
+            response.text,
             ordered_regex(
                 "Search Results for", "123",
                 "123-1", "Brick House",
@@ -190,7 +190,7 @@ class TestSearch(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
-            response.content.decode(),
+            response.text,
             ordered_regex(
                 "Search Results for", "red",
                 "234pr", "Brick 2 x 4", "Red",
@@ -201,43 +201,43 @@ class TestSearch(TestCase):
         response = self.client.get("/lego/search/", data={"q": "123", "mode": "name"})
 
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b"Nothing Found", response.content)
+        self.assertIn("Nothing Found", response.text)
 
     def test_nothing_found_by_color_in_name_mode(self):
         response = self.client.get("/lego/search/", data={"q": "red", "mode": "name"})
 
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b"Nothing Found", response.content)
+        self.assertIn("Nothing Found", response.text)
 
     def test_nothing_found_by_name_in_id_mode(self):
         response = self.client.get("/lego/search/", data={"q": "brick", "mode": "id"})
 
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b"Nothing Found", response.content)
+        self.assertIn("Nothing Found", response.text)
 
     def test_nothing_found_by_color_in_id_mode(self):
         response = self.client.get("/lego/search/", data={"q": "red", "mode": "id"})
 
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b"Nothing Found", response.content)
+        self.assertIn("Nothing Found", response.text)
 
     def test_nothing_found_by_name_in_color_mode(self):
         response = self.client.get("/lego/search/", data={"q": "brick", "mode": "color"})
 
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b"Nothing Found", response.content)
+        self.assertIn("Nothing Found", response.text)
 
     def test_nothing_found_by_lego_id_in_color_mode(self):
         response = self.client.get("/lego/search/", data={"q": "123", "mode": "color"})
 
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b"Nothing Found", response.content)
+        self.assertIn("Nothing Found", response.text)
 
     def test_nothing_found(self):
         response = self.client.get("/lego/search/", data={"q": "999", "mode": "all"})
 
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b"Nothing Found", response.content)
+        self.assertIn("Nothing Found", response.text)
 
 
 @test_settings
@@ -256,7 +256,7 @@ class TestAddSet(TestCase):
 
         self.assertRedirects(response, "/lego/set/1234-1/")
         self.assertRegex(
-            response.content.decode(),
+            response.text,
             ordered_regex(
                 "Lego Set 1234-1 Fighter Jet", "test://cdn.test/img/1234.jpg",
                 "Contains:",
@@ -327,9 +327,9 @@ class TestAuth(TestCase):
     @tag("login")
     def test_login_and_logout(self):
         response = self.client.get("/lego/")
-        self.assertIn(b"Log in", response.content)
-        self.assertNotIn(b"Add a New Lego Set", response.content)
-        self.assertNotIn(b"Admin Page", response.content)
+        self.assertIn("Log in", response.text)
+        self.assertNotIn("Add a New Lego Set", response.text)
+        self.assertNotIn("Admin Page", response.text)
 
         # log in
         response = self.client.post(
@@ -339,15 +339,15 @@ class TestAuth(TestCase):
         )
         self.assertRedirects(response, "/lego/")
         self.assertRegex(
-            response.content.decode(),
+            response.text,
             ordered_regex("test-user", "Log out"),
         )
-        self.assertIn(b"Add a New Lego Set", response.content)
-        self.assertIn(b"Admin Page", response.content)
+        self.assertIn("Add a New Lego Set", response.text)
+        self.assertIn("Admin Page", response.text)
 
         # log out
         response = self.client.post("/lego/logout/", follow=True)
         self.assertRedirects(response, "/lego/")
-        self.assertIn(b"Log in", response.content)
-        self.assertNotIn(b"Add a New Lego Set", response.content)
-        self.assertNotIn(b"Admin Page", response.content)
+        self.assertIn("Log in", response.text)
+        self.assertNotIn("Add a New Lego Set", response.text)
+        self.assertNotIn("Admin Page", response.text)

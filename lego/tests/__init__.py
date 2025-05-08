@@ -61,9 +61,7 @@ def ordered_regex(*parts):
 def _set_info_mock(set_lego_id):
     if set_lego_id == "1234-1":
         return {"name": "Fighter Jet", "image_url": "test://cdn.test/img/1234.jpg"}
-    if set_lego_id == "999-1":
-        raise HTTPError("404 Client Error: Not Found")
-    raise ValueError("_set_info_mock: unexpected test argument")
+    raise HTTPError("404 Not Found")
 
 
 def get_set_info_mock():
@@ -117,8 +115,6 @@ def _set_parts_mock(set_lego_id):
             "quantity": 1,
             "is_spare": False,
         }
-    else:
-        raise ValueError("_set_parts_mock: unexpected test argument")
 
 
 def get_set_parts_mock():

@@ -86,7 +86,9 @@ class TestSearch(TestCase):
     fixtures = ["test_data"]
 
     def test_set_found_by_name(self):
-        response = self.client.get("/lego/search/", data={"q": "house", "mode": "all"})
+        response = self.client.get(
+            "/lego/search/", query_params={"q": "house", "mode": "all"}
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
@@ -98,7 +100,9 @@ class TestSearch(TestCase):
         )
 
     def test_part_found_by_name(self):
-        response = self.client.get("/lego/search/", data={"q": "2 x 4", "mode": "all"})
+        response = self.client.get(
+            "/lego/search/", query_params={"q": "2 x 4", "mode": "all"}
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
@@ -111,7 +115,9 @@ class TestSearch(TestCase):
         )
 
     def test_multiple_results_found_by_name(self):
-        response = self.client.get("/lego/search/", data={"q": "brick", "mode": "all"})
+        response = self.client.get(
+            "/lego/search/", query_params={"q": "brick", "mode": "all"}
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
@@ -125,7 +131,9 @@ class TestSearch(TestCase):
         )
 
     def test_set_found_by_lego_id(self):
-        response = self.client.get("/lego/search/", data={"q": "123", "mode": "all"})
+        response = self.client.get(
+            "/lego/search/", query_params={"q": "123", "mode": "all"}
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
@@ -137,7 +145,9 @@ class TestSearch(TestCase):
         )
 
     def test_part_found_by_lego_id(self):
-        response = self.client.get("/lego/search/", data={"q": "234", "mode": "all"})
+        response = self.client.get(
+            "/lego/search/", query_params={"q": "234", "mode": "all"}
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
@@ -150,7 +160,9 @@ class TestSearch(TestCase):
         )
 
     def test_part_found_by_color(self):
-        response = self.client.get("/lego/search/", data={"q": "red", "mode": "all"})
+        response = self.client.get(
+            "/lego/search/", query_params={"q": "red", "mode": "all"}
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
@@ -162,7 +174,9 @@ class TestSearch(TestCase):
         )
 
     def test_set_found_by_name_in_name_mode(self):
-        response = self.client.get("/lego/search/", data={"q": "house", "mode": "name"})
+        response = self.client.get(
+            "/lego/search/", query_params={"q": "house", "mode": "name"}
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
@@ -174,7 +188,9 @@ class TestSearch(TestCase):
         )
 
     def test_set_found_by_lego_id_in_id_mode(self):
-        response = self.client.get("/lego/search/", data={"q": "123", "mode": "id"})
+        response = self.client.get(
+            "/lego/search/", query_params={"q": "123", "mode": "id"}
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
@@ -186,7 +202,9 @@ class TestSearch(TestCase):
         )
 
     def test_part_found_by_color_in_color_mode(self):
-        response = self.client.get("/lego/search/", data={"q": "red", "mode": "color"})
+        response = self.client.get(
+            "/lego/search/", query_params={"q": "red", "mode": "color"}
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
@@ -198,43 +216,57 @@ class TestSearch(TestCase):
         )
 
     def test_nothing_found_by_lego_id_in_name_mode(self):
-        response = self.client.get("/lego/search/", data={"q": "123", "mode": "name"})
+        response = self.client.get(
+            "/lego/search/", query_params={"q": "123", "mode": "name"}
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertIn("Nothing Found", response.text)
 
     def test_nothing_found_by_color_in_name_mode(self):
-        response = self.client.get("/lego/search/", data={"q": "red", "mode": "name"})
+        response = self.client.get(
+            "/lego/search/", query_params={"q": "red", "mode": "name"}
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertIn("Nothing Found", response.text)
 
     def test_nothing_found_by_name_in_id_mode(self):
-        response = self.client.get("/lego/search/", data={"q": "brick", "mode": "id"})
+        response = self.client.get(
+            "/lego/search/", query_params={"q": "brick", "mode": "id"}
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertIn("Nothing Found", response.text)
 
     def test_nothing_found_by_color_in_id_mode(self):
-        response = self.client.get("/lego/search/", data={"q": "red", "mode": "id"})
+        response = self.client.get(
+            "/lego/search/", query_params={"q": "red", "mode": "id"}
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertIn("Nothing Found", response.text)
 
     def test_nothing_found_by_name_in_color_mode(self):
-        response = self.client.get("/lego/search/", data={"q": "brick", "mode": "color"})
+        response = self.client.get(
+            "/lego/search/", query_params={"q": "brick", "mode": "color"}
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertIn("Nothing Found", response.text)
 
     def test_nothing_found_by_lego_id_in_color_mode(self):
-        response = self.client.get("/lego/search/", data={"q": "123", "mode": "color"})
+        response = self.client.get(
+            "/lego/search/", query_params={"q": "123", "mode": "color"}
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertIn("Nothing Found", response.text)
 
     def test_nothing_found(self):
-        response = self.client.get("/lego/search/", data={"q": "999", "mode": "all"})
+        response = self.client.get(
+            "/lego/search/", query_params={"q": "999", "mode": "all"}
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertIn("Nothing Found", response.text)

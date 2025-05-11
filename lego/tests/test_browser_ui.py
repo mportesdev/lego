@@ -31,12 +31,6 @@ class TestBrowserUI(LiveServerTestCase):
     def setUp(self):
         self.driver.get(f"{self.live_server_url}/lego/")
 
-    def login_test_user(self):
-        self.driver.find_element(By.XPATH, "//a[text()='Log in']").click()
-        self.driver.find_element(By.ID, "id_username").send_keys("test-user")
-        self.driver.find_element(By.ID, "id_password").send_keys("test-password")
-        self.driver.find_element(By.ID, "login_submit").click()
-
     def test_index_and_detail_pages(self):
         self.assertEqual(self.driver.title, "Home | O&F Lego")
 
@@ -110,32 +104,45 @@ class TestBrowserUI(LiveServerTestCase):
 
     @tag("write-db")
     def test_add_set(self):
-        self.login_test_user()
-        self.driver.find_element(By.LINK_TEXT, "Add a New Lego Set").click()
-        self.assertEqual(self.driver.title, "Add a New Lego Set | O&F Lego")
+        # log in
+        self.driver.find_element(By.LINK_TEXT, "Log in").click()
+        self.driver.find_element(By.ID, "id_username").send_keys("test-user")
+        self.driver.find_element(By.ID, "id_password").send_keys("test-password")
+        self.driver.find_element(By.ID, "login_submit").click()
 
+        # attempt to add existing set
+        self.driver.find_element(By.LINK_TEXT, "Add a New Lego Set").click()
         with get_set_info_mock(), get_set_parts_mock():
-            self.driver.find_element(By.ID, "id_set_lego_id").send_keys("1234-1")
+            self.driver.find_element(By.ID, "id_set_lego_id").send_keys("123")
             self.driver.find_element(By.ID, "add_set_submit").click()
 
-        self.assertEqual(self.driver.title, "Lego Set 1234-1 Fighter Jet | O&F Lego")
+        # nothing was added
+        self.assertIn("Add a New Lego Set", self.driver.title)
+        self.assertTrue(self.driver.current_url.endswith("/set/add/"))
+
+        # attempt to add invalid set
+        self.driver.find_element(By.LINK_TEXT, "Add a New Lego Set").click()
+        with get_set_info_mock(), get_set_parts_mock():
+            self.driver.find_element(By.ID, "id_set_lego_id").send_keys("999")
+            self.driver.find_element(By.ID, "add_set_submit").click()
+
+        # nothing was added
+        self.assertIn("Add a New Lego Set", self.driver.title)
+        self.assertTrue(self.driver.current_url.endswith("/set/add/"))
+
+        # add a new set
+        self.driver.find_element(By.LINK_TEXT, "Add a New Lego Set").click()
+        with get_set_info_mock(), get_set_parts_mock():
+            self.driver.find_element(By.ID, "id_set_lego_id").send_keys("1234")
+            self.driver.find_element(By.ID, "add_set_submit").click()
+
+        self.assertIn("Lego Set 1234-1 Fighter Jet", self.driver.title)
+        self.assertTrue(self.driver.current_url.endswith("/set/1234-1/"))
         self.driver.find_element(By.LINK_TEXT, "234pr")
         self.driver.find_element(By.LINK_TEXT, "111")
         self.driver.find_element(By.LINK_TEXT, "333")
         self.driver.find_element(By.LINK_TEXT, "102")
         self.driver.find_element(By.LINK_TEXT, "222")
-
-    @tag("write-db")
-    def test_add_set_without_suffix(self):
-        self.login_test_user()
-        self.driver.find_element(By.LINK_TEXT, "Add a New Lego Set").click()
-
-        with get_set_info_mock(), get_set_parts_mock():
-            self.driver.find_element(By.ID, "id_set_lego_id").send_keys("1234")
-            self.driver.find_element(By.ID, "add_set_submit").click()
-
-        self.assertTrue(self.driver.current_url.endswith("/lego/set/1234-1/"))
-        self.assertEqual(self.driver.title, "Lego Set 1234-1 Fighter Jet | O&F Lego")
 
     @tag("login")
     def test_login_and_logout(self):

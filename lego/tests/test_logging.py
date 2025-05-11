@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from django.test import TestCase, tag
 
 from lego.images import _store_image
@@ -79,4 +81,39 @@ class TestStoreImage(TestCase):
         self.assertRegex(
             log_output,
             ordered_regex("INFO", "No image URL: LegoPart"),
+        )
+
+    def test_unknown_image_data(self):
+        pk = LegoPart.objects.filter(image_url__isnull=False).first().pk
+        with (
+            patch("lego.images._scaled_image_for_url", side_effect=OSError),
+            self.assertLogs("lego.images", "INFO") as log_obj,
+        ):
+            _store_image(LegoPart, pk, "parts")
+
+        log_output = "\n".join(log_obj.output)
+        self.assertRegex(
+            log_output,
+            ordered_regex(
+                "ERROR", "reading image URL for LegoPart",
+                "INFO", "Deleted `image_url`: LegoPart",
+            ),
+        )
+
+    def test_unknown_image_format(self):
+        pk = LegoPart.objects.filter(image_url__isnull=False).first().pk
+        with (
+            patch("lego.images.Image.Image", autospec=True, format="TEST") as image,
+            patch("lego.images._scaled_image_for_url", return_value=image),
+            self.assertLogs("lego.images", "INFO") as log_obj,
+        ):
+            _store_image(LegoPart, pk, "parts")
+
+        log_output = "\n".join(log_obj.output)
+        self.assertRegex(
+            log_output,
+            ordered_regex(
+                "WARNING", "Unexpected image format 'TEST'",
+                "INFO", "Deleted `image_url`: LegoPart",
+            ),
         )

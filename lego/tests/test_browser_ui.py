@@ -37,12 +37,13 @@ class TestBrowserUI(LiveServerTestCase):
         # go to set detail
         self.driver.find_element(By.LINK_TEXT, "123-1").click()
         self.assertEqual(self.driver.title, "Lego Set 123-1 Brick House | O&F Lego")
-        link = self.driver.find_element(By.LINK_TEXT, "234pr")
-        self.driver.find_element(By.LINK_TEXT, "567")
+        link = self.driver.find_element(By.LINK_TEXT, "2345")
+        self.driver.find_element(By.LINK_TEXT, "fig-0008")
+        self.driver.find_element(By.LINK_TEXT, "2345pr0001")
 
         # go to part detail
         link.click()
-        self.assertEqual(self.driver.title, "Lego Part 234pr Brick 2 x 4, Red | O&F Lego")
+        self.assertEqual(self.driver.title, "Lego Part 2345 Brick 2 x 4, Red | O&F Lego")
 
         # go back to set detail
         self.driver.find_element(By.LINK_TEXT, "123-1").click()
@@ -59,9 +60,10 @@ class TestBrowserUI(LiveServerTestCase):
 
         self.assertEqual(self.driver.title, "Search Results for 'brick' | O&F Lego")
         self.driver.find_element(By.LINK_TEXT, "123-1")
-        self.driver.find_element(By.LINK_TEXT, "234pr")
+        self.driver.find_element(By.LINK_TEXT, "2345")
+        self.driver.find_element(By.LINK_TEXT, "2345pr0001")
 
-        # search by name
+        # search in names
         search_field = self.driver.find_element(By.ID, "id_q")
         search_field.clear()
         search_field.send_keys("house")
@@ -71,25 +73,28 @@ class TestBrowserUI(LiveServerTestCase):
         self.assertEqual(self.driver.title, "Search Results for 'house' | O&F Lego")
         self.driver.find_element(By.LINK_TEXT, "123-1")
 
-        # search by lego_id
+        # search in lego IDs
         search_field = self.driver.find_element(By.ID, "id_q")
         search_field.clear()
-        search_field.send_keys("234")
+        search_field.send_keys("2345")
         self.driver.find_element(By.ID, "id_mode_2").click()
         self.driver.find_element(By.ID, "search_submit").click()
 
-        self.assertEqual(self.driver.title, "Search Results for '234' | O&F Lego")
-        self.driver.find_element(By.LINK_TEXT, "234pr")
+        self.assertEqual(self.driver.title, "Search Results for '2345' | O&F Lego")
+        self.driver.find_element(By.LINK_TEXT, "2345")
+        self.driver.find_element(By.LINK_TEXT, "23456")
+        self.driver.find_element(By.LINK_TEXT, "2345pr0001")
 
-        # search by color
+        # search in colors
         search_field = self.driver.find_element(By.ID, "id_q")
         search_field.clear()
-        search_field.send_keys("red")
+        search_field.send_keys("white")
         self.driver.find_element(By.ID, "id_mode_3").click()
         self.driver.find_element(By.ID, "search_submit").click()
 
-        self.assertEqual(self.driver.title, "Search Results for 'red' | O&F Lego")
-        self.driver.find_element(By.LINK_TEXT, "234pr")
+        self.assertEqual(self.driver.title, "Search Results for 'white' | O&F Lego")
+        self.driver.find_element(By.LINK_TEXT, "2345")
+        self.driver.find_element(By.LINK_TEXT, "23456")
 
     def test_search_form_populated_from_get(self):
         self.driver.find_element(By.ID, "id_q").send_keys("123")
@@ -138,10 +143,10 @@ class TestBrowserUI(LiveServerTestCase):
 
         self.assertIn("Lego Set 1234-1 Fighter Jet", self.driver.title)
         self.assertTrue(self.driver.current_url.endswith("/set/1234-1/"))
-        self.driver.find_element(By.LINK_TEXT, "234pr")
+        self.driver.find_element(By.LINK_TEXT, "2345")
         self.driver.find_element(By.LINK_TEXT, "111")
-        self.driver.find_element(By.LINK_TEXT, "333")
-        self.driver.find_element(By.LINK_TEXT, "102")
+        self.driver.find_element(By.LINK_TEXT, "fig-0006")
+        self.driver.find_element(By.LINK_TEXT, "23456")
         self.driver.find_element(By.LINK_TEXT, "222")
 
     @tag("login")

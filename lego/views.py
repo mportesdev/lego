@@ -1,6 +1,7 @@
 import logging
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, render, redirect
@@ -185,10 +186,31 @@ def _get_part(shape, color, image_url):
     return part
 
 
-login = LoginView.as_view(
+_login = LoginView.as_view(
     template_name="lego/login.html",
     next_page="/lego/",
     extra_context=COMMON_CONTEXT,
 )
 
-logout = LogoutView.as_view(next_page="/lego/")
+
+def login(request, *args, **kwargs):
+    response = _login(request, *args, **kwargs)
+    if request.method == "POST":
+        user_id = request.session.get("_auth_user_id")
+        if user_id:
+            username = User.objects.get(pk=user_id).username
+            logger.info(f"User logged in: {username}")
+        else:
+            username = request.POST["username"]
+            logger.info(f"Failed user login: {username}")
+    return response
+
+
+_logout = LogoutView.as_view(next_page="/lego/")
+
+
+def logout(request, *args, **kwargs):
+    username = request.user.username
+    response = _logout(request, *args, **kwargs)
+    logger.info(f"User logged out: {username}")
+    return response

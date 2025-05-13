@@ -70,36 +70,44 @@ def get_set_info_mock():
 
 def _set_parts_mock(set_lego_id):
     if set_lego_id == "1234-1":
+        yield {  # existing part
+            "lego_id": "2345",
+            "name": "Brick 2 x 4",
+            "color_name": "White",
+            "image_url": "test://cdn.test/img/2345W.jpg",
+            "quantity": 2,
+            "is_spare": False,
+        }
         yield {  # part without color
             "lego_id": "fig-0006",
             "name": "Pilot, Blue Helmet",
             "image_url": "test://cdn.test/img/fig-0006.jpg",
             "quantity": 1,
         }
-        yield {
-            "lego_id": "111",
+        yield {  # part without image
+            "lego_id": "6868",
             "name": "Jet Engine",
             "color_name": "Blue",
-            "image_url": "test://cdn.test/img/111b.jpg",
-            "quantity": 2,
-        }
-        yield {  # spare part
-            "lego_id": "222",
-            "name": "Wheel",
-            "color_name": "Black",
-            "image_url": "test://cdn.test/img/222k.jpg",
-            "quantity": 1,
-            "is_spare": True,
-        }
-        yield {  # part without image
-            "lego_id": "222",
-            "name": "Wheel",
-            "color_name": "Black",
             "image_url": None,
+            "quantity": 1,
+        }
+        yield {  # new shape, new color
+            "lego_id": "4242",
+            "name": "Wheel",
+            "color_name": "Black",
+            "image_url": "test://cdn.test/img/4242K.jpg",
             "quantity": 3,
             "is_spare": False,
         }
-        yield {  # part with an updated shape name compared to db
+        yield {  # spare part
+            "lego_id": "4242",
+            "name": "Wheel",
+            "color_name": "Black",
+            "image_url": "test://cdn.test/img/4242K.jpg",
+            "quantity": 1,
+            "is_spare": True,
+        }
+        yield {  # new part, existing shape, updated shape name
             "lego_id": "2345",
             "name": "Brick 2 x 4 new",
             "color_name": "Blue",
@@ -107,7 +115,7 @@ def _set_parts_mock(set_lego_id):
             "quantity": 1,
             "is_spare": False,
         }
-        yield {  # part with an updated image url compared to db
+        yield {  # existing part, updated image_url
             "lego_id": "23456",
             "name": "Plate 1 x 3",
             "color_name": "White",

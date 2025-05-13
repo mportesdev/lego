@@ -302,11 +302,12 @@ class TestAddSet(TestCase):
             ordered_regex(
                 "Lego Set 1234-1 Fighter Jet", "test://cdn.test/img/1234.jpg",
                 "Contains:",
+                "2x", "2345", "Brick 2 x 4 new", "White", "test://cdn.test/img/2345W.jpg",
                 "1x", "2345", "Brick 2 x 4 new", "Blue", "test://cdn.test/img/2345B.jpg",
-                "2x", "111", "Jet Engine", "Blue", "test://cdn.test/img/111b.jpg",
+                "1x", "6868", "Jet Engine", "Blue",
                 "1x", "fig-0006", "Pilot, Blue Helmet", "test://cdn.test/img/fig-0006.jpg",
                 "1x", "23456", "Plate 1 x 3", "White", "test://cdn.test/img/23456W2.jpg",
-                "3x", "222", "Wheel", "Black",
+                "3x", "4242", "Wheel", "Black",
             ),
         )
 

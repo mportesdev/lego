@@ -27,10 +27,10 @@ class TestAddSet(TestCase):
             log_output,
             ordered_regex(
                 "INFO", "Created: LegoSet",
-                "INFO", "Skipping spare part:",
                 "INFO", "Created: Shape",
+                "INFO", "Created: LegoPart",
                 "INFO", "Created: Color",
-                "INFO", "Created: LegoPart", "222",
+                "INFO", "Skipping spare part:",
                 "WARNING", "Outdated: Shape",
                 "WARNING", "Updated: Shape",
                 "WARNING", "Outdated: LegoPart",

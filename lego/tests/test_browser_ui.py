@@ -144,10 +144,10 @@ class TestBrowserUI(LiveServerTestCase):
         self.assertIn("Lego Set 1234-1 Fighter Jet", self.driver.title)
         self.assertTrue(self.driver.current_url.endswith("/set/1234-1/"))
         self.driver.find_element(By.LINK_TEXT, "2345")
-        self.driver.find_element(By.LINK_TEXT, "111")
+        self.driver.find_element(By.LINK_TEXT, "6868")
         self.driver.find_element(By.LINK_TEXT, "fig-0006")
         self.driver.find_element(By.LINK_TEXT, "23456")
-        self.driver.find_element(By.LINK_TEXT, "222")
+        self.driver.find_element(By.LINK_TEXT, "4242")
 
     @tag("login")
     def test_login_and_logout(self):

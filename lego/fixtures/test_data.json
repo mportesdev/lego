@@ -23,7 +23,7 @@
     "model": "lego.shape",
     "pk": 1,
     "fields": {
-        "lego_id": "234pr",
+        "lego_id": "2345",
         "name": "Brick 2 x 4"
     }
 },
@@ -31,16 +31,24 @@
     "model": "lego.shape",
     "pk": 2,
     "fields": {
-        "lego_id": "567",
-        "name": "Figure"
+        "lego_id": "fig-0008",
+        "name": "Man, Brown Hat"
     }
 },
 {
     "model": "lego.shape",
     "pk": 3,
     "fields": {
-        "lego_id": "102",
+        "lego_id": "23456",
         "name": "Plate 1 x 3"
+    }
+},
+{
+    "model": "lego.shape",
+    "pk": 4,
+    "fields": {
+        "lego_id": "2345pr0001",
+        "name": "Brick 2 x 4 with print"
     }
 },
 {
@@ -63,7 +71,7 @@
     "fields": {
         "shape": 1,
         "color": 1,
-        "image_url": "test://cdn.test/img/234prR.jpg",
+        "image_url": "test://cdn.test/img/2345R.jpg",
         "image": "lego/img/parts/1.jpg"
     }
 },
@@ -73,7 +81,7 @@
     "fields": {
         "shape": 1,
         "color": 2,
-        "image_url": "test://cdn.test/img/234prW.jpg",
+        "image_url": "test://cdn.test/img/2345W.jpg",
         "image": "lego/img/parts/2.jpg"
     }
 },
@@ -83,7 +91,7 @@
     "fields": {
         "shape": 2,
         "color": null,
-        "image_url": "test://cdn.test/img/567.jpg",
+        "image_url": "test://cdn.test/img/fig-0008.jpg",
         "image": "lego/img/parts/3.jpg"
     }
 },
@@ -93,7 +101,7 @@
     "fields": {
         "shape": 3,
         "color": 2,
-        "image_url": "test://cdn.test/img/102W.jpg",
+        "image_url": "test://cdn.test/img/23456W.jpg",
         "image": null
     }
 },
@@ -104,6 +112,16 @@
         "shape": 3,
         "color": 1,
         "image_url": null,
+        "image": null
+    }
+},
+{
+    "model": "lego.legopart",
+    "pk": 6,
+    "fields": {
+        "shape": 4,
+        "color": 1,
+        "image_url": "test://cdn.test/img/2345pr0001R.jpg",
         "image": null
     }
 },
@@ -122,6 +140,42 @@
     "fields": {
         "set": 1,
         "part": 3,
+        "quantity": 1
+    }
+},
+{
+    "model": "lego.setitem",
+    "pk": 3,
+    "fields": {
+        "set": 2,
+        "part": 2,
+        "quantity": 1
+    }
+},
+{
+    "model": "lego.setitem",
+    "pk": 4,
+    "fields": {
+        "set": 2,
+        "part": 4,
+        "quantity": 1
+    }
+},
+{
+    "model": "lego.setitem",
+    "pk": 5,
+    "fields": {
+        "set": 1,
+        "part": 6,
+        "quantity": 2
+    }
+},
+{
+    "model": "lego.setitem",
+    "pk": 6,
+    "fields": {
+        "set": 2,
+        "part": 1,
         "quantity": 1
     }
 }

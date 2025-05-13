@@ -29,8 +29,9 @@ class TestGetResponse(TestCase):
             ordered_regex(
                 "Lego Set 123-1 Brick House", "/img/sets/1.jpg",
                 "Contains:",
-                "1x", "234pr", "Brick 2 x 4", "Red", "/img/parts/1.jpg",
-                "1x", "567", "Figure", "/img/parts/3.jpg",
+                "1x", "2345", "Brick 2 x 4", "Red", "/img/parts/1.jpg",
+                "2x", "2345pr0001", "Brick 2 x 4 with print", "Red",
+                "1x", "fig-0008", "Man, Brown Hat", "/img/parts/3.jpg",
             ),
         )
 
@@ -40,43 +41,44 @@ class TestGetResponse(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_part_detail(self):
-        response = self.client.get("/lego/part/567/")
+        response = self.client.get("/lego/part/fig-0008/")
 
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
             response.text,
             ordered_regex(
-                "Lego Part 567 Figure", "/img/parts/3.jpg",
+                "Lego Part fig-0008 Man, Brown Hat", "/img/parts/3.jpg",
                 "Included in:",
                 "1x in", "123-1", "Brick House", "/img/sets/1.jpg",
             ),
         )
 
     def test_part_detail_with_color_id(self):
-        response = self.client.get("/lego/part/234pr/1/")
+        response = self.client.get("/lego/part/2345/1/")
 
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
             response.text,
             ordered_regex(
-                "Lego Part 234pr Brick 2 x 4, Red", "/img/parts/1.jpg",
+                "Lego Part 2345 Brick 2 x 4, Red", "/img/parts/1.jpg",
                 "Included in:",
                 "1x in", "123-1", "Brick House", "/img/sets/1.jpg",
+                "1x in", "111-1", "Airport",
              ),
         )
 
-    def test_part_detail_not_found_if_lego_id_invalid(self):
+    def test_part_detail_not_found_by_lego_id(self):
         response = self.client.get("/lego/part/999/")
 
         self.assertEqual(response.status_code, 404)
 
-    def test_part_detail_not_found_if_lego_id_invalid_with_color_id(self):
+    def test_part_detail_not_found_by_lego_id_with_valid_color_id(self):
         response = self.client.get("/lego/part/999/1/")
 
         self.assertEqual(response.status_code, 404)
 
-    def test_part_detail_not_found_if_color_id_invalid(self):
-        response = self.client.get("/lego/part/234pr/99/")
+    def test_part_detail_not_found_by_color_id(self):
+        response = self.client.get("/lego/part/2345/99/")
 
         self.assertEqual(response.status_code, 404)
 
@@ -99,22 +101,22 @@ class TestSearch(TestCase):
             ),
         )
 
-    def test_part_found_by_name(self):
+    def test_parts_found_by_name(self):
         response = self.client.get(
-            "/lego/search/", query_params={"q": "2 x 4", "mode": "all"}
+            "/lego/search/", query_params={"q": "plate", "mode": "all"}
         )
 
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
             response.text,
             ordered_regex(
-                "Search Results for", "2 x 4",
-                "234pr", "Brick 2 x 4", "Red", "/img/parts/1.jpg",
-                "234pr", "Brick 2 x 4", "White", "test://cdn.test/img/234prW.jpg",
+                "Search Results for", "plate",
+                "23456", "Plate 1 x 3", "White", "test://cdn.test/img/23456W.jpg",
+                "23456", "Plate 1 x 3", "Red",
             ),
         )
 
-    def test_multiple_results_found_by_name(self):
+    def test_set_and_parts_found_by_name(self):
         response = self.client.get(
             "/lego/search/", query_params={"q": "brick", "mode": "all"}
         )
@@ -125,8 +127,9 @@ class TestSearch(TestCase):
             ordered_regex(
                 "Search Results for", "brick",
                 "123-1", "Brick House", "/img/sets/1.jpg",
-                "234pr", "Brick 2 x 4", "Red", "/img/parts/1.jpg",
-                "234pr", "Brick 2 x 4", "White", "test://cdn.test/img/234prW.jpg",
+                "2345", "Brick 2 x 4", "Red", "/img/parts/1.jpg",
+                "2345", "Brick 2 x 4", "White", "test://cdn.test/img/2345W.jpg",
+                "2345pr0001", "Brick 2 x 4 with print", "Red",
             ),
         )
 
@@ -144,22 +147,25 @@ class TestSearch(TestCase):
             ),
         )
 
-    def test_part_found_by_lego_id(self):
+    def test_parts_found_by_lego_id(self):
         response = self.client.get(
-            "/lego/search/", query_params={"q": "234", "mode": "all"}
+            "/lego/search/", query_params={"q": "2345", "mode": "all"}
         )
 
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
             response.text,
             ordered_regex(
-                "Search Results for", "234",
-                "234pr", "Brick 2 x 4", "Red", "/img/parts/1.jpg",
-                "234pr", "Brick 2 x 4", "White", "test://cdn.test/img/234prW.jpg",
+                "Search Results for", "2345",
+                "2345", "Brick 2 x 4", "Red", "/img/parts/1.jpg",
+                "2345", "Brick 2 x 4", "White", "test://cdn.test/img/2345W.jpg",
+                "23456", "Plate 1 x 3", "White", "test://cdn.test/img/23456W.jpg",
+                "23456", "Plate 1 x 3", "Red",
+                "2345pr0001", "Brick 2 x 4 with print", "Red", "test://cdn.test/img/2345pr0001R.jpg",
             ),
         )
 
-    def test_part_found_by_color(self):
+    def test_parts_found_by_color(self):
         response = self.client.get(
             "/lego/search/", query_params={"q": "red", "mode": "all"}
         )
@@ -169,7 +175,9 @@ class TestSearch(TestCase):
             response.text,
             ordered_regex(
                 "Search Results for", "red",
-                "234pr", "Brick 2 x 4", "Red",
+                "2345", "Brick 2 x 4", "Red",
+                "23456", "Plate 1 x 3", "Red",
+                "2345pr0001", "Brick 2 x 4 with print", "Red",
             ),
         )
 
@@ -201,7 +209,7 @@ class TestSearch(TestCase):
              ),
         )
 
-    def test_part_found_by_color_in_color_mode(self):
+    def test_parts_found_by_color_in_color_mode(self):
         response = self.client.get(
             "/lego/search/", query_params={"q": "red", "mode": "color"}
         )
@@ -211,7 +219,9 @@ class TestSearch(TestCase):
             response.text,
             ordered_regex(
                 "Search Results for", "red",
-                "234pr", "Brick 2 x 4", "Red",
+                "2345", "Brick 2 x 4", "Red",
+                "23456", "Plate 1 x 3", "Red",
+                "2345pr0001", "Brick 2 x 4 with print", "Red",
             ),
         )
 
@@ -292,11 +302,12 @@ class TestAddSet(TestCase):
             ordered_regex(
                 "Lego Set 1234-1 Fighter Jet", "test://cdn.test/img/1234.jpg",
                 "Contains:",
-                "1x", "234pr", "Brick 2 x 4 with studs", "Blue", "test://cdn.test/img/234prB.jpg",
-                "2x", "111", "Jet Engine", "Blue", "test://cdn.test/img/111b.jpg",
-                "1x", "333", "Pilot", "test://cdn.test/img/333.jpg",
-                "1x", "102", "Plate 1 x 3", "White", "test://cdn.test/img/102W2.jpg",
-                "3x", "222", "Wheel", "Black",
+                "2x", "2345", "Brick 2 x 4 new", "White", "test://cdn.test/img/2345W.jpg",
+                "1x", "2345", "Brick 2 x 4 new", "Blue", "test://cdn.test/img/2345B.jpg",
+                "1x", "6868", "Jet Engine", "Blue",
+                "1x", "fig-0006", "Pilot, Blue Helmet", "test://cdn.test/img/fig-0006.jpg",
+                "1x", "23456", "Plate 1 x 3", "White", "test://cdn.test/img/23456W2.jpg",
+                "3x", "4242", "Wheel", "Black",
             ),
         )
 

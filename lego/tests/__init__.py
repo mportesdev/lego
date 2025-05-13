@@ -70,48 +70,56 @@ def get_set_info_mock():
 
 def _set_parts_mock(set_lego_id):
     if set_lego_id == "1234-1":
-        yield {  # part without color
-            "lego_id": "333",
-            "name": "Pilot",
-            "image_url": "test://cdn.test/img/333.jpg",
-            "quantity": 1,
-        }
-        yield {
-            "lego_id": "111",
-            "name": "Jet Engine",
-            "color_name": "Blue",
-            "image_url": "test://cdn.test/img/111b.jpg",
+        yield {  # existing part
+            "lego_id": "2345",
+            "name": "Brick 2 x 4",
+            "color_name": "White",
+            "image_url": "test://cdn.test/img/2345W.jpg",
             "quantity": 2,
+            "is_spare": False,
         }
-        yield {  # spare part
-            "lego_id": "222",
-            "name": "Wheel",
-            "color_name": "Black",
-            "image_url": "test://cdn.test/img/222k.jpg",
+        yield {  # part without color
+            "lego_id": "fig-0006",
+            "name": "Pilot, Blue Helmet",
+            "image_url": "test://cdn.test/img/fig-0006.jpg",
             "quantity": 1,
-            "is_spare": True,
         }
         yield {  # part without image
-            "lego_id": "222",
+            "lego_id": "6868",
+            "name": "Jet Engine",
+            "color_name": "Blue",
+            "image_url": None,
+            "quantity": 1,
+        }
+        yield {  # new shape, new color
+            "lego_id": "4242",
             "name": "Wheel",
             "color_name": "Black",
-            "image_url": None,
+            "image_url": "test://cdn.test/img/4242K.jpg",
             "quantity": 3,
             "is_spare": False,
         }
-        yield {  # part with an updated shape name compared to db
-            "lego_id": "234pr",
-            "name": "Brick 2 x 4 with studs",
+        yield {  # spare part
+            "lego_id": "4242",
+            "name": "Wheel",
+            "color_name": "Black",
+            "image_url": "test://cdn.test/img/4242K.jpg",
+            "quantity": 1,
+            "is_spare": True,
+        }
+        yield {  # new part, existing shape, updated shape name
+            "lego_id": "2345",
+            "name": "Brick 2 x 4 new",
             "color_name": "Blue",
-            "image_url": "test://cdn.test/img/234prB.jpg",
+            "image_url": "test://cdn.test/img/2345B.jpg",
             "quantity": 1,
             "is_spare": False,
         }
-        yield {  # part with an updated image url compared to db
-            "lego_id": "102",
+        yield {  # existing part, updated image_url
+            "lego_id": "23456",
             "name": "Plate 1 x 3",
             "color_name": "White",
-            "image_url": "test://cdn.test/img/102W2.jpg",
+            "image_url": "test://cdn.test/img/23456W2.jpg",
             "quantity": 1,
             "is_spare": False,
         }

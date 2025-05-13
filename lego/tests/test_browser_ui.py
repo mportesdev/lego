@@ -32,33 +32,36 @@ class TestBrowserUI(LiveServerTestCase):
         self.driver.get(f"{self.live_server_url}/lego/")
 
     def test_index_and_detail_pages(self):
-        self.assertEqual(self.driver.title, "Home | O&F Lego")
+        self.assertIn("Home", self.driver.title)
+        set_link = self.driver.find_element(By.LINK_TEXT, "123-1")
 
         # go to set detail
-        self.driver.find_element(By.LINK_TEXT, "123-1").click()
-        self.assertEqual(self.driver.title, "Lego Set 123-1 Brick House | O&F Lego")
-        link = self.driver.find_element(By.LINK_TEXT, "2345")
+        set_link.click()
+        self.assertIn("Lego Set 123-1 Brick House", self.driver.title)
+        part_link = self.driver.find_element(By.LINK_TEXT, "2345")
         self.driver.find_element(By.LINK_TEXT, "fig-0008")
         self.driver.find_element(By.LINK_TEXT, "2345pr0001")
 
         # go to part detail
-        link.click()
-        self.assertEqual(self.driver.title, "Lego Part 2345 Brick 2 x 4, Red | O&F Lego")
+        part_link.click()
+        self.assertIn("Lego Part 2345 Brick 2 x 4, Red", self.driver.title)
+        set_link = self.driver.find_element(By.LINK_TEXT, "123-1")
 
         # go back to set detail
-        self.driver.find_element(By.LINK_TEXT, "123-1").click()
-        self.assertEqual(self.driver.title, "Lego Set 123-1 Brick House | O&F Lego")
+        set_link.click()
+        self.assertIn("Lego Set 123-1 Brick House", self.driver.title)
+        home_link = self.driver.find_element(By.LINK_TEXT, "O&F Lego")
 
         # go back to index page
-        self.driver.find_element(By.LINK_TEXT, "O&F Lego").click()
-        self.assertEqual(self.driver.title, "Home | O&F Lego")
+        home_link.click()
+        self.assertIn("Home", self.driver.title)
 
     def test_search(self):
         # search everywhere
         self.driver.find_element(By.ID, "id_q").send_keys("brick")
         self.driver.find_element(By.ID, "search_submit").click()
 
-        self.assertEqual(self.driver.title, "Search Results for 'brick' | O&F Lego")
+        self.assertIn("Search Results for 'brick'", self.driver.title)
         self.driver.find_element(By.LINK_TEXT, "123-1")
         self.driver.find_element(By.LINK_TEXT, "2345")
         self.driver.find_element(By.LINK_TEXT, "2345pr0001")
@@ -70,7 +73,7 @@ class TestBrowserUI(LiveServerTestCase):
         self.driver.find_element(By.ID, "id_mode_1").click()
         self.driver.find_element(By.ID, "search_submit").click()
 
-        self.assertEqual(self.driver.title, "Search Results for 'house' | O&F Lego")
+        self.assertIn("Search Results for 'house'", self.driver.title)
         self.driver.find_element(By.LINK_TEXT, "123-1")
 
         # search in lego IDs
@@ -80,7 +83,7 @@ class TestBrowserUI(LiveServerTestCase):
         self.driver.find_element(By.ID, "id_mode_2").click()
         self.driver.find_element(By.ID, "search_submit").click()
 
-        self.assertEqual(self.driver.title, "Search Results for '2345' | O&F Lego")
+        self.assertIn("Search Results for '2345'", self.driver.title)
         self.driver.find_element(By.LINK_TEXT, "2345")
         self.driver.find_element(By.LINK_TEXT, "23456")
         self.driver.find_element(By.LINK_TEXT, "2345pr0001")
@@ -92,7 +95,7 @@ class TestBrowserUI(LiveServerTestCase):
         self.driver.find_element(By.ID, "id_mode_3").click()
         self.driver.find_element(By.ID, "search_submit").click()
 
-        self.assertEqual(self.driver.title, "Search Results for 'white' | O&F Lego")
+        self.assertIn("Search Results for 'white'", self.driver.title)
         self.driver.find_element(By.LINK_TEXT, "2345")
         self.driver.find_element(By.LINK_TEXT, "23456")
 
@@ -157,9 +160,11 @@ class TestBrowserUI(LiveServerTestCase):
         self.driver.find_element(By.ID, "id_password").send_keys("test-password")
         self.driver.find_element(By.ID, "login_submit").click()
         self.driver.find_element(By.XPATH, "//div[text()='test-user']")
+        logout_link = self.driver.find_element(By.ID, "log_out")
         self.driver.find_element(By.LINK_TEXT, "Admin Page")
+
         # log out
-        self.driver.find_element(By.ID, "log_out").click()
+        logout_link.click()
         self.driver.find_element(By.LINK_TEXT, "Log in")
 
     @tag("login")

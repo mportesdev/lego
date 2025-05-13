@@ -69,12 +69,13 @@ class TestAddSet(TestCase):
         )
 
 
+@test_settings
 class TestStoreImage(TestCase):
     fixtures = ["test_data"]
 
     def test_object_without_image_url(self):
+        pk = LegoPart.objects.filter(image_url__isnull=True).first().pk
         with self.assertLogs("lego.images", "INFO") as log_obj:
-            pk = LegoPart.objects.filter(image_url__isnull=True).first().pk
             _store_image(LegoPart, pk, "parts")
 
         log_output = "\n".join(log_obj.output)

@@ -120,8 +120,8 @@ class TestBrowserUI(LiveServerTestCase):
 
         # attempt to add existing set
         self.driver.find_element(By.LINK_TEXT, "Add a New Lego Set").click()
+        self.driver.find_element(By.ID, "id_set_lego_id").send_keys("123")
         with get_set_info_mock(), get_set_parts_mock():
-            self.driver.find_element(By.ID, "id_set_lego_id").send_keys("123")
             self.driver.find_element(By.ID, "add_set_submit").click()
 
         # nothing was added
@@ -130,8 +130,8 @@ class TestBrowserUI(LiveServerTestCase):
 
         # attempt to add invalid set
         self.driver.find_element(By.LINK_TEXT, "Add a New Lego Set").click()
+        self.driver.find_element(By.ID, "id_set_lego_id").send_keys("999")
         with get_set_info_mock(), get_set_parts_mock():
-            self.driver.find_element(By.ID, "id_set_lego_id").send_keys("999")
             self.driver.find_element(By.ID, "add_set_submit").click()
 
         # nothing was added
@@ -140,8 +140,8 @@ class TestBrowserUI(LiveServerTestCase):
 
         # add a new set
         self.driver.find_element(By.LINK_TEXT, "Add a New Lego Set").click()
+        self.driver.find_element(By.ID, "id_set_lego_id").send_keys("1234")
         with get_set_info_mock(), get_set_parts_mock():
-            self.driver.find_element(By.ID, "id_set_lego_id").send_keys("1234")
             self.driver.find_element(By.ID, "add_set_submit").click()
 
         self.assertIn("Lego Set 1234-1 Fighter Jet", self.driver.title)

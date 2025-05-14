@@ -5,7 +5,10 @@ from django.test import TestCase
 from lego.images import _store_image
 from lego.models import LegoPart
 
+from . import test_settings
 
+
+@test_settings
 class TestStoreImage(TestCase):
     fixtures = ["test_data"]
 

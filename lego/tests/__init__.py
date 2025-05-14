@@ -51,11 +51,13 @@ logging.config.dictConfig(
 )
 
 
-def ordered_regex(*parts):
-    return re.compile(
-        ".*?".join(re.escape(part) for part in parts),
-        flags=re.DOTALL,
-    )
+class OrderedPartsMixin:
+    def assertParts(self, text, *parts):
+        regex = re.compile(
+            ".*?".join(re.escape(part) for part in parts),
+            flags=re.DOTALL,
+        )
+        self.assertRegex(text, regex)
 
 
 def _set_info_mock(set_lego_id):

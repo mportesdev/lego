@@ -5,11 +5,11 @@ from django.test import TestCase, tag
 from lego.images import _store_image
 from lego.models import LegoPart
 
-from . import test_settings, ordered_regex, get_set_info_mock, get_set_parts_mock
+from . import test_settings, OrderedPartsMixin, get_set_info_mock, get_set_parts_mock
 
 
 @test_settings
-class TestAddSet(TestCase):
+class TestAddSet(TestCase, OrderedPartsMixin):
     fixtures = ["test_data", "test_user"]
 
     @tag("write-db")
@@ -23,19 +23,17 @@ class TestAddSet(TestCase):
             self.client.post("/lego/set/add/", data={"set_lego_id": "1234-1"})
 
         log_output = "\n".join(log_obj.output)
-        self.assertRegex(
+        self.assertParts(
             log_output,
-            ordered_regex(
-                "INFO", "Created: LegoSet",
-                "INFO", "Created: Shape",
-                "INFO", "Created: LegoPart",
-                "INFO", "Created: Color",
-                "INFO", "Skipping spare part:",
-                "WARNING", "Outdated: Shape",
-                "WARNING", "Updated: Shape",
-                "WARNING", "Outdated: LegoPart",
-                "WARNING", "Updated: LegoPart",
-            ),
+            "INFO", "Created: LegoSet",
+            "INFO", "Created: Shape",
+            "INFO", "Created: LegoPart",
+            "INFO", "Created: Color",
+            "INFO", "Skipping spare part:",
+            "WARNING", "Outdated: Shape",
+            "WARNING", "Updated: Shape",
+            "WARNING", "Outdated: LegoPart",
+            "WARNING", "Updated: LegoPart",
         )
 
     def test_existing_lego_id(self):
@@ -48,10 +46,7 @@ class TestAddSet(TestCase):
             self.client.post("/lego/set/add/", data={"set_lego_id": "123-1"})
 
         log_output = "\n".join(log_obj.output)
-        self.assertRegex(
-            log_output,
-            ordered_regex("WARNING", "Already exists: LegoSet"),
-        )
+        self.assertParts(log_output, "WARNING", "Already exists: LegoSet")
 
     def test_invalid_lego_id(self):
         self.client.login(username="test-user", password="test-password")
@@ -63,14 +58,13 @@ class TestAddSet(TestCase):
             self.client.post("/lego/set/add/", data={"set_lego_id": "999-1"})
 
         log_output = "\n".join(log_obj.output)
-        self.assertRegex(
-            log_output,
-            ordered_regex("ERROR", "Error calling external API:", "Not Found"),
+        self.assertParts(
+            log_output, "ERROR", "Error calling external API:", "Not Found",
         )
 
 
 @test_settings
-class TestStoreImage(TestCase):
+class TestStoreImage(TestCase, OrderedPartsMixin):
     fixtures = ["test_data"]
 
     def test_object_without_image_url(self):
@@ -79,10 +73,7 @@ class TestStoreImage(TestCase):
             _store_image(LegoPart, pk, "parts")
 
         log_output = "\n".join(log_obj.output)
-        self.assertRegex(
-            log_output,
-            ordered_regex("INFO", "No image URL: LegoPart"),
-        )
+        self.assertParts(log_output, "INFO", "No image URL: LegoPart")
 
     def test_unknown_image_data(self):
         pk = LegoPart.objects.filter(image_url__isnull=False).first().pk
@@ -93,12 +84,10 @@ class TestStoreImage(TestCase):
             _store_image(LegoPart, pk, "parts")
 
         log_output = "\n".join(log_obj.output)
-        self.assertRegex(
+        self.assertParts(
             log_output,
-            ordered_regex(
-                "ERROR", "reading image URL for LegoPart",
-                "INFO", "Deleted `image_url`: LegoPart",
-            ),
+            "ERROR", "reading image URL for LegoPart",
+            "INFO", "Deleted `image_url`: LegoPart",
         )
 
     def test_unknown_image_format(self):
@@ -111,17 +100,15 @@ class TestStoreImage(TestCase):
             _store_image(LegoPart, pk, "parts")
 
         log_output = "\n".join(log_obj.output)
-        self.assertRegex(
+        self.assertParts(
             log_output,
-            ordered_regex(
-                "WARNING", "Unexpected image format 'TEST'",
-                "INFO", "Deleted `image_url`: LegoPart",
-            ),
+            "WARNING", "Unexpected image format 'TEST'",
+            "INFO", "Deleted `image_url`: LegoPart",
         )
 
 
 @test_settings
-class TestAuth(TestCase):
+class TestAuth(TestCase, OrderedPartsMixin):
     fixtures = ["test_user"]
 
     @tag("login")
@@ -133,10 +120,7 @@ class TestAuth(TestCase):
             )
 
         log_output = "\n".join(log_obj.output)
-        self.assertRegex(
-            log_output,
-            ordered_regex("INFO", "User logged in: test-user"),
-        )
+        self.assertParts(log_output, "INFO", "User logged in: test-user")
 
     @tag("login")
     def test_login_with_incorrect_password(self):
@@ -147,10 +131,7 @@ class TestAuth(TestCase):
             )
 
         log_output = "\n".join(log_obj.output)
-        self.assertRegex(
-            log_output,
-            ordered_regex("INFO", "Failed user login: test-user"),
-        )
+        self.assertParts(log_output, "INFO", "Failed user login: test-user")
 
     @tag("login")
     def test_login_with_incorrect_username(self):
@@ -161,10 +142,7 @@ class TestAuth(TestCase):
             )
 
         log_output = "\n".join(log_obj.output)
-        self.assertRegex(
-            log_output,
-            ordered_regex("INFO", "Failed user login: unknown-user"),
-        )
+        self.assertParts(log_output, "INFO", "Failed user login: unknown-user")
 
     @tag("login")
     def test_logout(self):
@@ -173,7 +151,4 @@ class TestAuth(TestCase):
             self.client.post("/lego/logout/")
 
         log_output = "\n".join(log_obj.output)
-        self.assertRegex(
-            log_output,
-            ordered_regex("INFO", "User logged out: test-user"),
-        )
+        self.assertParts(log_output, "INFO", "User logged out: test-user")

@@ -16,8 +16,10 @@ class TestGetResponse(TestCase):
             ordered_regex(
                 "Latest Additions",
                 "111-1", "Airport",
-                "123-1", "Brick House",
             ),
+        )
+        self.assertRegex(
+            response.text, ordered_regex("123-1", "Brick House"),
         )
 
     def test_set_detail(self):
@@ -29,10 +31,15 @@ class TestGetResponse(TestCase):
             ordered_regex(
                 "Lego Set 123-1 Brick House",
                 "Contains:",
-                "1x", "2345", "Brick 2 x 4", "Red",
-                "2x", "2345pr0001", "Brick 2 x 4 with print", "Red",
                 "1x", "fig-0008", "Man, Brown Hat",
             ),
+        )
+        self.assertRegex(
+            response.text, ordered_regex("1x", "2345", "Brick 2 x 4", "Red"),
+        )
+        self.assertRegex(
+            response.text,
+            ordered_regex("2x", "2345pr0001", "Brick 2 x 4 with print", "Red"),
         )
 
     def test_set_detail_not_found(self):
@@ -62,9 +69,11 @@ class TestGetResponse(TestCase):
             ordered_regex(
                 "Lego Part 2345 Brick 2 x 4, Red",
                 "Included in:",
-                "1x in", "123-1", "Brick House",
                 "1x in", "111-1", "Airport",
              ),
+        )
+        self.assertRegex(
+            response.text, ordered_regex("1x in", "123-1", "Brick House"),
         )
 
     def test_part_detail_not_found_by_lego_id(self):
@@ -112,8 +121,10 @@ class TestSearch(TestCase):
             ordered_regex(
                 "Search Results for", "plate",
                 "23456", "Plate 1 x 3", "White",
-                "23456", "Plate 1 x 3", "Red",
             ),
+        )
+        self.assertRegex(
+            response.text, ordered_regex("23456", "Plate 1 x 3", "Red"),
         )
 
     def test_set_and_parts_found_by_name(self):
@@ -128,9 +139,13 @@ class TestSearch(TestCase):
                 "Search Results for", "brick",
                 "123-1", "Brick House",
                 "2345", "Brick 2 x 4", "Red",
-                "2345", "Brick 2 x 4", "White",
-                "2345pr0001", "Brick 2 x 4 with print", "Red",
             ),
+        )
+        self.assertRegex(
+            response.text, ordered_regex("2345", "Brick 2 x 4", "White"),
+        )
+        self.assertRegex(
+            response.text, ordered_regex("2345pr0001", "Brick 2 x 4 with print", "Red"),
         )
 
     def test_set_found_by_lego_id(self):
@@ -158,11 +173,19 @@ class TestSearch(TestCase):
             ordered_regex(
                 "Search Results for", "2345",
                 "2345", "Brick 2 x 4", "Red",
-                "2345", "Brick 2 x 4", "White",
-                "23456", "Plate 1 x 3", "White",
-                "23456", "Plate 1 x 3", "Red",
-                "2345pr0001", "Brick 2 x 4 with print", "Red",
             ),
+        )
+        self.assertRegex(
+            response.text, ordered_regex("2345", "Brick 2 x 4", "White"),
+        )
+        self.assertRegex(
+            response.text, ordered_regex("2345pr0001", "Brick 2 x 4 with print", "Red"),
+        )
+        self.assertRegex(
+            response.text, ordered_regex("23456", "Plate 1 x 3", "Red"),
+        )
+        self.assertRegex(
+            response.text, ordered_regex("23456", "Plate 1 x 3", "White"),
         )
 
     def test_parts_found_by_color(self):
@@ -176,9 +199,13 @@ class TestSearch(TestCase):
             ordered_regex(
                 "Search Results for", "red",
                 "2345", "Brick 2 x 4", "Red",
-                "23456", "Plate 1 x 3", "Red",
-                "2345pr0001", "Brick 2 x 4 with print", "Red",
             ),
+        )
+        self.assertRegex(
+            response.text, ordered_regex("2345pr0001", "Brick 2 x 4 with print", "Red"),
+        )
+        self.assertRegex(
+            response.text, ordered_regex("23456", "Plate 1 x 3", "Red"),
         )
 
     def test_set_found_by_name_in_name_mode(self):
@@ -220,9 +247,13 @@ class TestSearch(TestCase):
             ordered_regex(
                 "Search Results for", "red",
                 "2345", "Brick 2 x 4", "Red",
-                "23456", "Plate 1 x 3", "Red",
-                "2345pr0001", "Brick 2 x 4 with print", "Red",
             ),
+        )
+        self.assertRegex(
+            response.text, ordered_regex("2345pr0001", "Brick 2 x 4 with print", "Red"),
+        )
+        self.assertRegex(
+            response.text, ordered_regex("23456", "Plate 1 x 3", "Red"),
         )
 
     def test_nothing_found_by_lego_id_in_name_mode(self):
@@ -259,13 +290,12 @@ class TestImageUrls(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertRegex(
-            response.text,
-            ordered_regex(
-                # 111-1 has external image URL
-                "111-1", "test://cdn.test/img/111.jpg",
-                # 123-1 has local static file
-                "123-1", "/img/sets/1.jpg",
-            )
+            # 111-1 has external image URL
+            response.text, ordered_regex("111-1", "test://cdn.test/img/111.jpg"),
+        )
+        self.assertRegex(
+            # 123-1 has local static file
+            response.text, ordered_regex("123-1", "/img/sets/1.jpg"),
         )
 
     def test_part_image_urls(self):
@@ -274,15 +304,15 @@ class TestImageUrls(TestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        # 23456 White has external image URL
         self.assertRegex(
+            # 23456 White has external image URL
             response.text,
-            ordered_regex(
-                "23456", "White", "test://cdn.test/img/23456W.jpg",
-                "23456", "Red",
-            )
+            ordered_regex("23456", "White", "test://cdn.test/img/23456W.jpg"),
         )
         # 23456 Red has no image
+        self.assertRegex(
+            response.text, ordered_regex("23456", "Red"),
+        )
         self.assertNotIn("23456R", response.text)
         self.assertNotIn("img/parts", response.text)
 
@@ -308,13 +338,23 @@ class TestAddSet(TestCase):
             ordered_regex(
                 "Lego Set 1234-1 Fighter Jet",
                 "Contains:",
-                "2x", "2345", "Brick 2 x 4 new", "White",
-                "1x", "2345", "Brick 2 x 4 new", "Blue",
-                "1x", "6868", "Jet Engine", "Blue",
                 "1x", "fig-0006", "Pilot, Blue Helmet",
-                "1x", "23456", "Plate 1 x 3", "White",
-                "3x", "4242", "Wheel", "Black",
             ),
+        )
+        self.assertRegex(
+            response.text, ordered_regex("2x", "2345", "Brick 2 x 4 new", "White"),
+        )
+        self.assertRegex(
+            response.text, ordered_regex("1x", "2345", "Brick 2 x 4 new", "Blue"),
+        )
+        self.assertRegex(
+            response.text, ordered_regex("1x", "6868", "Jet Engine", "Blue"),
+        )
+        self.assertRegex(
+            response.text, ordered_regex("1x", "23456", "Plate 1 x 3", "White"),
+        )
+        self.assertRegex(
+            response.text, ordered_regex("3x", "4242", "Wheel", "Black"),
         )
 
     @tag("write-db")
@@ -395,8 +435,7 @@ class TestAuth(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertRedirects(response, "/lego/")
         self.assertRegex(
-            response.text,
-            ordered_regex("test-user", "Log out"),
+            response.text, ordered_regex("test-user", "Log out"),
         )
         self.assertIn("Add a New Lego Set", response.text)
         self.assertIn("Admin Page", response.text)

@@ -1,6 +1,28 @@
 {% extends "lego/base.html" %}
 {% load static %}
 {% load lego_extras %}
+{% block append_head %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+<link rel="stylesheet" type="text/css" href="{% static 'lego/css/styles.css' %}">
+<script type="text/javascript">
+function toggleHideShow(partPk) {
+    const itemId = `item_${partPk}`;
+    const item = document.getElementById(itemId);
+    const toggleId = `hide_show_${partPk}`;
+    const toggle = document.getElementById(toggleId);
+
+    if (item.style.opacity == 0.25) {
+        item.style.opacity = 1.0;
+        toggle.classList.remove("ti-eye-closed");
+        toggle.classList.add("ti-eye");
+    } else {
+        item.style.opacity = 0.25;
+toggle.classList.remove("ti-eye");
+        toggle.classList.add("ti-eye-closed");
+    }
+}
+</script>
+{% endblock %}
 {% block content %}
   <div class="title is-4">{{ title }}</div>
   {% if legoset.image|is_static_file %}<div><img src="{% static legoset.image %}"></div>
@@ -9,7 +31,8 @@
   <div class="subtitle">Contains:</div>
   <div class="grid">
   {% for item in legoset.setitem_set.all %}
-    <div class="box">
+    <div id="item_{{ item.part.pk }}" class="box">
+      <div><button onclick="toggleHideShow({{ item.part.pk }})" title="Hide/Show" id="hide_show_{{ item.part.pk }}" class="ti ti-eye icon-24"></button></div>
       <div>{{ item.quantity }}x</div>
       <div><a href="{{ item.part.get_absolute_url }}">{{ item.part.shape.lego_id }}</a></div>
       <div>{{ item.part.shape.name }}</div>

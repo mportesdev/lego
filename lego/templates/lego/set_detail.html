@@ -2,6 +2,8 @@
 {% load static %}
 {% load lego_extras %}
 {% block append_head %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+<link rel="stylesheet" type="text/css" href="{% static 'lego/css/styles.css' %}">
 <script type="text/javascript">
 function toggleHideShow(partPk) {
     const itemId = `item_${partPk}`;
@@ -19,7 +21,7 @@ function toggleHideShow(partPk) {
   <div class="grid">
   {% for item in legoset.setitem_set.all %}
     <div id="item_{{ item.part.pk }}" class="box">
-      <div><button onclick="toggleHideShow({{ item.part.pk }})" title="Hide/Show" id="hide_show_{{ item.part.pk }}">hide/show</button></div>
+      <div><button onclick="toggleHideShow({{ item.part.pk }})" title="Hide/Show" id="hide_show_{{ item.part.pk }}" class="ti ti-eye icon-24"></button></div>
       <div>{{ item.quantity }}x</div>
       <div><a href="{{ item.part.get_absolute_url }}">{{ item.part.shape.lego_id }}</a></div>
       <div>{{ item.part.shape.name }}</div>

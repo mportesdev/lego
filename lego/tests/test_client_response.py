@@ -106,11 +106,8 @@ class TestSearch(TestCase, OrderedPartsMixin):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertParts(
-            response.text,
-            "Search Results for", "house",
-            "123-1", "Brick House",
-        )
+        self.assertInHTML("Search Results for 'house'", response.text)
+        self.assertParts(response.text, "123-1", "Brick House")
 
     def test_parts_found_by_name(self):
         response = self.client.get(
@@ -118,11 +115,8 @@ class TestSearch(TestCase, OrderedPartsMixin):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertParts(
-            response.text,
-            "Search Results for", "plate",
-            "23456", "Plate 1 x 3", "White",
-        )
+        self.assertInHTML("Search Results for 'plate'", response.text)
+        self.assertParts(response.text, "23456", "Plate 1 x 3", "White")
         self.assertParts(response.text, "23456", "Plate 1 x 3", "Red")
 
     def test_set_and_parts_found_by_name(self):
@@ -131,9 +125,9 @@ class TestSearch(TestCase, OrderedPartsMixin):
         )
 
         self.assertEqual(response.status_code, 200)
+        self.assertInHTML("Search Results for 'brick'", response.text)
         self.assertParts(
             response.text,
-            "Search Results for", "brick",
             "123-1", "Brick House",
             "2345", "Brick 2 x 4", "Red",
         )
@@ -146,11 +140,8 @@ class TestSearch(TestCase, OrderedPartsMixin):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertParts(
-            response.text,
-            "Search Results for", "123",
-            "123-1", "Brick House",
-        )
+        self.assertInHTML("Search Results for '123'", response.text)
+        self.assertParts(response.text, "123-1", "Brick House")
 
     def test_parts_found_by_num_code(self):
         response = self.client.get(
@@ -158,11 +149,8 @@ class TestSearch(TestCase, OrderedPartsMixin):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertParts(
-            response.text,
-            "Search Results for", "2345",
-            "2345", "Brick 2 x 4", "Red",
-        )
+        self.assertInHTML("Search Results for '2345'", response.text)
+        self.assertParts(response.text, "2345", "Brick 2 x 4", "Red")
         self.assertParts(response.text, "2345", "Brick 2 x 4", "White")
         self.assertParts(response.text, "2345pr0001", "Brick 2 x 4 with print", "Red")
         self.assertNotIn("23456", response.text)
@@ -173,11 +161,8 @@ class TestSearch(TestCase, OrderedPartsMixin):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertParts(
-            response.text,
-            "Search Results for", "red",
-            "2345", "Brick 2 x 4", "Red",
-        )
+        self.assertInHTML("Search Results for 'red'", response.text)
+        self.assertParts(response.text, "2345", "Brick 2 x 4", "Red")
         self.assertParts(response.text, "2345pr0001", "Brick 2 x 4 with print", "Red")
         self.assertParts(response.text, "23456", "Plate 1 x 3", "Red")
 
@@ -187,11 +172,8 @@ class TestSearch(TestCase, OrderedPartsMixin):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertParts(
-            response.text,
-            "Search Results for", "house",
-            "123-1", "Brick House",
-        )
+        self.assertInHTML("Search Results for 'house'", response.text)
+        self.assertParts(response.text, "123-1", "Brick House")
 
     def test_set_found_by_lego_id_in_id_mode(self):
         response = self.client.get(
@@ -199,11 +181,8 @@ class TestSearch(TestCase, OrderedPartsMixin):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertParts(
-            response.text,
-            "Search Results for", "123",
-            "123-1", "Brick House",
-        )
+        self.assertInHTML("Search Results for '123'", response.text)
+        self.assertParts(response.text, "123-1", "Brick House")
 
     def test_parts_found_by_num_code_in_id_mode(self):
         response = self.client.get(
@@ -211,11 +190,8 @@ class TestSearch(TestCase, OrderedPartsMixin):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertParts(
-            response.text,
-            "Search Results for", "2345",
-            "2345", "Brick 2 x 4", "Red",
-        )
+        self.assertInHTML("Search Results for '2345'", response.text)
+        self.assertParts(response.text, "2345", "Brick 2 x 4", "Red")
         self.assertParts(response.text, "2345", "Brick 2 x 4", "White")
         self.assertParts(response.text, "2345pr0001", "Brick 2 x 4 with print", "Red")
         self.assertNotIn("23456", response.text)
@@ -226,11 +202,8 @@ class TestSearch(TestCase, OrderedPartsMixin):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertParts(
-            response.text,
-            "Search Results for", "red",
-            "2345", "Brick 2 x 4", "Red",
-        )
+        self.assertInHTML("Search Results for 'red'", response.text)
+        self.assertParts(response.text, "2345", "Brick 2 x 4", "Red")
         self.assertParts(response.text, "2345pr0001", "Brick 2 x 4 with print", "Red")
         self.assertParts(response.text, "23456", "Plate 1 x 3", "Red")
 

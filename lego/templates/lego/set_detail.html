@@ -8,7 +8,18 @@
 function toggleHideShow(partPk) {
     const itemId = `item_${partPk}`;
     const item = document.getElementById(itemId);
-    item.style.opacity = (item.style.opacity == 0.25) ? 1.0 : 0.25;
+    const toggleId = `hide_show_${partPk}`;
+    const toggle = document.getElementById(toggleId);
+
+    if (item.style.opacity == 0.25) {
+        item.style.opacity = 1.0;
+        toggle.classList.remove("ti-eye-closed");
+        toggle.classList.add("ti-eye");
+    } else {
+        item.style.opacity = 0.25;
+toggle.classList.remove("ti-eye");
+        toggle.classList.add("ti-eye-closed");
+    }
 }
 </script>
 {% endblock %}

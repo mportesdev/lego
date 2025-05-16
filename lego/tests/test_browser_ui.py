@@ -63,10 +63,10 @@ class TestBrowserUI(LiveServerTestCase):
         toggle = self.driver.find_element(By.ID, "hide_show_1")
         # hide
         toggle.click()
-        self.assertEqual(float(item.get_property("style")["opacity"]), 0.25)
+        self.assertAlmostEqual(float(item.get_property("style")["opacity"]), 0.25)
         # show
         toggle.click()
-        self.assertEqual(float(item.get_property("style")["opacity"]), 1.0)
+        self.assertAlmostEqual(float(item.get_property("style")["opacity"]), 1.0)
 
     def test_search(self):
         # search everywhere

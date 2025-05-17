@@ -6,19 +6,15 @@
 <link rel="stylesheet" type="text/css" href="{% static 'lego/css/styles.css' %}">
 <script type="text/javascript">
 function toggleHideShow(partPk) {
-    const itemId = `item_${partPk}`;
-    const item = document.getElementById(itemId);
-    const toggleId = `hide_show_${partPk}`;
-    const toggle = document.getElementById(toggleId);
+    const toggle = document.getElementById(`hide_show_${partPk}`);
+    toggle.classList.toggle("ti-eye-closed");
+    toggle.classList.toggle("ti-eye");
 
-    if (item.style.opacity == 0.25) {
-        item.style.opacity = 1.0;
-        toggle.classList.remove("ti-eye-closed");
-        toggle.classList.add("ti-eye");
+    const item = document.getElementById(`item_${partPk}`);
+    if (toggle.classList.contains("ti-eye")) {
+        item.style.opacity = 1.0
     } else {
-        item.style.opacity = 0.25;
-        toggle.classList.remove("ti-eye");
-        toggle.classList.add("ti-eye-closed");
+        item.style.opacity = 0.25
     }
 }
 </script>

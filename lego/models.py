@@ -2,9 +2,20 @@ from django.db import models
 from django.urls import reverse
 
 
+class NumericPrefix(models.Func):
+    function = "substring"
+    template = "%(function)s(%(expressions)s from '^\\d+')"
+
+
 class Shape(models.Model):
     lego_id = models.CharField(max_length=30, unique=True)
     name = models.CharField(max_length=150)
+    num_code = models.GeneratedField(
+        expression=NumericPrefix("lego_id"),
+        output_field=models.CharField(max_length=30),
+        db_persist=True,
+        null=True,
+    )
 
     def __str__(self):
         return f"{self.lego_id} {self.name}"
@@ -12,7 +23,7 @@ class Shape(models.Model):
     def __repr__(self):
         fields_repr = ", ".join(
             f"{field_name}={getattr(self, field_name)!r}"
-            for field_name in ("id", "lego_id", "name")
+            for field_name in ("id", "lego_id", "name", "num_code")
         )
         return f"{type(self).__name__}({fields_repr})"
 

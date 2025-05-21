@@ -21,6 +21,7 @@ class Shape(models.Model):
         indexes = [
             models.Index(fields=["num_code"]),
         ]
+        ordering = ["num_code"]
 
     def __str__(self):
         return f"{self.lego_id} {self.name}"
@@ -74,6 +75,7 @@ class LegoPart(models.Model):
                 fields=["shape", "color"], name="unique_shape_color"
             ),
         ]
+        ordering = ["shape"]
 
     def get_absolute_url(self):
         kwargs = {"lego_id": self.shape.lego_id}
@@ -111,7 +113,7 @@ class SetItem(models.Model):
     quantity = models.PositiveSmallIntegerField(default=1)
 
     class Meta:
-        ordering = ["part__shape__name"]
+        ordering = ["part"]
 
     def __repr__(self):
         return _repr(self)

@@ -66,7 +66,7 @@ def search(request):
     name_q = Q(name__icontains=search_string)
     lego_id_q = Q(lego_id__startswith=search_string)
     shape_name_q = Q(shape__name__icontains=search_string)
-    shape_lego_id_q = Q(shape__lego_id__startswith=search_string)
+    shape_num_code_q = Q(shape__num_code__exact=search_string)
     color_name_q = Q(color__name__icontains=search_string)
 
     if search_mode == "name":
@@ -74,13 +74,13 @@ def search(request):
         parts = LegoPart.objects.filter(shape_name_q)
     elif search_mode == "id":
         sets = LegoSet.objects.filter(lego_id_q)
-        parts = LegoPart.objects.filter(shape_lego_id_q)
+        parts = LegoPart.objects.filter(shape_num_code_q)
     elif search_mode == "color":
         sets = LegoSet.objects.none()  # sets don't have colors
         parts = LegoPart.objects.filter(color_name_q)
     else:
         sets = LegoSet.objects.filter(name_q | lego_id_q)
-        parts = LegoPart.objects.filter(shape_name_q | shape_lego_id_q | color_name_q)
+        parts = LegoPart.objects.filter(shape_name_q | shape_num_code_q | color_name_q)
 
     return render(
         request,

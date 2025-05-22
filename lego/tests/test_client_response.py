@@ -1,3 +1,5 @@
+from operator import attrgetter
+
 from django.test import TestCase, tag
 
 from . import test_settings, OrderedPartsMixin, get_set_info_mock, get_set_parts_mock
@@ -78,6 +80,23 @@ class TestGetResponse(TestCase, OrderedPartsMixin):
 
 
 @test_settings
+class TestResponseQuerySet(TestCase):
+    fixtures = ["test_data"]
+
+    def test_parts_found_by_num_code(self):
+        response = self.client.get(
+            "/lego/search/", query_params={"q": "2345", "mode": "id"}
+        )
+
+        self.assertQuerySetEqual(
+            response.context["parts"],
+            (("2345", "Red"), ("2345pr0001", "Red"), ("2345", "White")),
+            transform=attrgetter("shape.lego_id", "color.name"),
+            ordered=False,
+        )
+
+
+@test_settings
 class TestSearch(TestCase, OrderedPartsMixin):
     fixtures = ["test_data"]
 
@@ -133,7 +152,7 @@ class TestSearch(TestCase, OrderedPartsMixin):
             "123-1", "Brick House",
         )
 
-    def test_parts_found_by_lego_id(self):
+    def test_parts_found_by_num_code(self):
         response = self.client.get(
             "/lego/search/", query_params={"q": "2345", "mode": "all"}
         )
@@ -146,8 +165,7 @@ class TestSearch(TestCase, OrderedPartsMixin):
         )
         self.assertParts(response.text, "2345", "Brick 2 x 4", "White")
         self.assertParts(response.text, "2345pr0001", "Brick 2 x 4 with print", "Red")
-        self.assertParts(response.text, "23456", "Plate 1 x 3", "Red")
-        self.assertParts(response.text, "23456", "Plate 1 x 3", "White")
+        self.assertNotIn("23456", response.text)
 
     def test_parts_found_by_color(self):
         response = self.client.get(
@@ -186,6 +204,21 @@ class TestSearch(TestCase, OrderedPartsMixin):
             "Search Results for", "123",
             "123-1", "Brick House",
         )
+
+    def test_parts_found_by_num_code_in_id_mode(self):
+        response = self.client.get(
+            "/lego/search/", query_params={"q": "2345", "mode": "id"}
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertParts(
+            response.text,
+            "Search Results for", "2345",
+            "2345", "Brick 2 x 4", "Red",
+        )
+        self.assertParts(response.text, "2345", "Brick 2 x 4", "White")
+        self.assertParts(response.text, "2345pr0001", "Brick 2 x 4 with print", "Red")
+        self.assertNotIn("23456", response.text)
 
     def test_parts_found_by_color_in_color_mode(self):
         response = self.client.get(

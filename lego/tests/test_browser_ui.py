@@ -97,7 +97,6 @@ class TestBrowserUI(LiveServerTestCase):
 
         self.assertIn("Search Results for '2345'", self.driver.title)
         self.driver.find_element(By.LINK_TEXT, "2345")
-        self.driver.find_element(By.LINK_TEXT, "23456")
         self.driver.find_element(By.LINK_TEXT, "2345pr0001")
 
         # search in colors

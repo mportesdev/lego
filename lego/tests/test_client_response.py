@@ -321,13 +321,13 @@ class TestAddSet(TestCase, OrderedPartsMixin):
         self.client.login(username="test-user", password="test-password")
         with get_set_info_mock() as mock_1, get_set_parts_mock() as mock_2:
             response = self.client.post(
-                "/lego/set/add/", data={"set_lego_id": "1234"}, follow=True
+                "/lego/set/add/", data={"set_lego_id": "1122"}, follow=True
             )
-            mock_1.assert_called_once_with("1234-1")
-            mock_2.assert_called_once_with("1234-1")
+            mock_1.assert_called_once_with("1122-1")
+            mock_2.assert_called_once_with("1122-1")
 
         self.assertEqual(response.status_code, 200)
-        self.assertRedirects(response, "/lego/set/1234-1/")
+        self.assertRedirects(response, "/lego/set/1122-1/")
 
     def test_add_set_existing_lego_id(self):
         self.client.login(username="test-user", password="test-password")

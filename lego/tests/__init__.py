@@ -63,6 +63,8 @@ class OrderedPartsMixin:
 def _set_info_mock(set_lego_id):
     if set_lego_id == "1234-1":
         return {"name": "Fighter Jet", "image_url": "test://cdn.test/img/1234.jpg"}
+    elif set_lego_id == "1122-1":
+        return {"name": "Miniset", "image_url": "test://cdn.test/img/1122.jpg"}
     raise HTTPError("404 Not Found")
 
 
@@ -122,6 +124,15 @@ def _set_parts_mock(set_lego_id):
             "name": "Plate 1 x 3",
             "color_name": "White",
             "image_url": "test://cdn.test/img/23456W2.jpg",
+            "quantity": 1,
+            "is_spare": False,
+        }
+    elif set_lego_id == "1122-1":
+        yield {  # new shape, existing color
+            "lego_id": "3344a",
+            "name": "Brick 2 x 2",
+            "color_name": "Red",
+            "image_url": "test://cdn.test/img/3344aR.jpg",
             "quantity": 1,
             "is_spare": False,
         }

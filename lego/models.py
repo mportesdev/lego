@@ -17,6 +17,11 @@ class Shape(models.Model):
         null=True,
     )
 
+    class Meta:
+        indexes = [
+            models.Index(fields=["num_code"]),
+        ]
+
     def __str__(self):
         return f"{self.lego_id} {self.name}"
 

@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from lego.models import Shape
+from lego.models import Shape, Color, LegoPart, LegoSet
 
 from . import test_settings, get_set_info_mock, get_set_parts_mock
 
@@ -23,3 +23,68 @@ class TestAddSet(TestCase):
             self.client.post("/lego/set/add/", data={"set_lego_id": "1122-1"})
 
         self.assertEqual(Shape.objects.get(lego_id="3344a").num_code, "3344")
+
+    def test_existing_part_pk(self):
+        part_pk = LegoPart.objects.get(shape__lego_id="2345", color__name="White").pk
+
+        self.client.login(username="test-user", password="test-password")
+        with get_set_info_mock(), get_set_parts_mock():
+            self.client.post("/lego/set/add/", data={"set_lego_id": "1234-1"})
+
+        new_set = LegoSet.objects.get(lego_id="1234-1")
+        added_part = new_set.parts.get(shape__lego_id="2345", color__name="White")
+        self.assertEqual(added_part.pk, part_pk)
+
+    def test_new_part_existing_shape(self):
+        shape_pk = Shape.objects.get(lego_id="2345").pk
+
+        self.client.login(username="test-user", password="test-password")
+        with get_set_info_mock(), get_set_parts_mock():
+            self.client.post("/lego/set/add/", data={"set_lego_id": "1234-1"})
+
+        new_set = LegoSet.objects.get(lego_id="1234-1")
+        added_part = new_set.parts.get(shape__lego_id="2345", color__name="Blue")
+        self.assertEqual(added_part.shape.pk, shape_pk)
+
+    def test_new_part_existing_color(self):
+        color_pk = Color.objects.get(name="Red").pk
+
+        self.client.login(username="test-user", password="test-password")
+        with get_set_info_mock(), get_set_parts_mock():
+            self.client.post("/lego/set/add/", data={"set_lego_id": "1122-1"})
+
+        new_set = LegoSet.objects.get(lego_id="1122-1")
+        added_part = new_set.parts.get(shape__lego_id="3344a", color__name="Red")
+        self.assertEqual(added_part.color.pk, color_pk)
+
+    def test_updated_image_url(self):
+        part = LegoPart.objects.get(shape__lego_id="23456", color__name="White")
+
+        self.client.login(username="test-user", password="test-password")
+        with get_set_info_mock(), get_set_parts_mock():
+            self.client.post("/lego/set/add/", data={"set_lego_id": "1234-1"})
+
+        part.refresh_from_db()
+        self.assertEqual(part.image_url, "test://cdn.test/img/23456W2.jpg")
+
+    def test_updated_shape_name(self):
+        shape = Shape.objects.get(lego_id="2345")
+
+        self.client.login(username="test-user", password="test-password")
+        with get_set_info_mock(), get_set_parts_mock():
+            self.client.post("/lego/set/add/", data={"set_lego_id": "1234-1"})
+
+        shape.refresh_from_db()
+        self.assertEqual(shape.name, "Brick 2 x 4 new")
+
+    def test_spare_part_ignored(self):
+        self.client.login(username="test-user", password="test-password")
+        with get_set_info_mock(), get_set_parts_mock():
+            self.client.post("/lego/set/add/", data={"set_lego_id": "1234-1"})
+
+        new_set = LegoSet.objects.get(lego_id="1234-1")
+        item = new_set.setitem_set.get(
+            part__shape__lego_id="4242", part__color__name="Black",
+        )
+        # quantity not overwritten by spare part
+        self.assertEqual(item.quantity, 3)

@@ -11,3 +11,17 @@ test *args:
     coverage html
 
 alias t := test
+
+serve-develop:
+    python manage.py runserver --nostatic
+
+alias s := serve-develop
+
+serve $LEGO_DEBUG="0":
+    gunicorn project.asgi:application
+
+db:
+    docker run -d --rm --name pg_lego -p 5433:5432 --env POSTGRES_PASSWORD=devpgcontainer postgres:15
+
+psql:
+    docker exec -it --user postgres pg_lego psql

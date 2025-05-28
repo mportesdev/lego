@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("LEGO_SECRET_KEY")
 
-DEBUG = os.getenv("LEGO_DEBUG", "False") in ("1", "True", "true")
+DEBUG = os.getenv("LEGO_DEBUG") in ("1", "true")
 
 ALLOWED_HOSTS = os.getenv("LEGO_ALLOWED_HOSTS", "").split(",")
 
@@ -138,8 +138,8 @@ LOGGING = {
             "handlers": ["console", "lego-logfile"],
         },
         "django": {
-            "level": "ERROR",
-            "handlers": ["django-logfile"],
+            "level": "INFO",
+            "handlers": ["console", "mail_admins", "django-logfile"],
         },
     },
     "handlers": {
@@ -160,6 +160,16 @@ LOGGING = {
             "level": "ERROR",
             "formatter": "detailed",
         },
+        "mail_admins": {    # copied from django.utils.log.DEFAULT_LOGGING
+            "level": "ERROR",
+            "filters": ["require_debug_false"],
+            "class": "django.utils.log.AdminEmailHandler",
+        },
+    },
+    "filters": {    # copied from django.utils.log.DEFAULT_LOGGING
+        "require_debug_false": {
+            "()": "django.utils.log.RequireDebugFalse",
+        },
     },
     "formatters": {
         "brief": {
@@ -172,3 +182,18 @@ LOGGING = {
         },
     },
 }
+
+
+# Error reporting
+
+ADMINS = [
+    (os.getenv("LEGO_ADMIN_NAME"), os.getenv("LEGO_ADMIN_EMAIL")),
+]
+
+EMAIL_HOST = os.getenv("LEGO_EMAIL_HOST")
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.getenv("LEGO_EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("LEGO_EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS = True
+
+SERVER_EMAIL = os.getenv("LEGO_SERVER_EMAIL")

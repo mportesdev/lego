@@ -7,6 +7,7 @@ from django.contrib.staticfiles.testing import LiveServerTestCase
 from django.test import tag
 from selenium.webdriver import Firefox
 from selenium.webdriver.common.by import By
+from selenium.webdriver.firefox.options import Options
 
 from . import test_settings, get_set_info_mock, get_set_parts_mock
 
@@ -21,7 +22,10 @@ class TestBrowserUI(LiveServerTestCase):
         super().setUpClass()
         os.environ["TMPDIR"] = cls.temp_dir = mkdtemp(dir=Path(__file__).parent)
         cls.addClassCleanup(shutil.rmtree, cls.temp_dir)
-        cls.driver = Firefox()
+        options = Options()
+        if os.getenv("FIREFOX_HEADLESS"):
+            options.add_argument("-headless")
+        cls.driver = Firefox(options=options)
 
     @classmethod
     def tearDownClass(cls):

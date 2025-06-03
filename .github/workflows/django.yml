@@ -41,7 +41,8 @@ jobs:
       env:
         DATABASE_URL: "postgresql://test_user:test_password@localhost:5432/lego"
         LEGO_SECRET_KEY: ${{ secrets.TEST_LEGO_SECRET_KEY }}
+        FIREFOX_HEADLESS: 1
       run: |
         python manage.py collectstatic --no-input
         python manage.py check
-        python manage.py test --noinput --failfast --shuffle --verbosity=2 --durations=10 --exclude-tag=browser lego
+        python manage.py test --noinput --failfast --shuffle --verbosity=2 --durations=10 lego

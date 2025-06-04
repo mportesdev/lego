@@ -145,13 +145,13 @@ LOGGING = {
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
-            "level": "WARNING",
+            "level": "DEBUG" if DEBUG else "INFO",
             "formatter": "brief",
         },
         "lego-logfile": {
             "class": "logging.FileHandler",
             "filename": BASE_DIR / "lego.log",
-            "level": "DEBUG" if DEBUG else "INFO",
+            "level": "INFO",
             "formatter": "detailed",
         },
         "django-logfile": {

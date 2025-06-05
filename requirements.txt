@@ -1,4 +1,4 @@
-Django==5.2.1
+Django==5.2.2
 django-tasks==0.7.0
 psycopg[binary]==3.2.9
 requests==2.32.3

@@ -14,6 +14,8 @@
         <div><figure class="image is-128x128">
           <a href="{{ set.get_absolute_url }}" title="{{ set }}"><img src="{{ set.image_url }}" loading="lazy"></a>
         </figure></div>
+      {% else %}
+        <a href="{{ set.get_absolute_url }}" title="{{ set }}" class="ti ti-lego icon-96"></a>
       {% endif %}
     </div>
   {% endfor %}

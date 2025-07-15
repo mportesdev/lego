@@ -30,13 +30,13 @@ function toggleHideShow(partPk) {
       <div><button onclick="toggleHideShow({{ item.part.pk }})" title="Hide/Show" id="hide_show_{{ item.part.pk }}" class="ti ti-eye icon-24"></button></div>
       <div>{{ item.quantity }}x</div>
       {% if item.part.image|is_static_file %}
-        <div><figure class="image is-128x128">
+        <div>
           <a href="{{ item.part.get_absolute_url }}" title="{{ item.part }}"><img src="{% static item.part.image %}" loading="lazy"></a>
-        </figure></div>
+        </div>
       {% elif item.part.image_url %}
-        <div><figure class="image is-128x128">
+        <div>
           <a href="{{ item.part.get_absolute_url }}" title="{{ item.part }}"><img src="{{ item.part.image_url }}" loading="lazy"></a>
-        </figure></div>
+        </div>
       {% else %}
         <a href="{{ item.part.get_absolute_url }}" title="{{ item.part }}" class="ti ti-lego icon-96"></a>
       {% endif %}

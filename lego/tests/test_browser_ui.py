@@ -42,14 +42,14 @@ class TestBrowserUI(LiveServerTestCase):
         # go to set detail
         set_link.click()
         self.assertIn("Lego Set 123-1 Brick House", self.driver.title)
-        part_link = self.driver.find_element(By.XPATH, "//figure[a[starts-with(@title, '2345')]]")
+        part_link = self.driver.find_element(By.XPATH, "//a[starts-with(@title, '2345')]")
         self.driver.find_element(By.XPATH, "//a[starts-with(@title, 'fig-0008')]")
         self.driver.find_element(By.XPATH, "//a[starts-with(@title, '2345pr0001')]")
 
         # go to part detail
         part_link.click()
         self.assertIn("Lego Part 2345 Brick 2 x 4, Red", self.driver.title)
-        set_link = self.driver.find_element(By.XPATH, "//figure[a[starts-with(@title, '123-1')]]")
+        set_link = self.driver.find_element(By.XPATH, "//a[starts-with(@title, '123-1')]")
 
         # go back to set detail
         set_link.click()

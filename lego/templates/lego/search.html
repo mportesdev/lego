@@ -8,13 +8,13 @@
     {% for set in sets %}
       <div class="box">
         {% if set.image|is_static_file %}
-          <div><figure class="image is-128x128">
+          <div>
             <a href="{{ set.get_absolute_url }}" title="{{ set }}"><img src="{% static set.image %}" loading="lazy"></a>
-          </figure></div>
+          </div>
         {% elif set.image_url %}
-          <div><figure class="image is-128x128">
+          <div>
             <a href="{{ set.get_absolute_url }}" title="{{ set }}"><img src="{{ set.image_url }}" loading="lazy"></a>
-          </figure></div>
+          </div>
         {% else %}
           <a href="{{ set.get_absolute_url }}" title="{{ set }}" class="ti ti-lego icon-96"></a>
         {% endif %}
@@ -23,13 +23,13 @@
     {% for part in parts %}
       <div class="box">
         {% if part.image|is_static_file %}
-          <div><figure class="image is-128x128">
+          <div>
             <a href="{{ part.get_absolute_url }}" title="{{ part }}"><img src="{% static part.image %}" loading="lazy"></a>
-          </figure></div>
+          </div>
         {% elif part.image_url %}
-          <div><figure class="image is-128x128">
+          <div>
             <a href="{{ part.get_absolute_url }}" title="{{ part }}"><img src="{{ part.image_url }}" loading="lazy"></a>
-          </figure></div>
+          </div>
         {% else %}
           <a href="{{ part.get_absolute_url }}" title="{{ part }}" class="ti ti-lego icon-96"></a>
         {% endif %}

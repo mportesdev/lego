@@ -2,8 +2,6 @@
 {% load static %}
 {% load lego_extras %}
 {% block append_head %}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
-<link rel="stylesheet" type="text/css" href="{% static 'lego/css/styles.css' %}">
 <script type="text/javascript">
 function toggleHideShow(partPk) {
     const toggle = document.getElementById(`hide_show_${partPk}`);
@@ -23,6 +21,7 @@ function toggleHideShow(partPk) {
   <div class="title is-4">{{ title }}</div>
   {% if legoset.image|is_static_file %}<div><img src="{% static legoset.image %}"></div>
   {% elif legoset.image_url %}<div><figure class="image is-128x128"><img src="{{ legoset.image_url }}"></figure></div>
+  {% else %}<div class="ti ti-lego icon-96"></div>
   {% endif %}
   <div class="subtitle">Contains:</div>
   <div class="grid">
@@ -30,17 +29,16 @@ function toggleHideShow(partPk) {
     <div id="item_{{ item.part.pk }}" class="box">
       <div><button onclick="toggleHideShow({{ item.part.pk }})" title="Hide/Show" id="hide_show_{{ item.part.pk }}" class="ti ti-eye icon-24"></button></div>
       <div>{{ item.quantity }}x</div>
-      <div><a href="{{ item.part.get_absolute_url }}">{{ item.part.shape.lego_id }}</a></div>
-      <div>{{ item.part.shape.name }}</div>
-      <div>{% if item.part.color %}{{ item.part.color.name }}{% endif %}</div>
       {% if item.part.image|is_static_file %}
-        <div><figure class="image is-128x128">
-          <a href="{{ item.part.get_absolute_url }}"><img src="{% static item.part.image %}" loading="lazy"></a>
-        </figure></div>
+        <div>
+          <a href="{{ item.part.get_absolute_url }}" title="{{ item.part }}"><img src="{% static item.part.image %}" loading="lazy"></a>
+        </div>
       {% elif item.part.image_url %}
-        <div><figure class="image is-128x128">
-          <a href="{{ item.part.get_absolute_url }}"><img src="{{ item.part.image_url }}" loading="lazy"></a>
-        </figure></div>
+        <div>
+          <a href="{{ item.part.get_absolute_url }}" title="{{ item.part }}"><img src="{{ item.part.image_url }}" loading="lazy"></a>
+        </div>
+      {% else %}
+        <a href="{{ item.part.get_absolute_url }}" title="{{ item.part }}" class="ti ti-lego icon-96"></a>
       {% endif %}
     </div>
   {% endfor %}

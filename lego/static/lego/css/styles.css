@@ -1,3 +1,8 @@
 .icon-24 {
     font-size: 24pt;
 }
+
+.icon-96 {
+    font-size: 96pt;
+    color: hsl(0 0 90);
+}

@@ -5,22 +5,23 @@
   <div class="title is-4">{{ title }}</div>
   {% if legopart.image|is_static_file %}<div><img src="{% static legopart.image %}"></div>
   {% elif legopart.image_url %}<div><figure class="image is-128x128"><img src="{{ legopart.image_url }}"></figure></div>
+  {% else %}<div class="ti ti-lego icon-96"></div>
   {% endif %}
   <div class="subtitle">Included in:</div>
   <div class="grid">
   {% for item in legopart.setitem_set.all %}
     <div class="box">
       <div>{{ item.quantity }}x in</div>
-      <div><a href="{{ item.set.get_absolute_url }}">{{ item.set.lego_id }}</a></div>
-      <div>{{ item.set.name }}</div>
       {% if item.set.image|is_static_file %}
-        <div><figure class="image is-128x128">
-          <a href="{{ item.set.get_absolute_url }}"><img src="{% static item.set.image %}" loading="lazy"></a>
-        </figure></div>
+        <div>
+          <a href="{{ item.set.get_absolute_url }}" title="{{ item.set }}"><img src="{% static item.set.image %}" loading="lazy"></a>
+        </div>
       {% elif item.set.image_url %}
-        <div><figure class="image is-128x128">
-          <a href="{{ item.set.get_absolute_url }}"><img src="{{ item.set.image_url }}" loading="lazy"></a>
-        </figure></div>
+        <div>
+          <a href="{{ item.set.get_absolute_url }}" title="{{ item.set }}"><img src="{{ item.set.image_url }}" loading="lazy"></a>
+        </div>
+      {% else %}
+        <a href="{{ item.set.get_absolute_url }}" title="{{ item.set }}" class="ti ti-lego icon-96"></a>
       {% endif %}
     </div>
   {% endfor %}

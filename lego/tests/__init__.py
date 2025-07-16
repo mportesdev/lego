@@ -139,4 +139,4 @@ def _set_parts_mock(set_lego_id):
 
 
 def get_set_parts_mock():
-    return patch("lego.views.get_set_parts", side_effect=_set_parts_mock)
+    return patch("lego.orm_utils.get_set_parts", side_effect=_set_parts_mock)

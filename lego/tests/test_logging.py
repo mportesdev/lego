@@ -18,7 +18,7 @@ class TestAddSet(TestCase, OrderedPartsMixin):
         with (
             get_set_info_mock(),
             get_set_parts_mock(),
-            self.assertLogs("lego.views", "INFO") as log_obj,
+            self.assertLogs("lego.orm_utils", "INFO") as log_obj,
         ):
             self.client.post("/lego/set/add/", data={"set_lego_id": "1234-1"})
 

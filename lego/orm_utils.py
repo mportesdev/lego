@@ -7,12 +7,15 @@ from .models import Shape, Color, LegoPart
 logger = logging.getLogger(__name__)
 
 
-def save_set_with_parts(set_, set_info):
+def save_set_with_parts(set_, set_info, is_new=True):
+    image_uptodate = set_.image_url == set_info["image_url"]
     set_.name = set_info["name"]
     set_.image_url = set_info["image_url"]
     set_.save()
-    logger.info(f"Created: {set_!r}")
-    store_set_image.enqueue(pk=set_.pk)
+    if is_new:
+        logger.info(f"Created: {set_!r}")
+    if not image_uptodate:
+        store_set_image.enqueue(pk=set_.pk)
 
     for item in get_set_parts(set_.lego_id):
         if item.get("is_spare"):

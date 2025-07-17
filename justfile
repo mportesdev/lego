@@ -29,3 +29,9 @@ db-up:
 
 psql: db-up
     docker exec -it --user postgres pg_lego psql
+
+tasks: db-up
+    python manage.py db_worker --verbosity=2
+
+reinstall:
+    pip install --force-reinstall -r requirements.txt -r test-requirements.txt

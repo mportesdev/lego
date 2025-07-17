@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
   <link rel="stylesheet" type="text/css" href="{% static 'lego/css/styles.css' %}">
   <link rel="shortcut icon" href="{% static 'lego/favicon.png' %}">
-  <title>{{ title }} | {{ site_name }}</title>
+  <title>{{ title }} | {{ website_name }}</title>
 {% block append_head %}
 {% endblock %}
 </head>
@@ -16,7 +16,7 @@
 <div class="container">
 <div class="columns">
 <div class="column">
-  <a href="{% url 'index' %}" id="index_link"><div class="title is-3">{{ site_name }}</div></a>
+  <a href="{% url 'index' %}" id="index_link"><div class="title is-3">{{ website_name }}</div></a>
 </div>
 <div class="column">
   <form action="{% url 'search' %}" method="get">

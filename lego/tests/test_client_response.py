@@ -377,3 +377,16 @@ class TestAuth(TestCase, OrderedPartsMixin):
         self.assertIn("Log in", response.text)
         self.assertNotIn("Add a New Lego Set", response.text)
         self.assertNotIn("Admin Page", response.text)
+
+
+@test_settings
+class TestCommonContext(TestCase, OrderedPartsMixin):
+
+    def test_common_context_rendered(self):
+        response = self.client.get("/lego/")
+        self.assertInHTML("Home | O&F Lego", response.text)
+        self.assertParts(response.text, "Search:", "everywhere")
+
+        response = self.client.get("/lego/login/")
+        self.assertInHTML("O&F Lego", response.text)
+        self.assertParts(response.text, "Search:", "everywhere")

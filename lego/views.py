@@ -137,6 +137,7 @@ def add_set(request):
 _login = LoginView.as_view(
     template_name="lego/login.html",
     next_page="/lego/",
+    extra_context={"title": "Log in"},
 )
 
 

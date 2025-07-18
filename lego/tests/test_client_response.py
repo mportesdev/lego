@@ -388,5 +388,5 @@ class TestCommonContext(TestCase, OrderedPartsMixin):
         self.assertParts(response.text, "Search:", "everywhere")
 
         response = self.client.get("/lego/login/")
-        self.assertInHTML("O&F Lego", response.text)
+        self.assertInHTML("Log in | O&F Lego", response.text)
         self.assertParts(response.text, "Search:", "everywhere")

@@ -12,8 +12,6 @@ from .forms import SearchForm, AddSetForm
 from .models import LegoPart, LegoSet
 from .orm_utils import save_set_with_parts
 
-COMMON_CONTEXT = {"site_name": "O&F Lego", "search_form": SearchForm}
-
 logger = logging.getLogger(__name__)
 
 
@@ -22,7 +20,7 @@ class IndexView(ListView):
     template_name = "lego/index.html"
     paginate_by = 24
     ordering = "-pk"
-    extra_context = COMMON_CONTEXT | {"title": "Home"}
+    extra_context = {"title": "Home"}
 
 
 class SetDetail(DetailView):
@@ -33,7 +31,7 @@ class SetDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        return context | COMMON_CONTEXT | {"title": f"Lego Set {self.object}"}
+        return context | {"title": f"Lego Set {self.object}"}
 
 
 class PartDetail(DetailView):
@@ -48,7 +46,7 @@ class PartDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        return context | COMMON_CONTEXT | {"title": f"Lego Part {self.object}"}
+        return context | {"title": f"Lego Part {self.object}"}
 
 
 def search(request):
@@ -57,7 +55,7 @@ def search(request):
         return render(
             request,
             "lego/search.html",
-            context=COMMON_CONTEXT | {"title": "Search", "search_form": form},
+            context={"title": "Search", "search_form": form},
         )
 
     search_string = form.cleaned_data["q"]
@@ -85,7 +83,7 @@ def search(request):
     return render(
         request,
         "lego/search.html",
-        context=COMMON_CONTEXT | {
+        context={
             "sets": sets,
             "parts": parts,
             "title": f"Search Results for {search_string!r}",
@@ -100,7 +98,7 @@ def add_set(request):
         return render(
             request,
             "lego/add_set.html",
-            context=COMMON_CONTEXT | {
+            context={
                 "add_set_form": AddSetForm,
                 "title": "Add a New Lego Set",
             },
@@ -111,7 +109,7 @@ def add_set(request):
         return render(
             request,
             "lego/add_set.html",
-            context=COMMON_CONTEXT | {
+            context={
                 "add_set_form": form,
                 "title": "Add a New Lego Set",
             },
@@ -139,7 +137,7 @@ def add_set(request):
 _login = LoginView.as_view(
     template_name="lego/login.html",
     next_page="/lego/",
-    extra_context=COMMON_CONTEXT,
+    extra_context={"title": "Log in"},
 )
 
 

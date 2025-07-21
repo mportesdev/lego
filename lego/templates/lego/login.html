@@ -3,7 +3,7 @@
   {% if user.is_authenticated %}
     You are already logged in
   {% else %}
-    <div class="title is-4">Log in</div>
+    <div class="title is-4">{{ title }}</div>
     <form action="{% url 'login' %}" method="post">{% csrf_token %}
       {{ form }}
       <input type="hidden" name="next" value="{{ request.headers.Referer }}">

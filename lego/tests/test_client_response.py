@@ -50,6 +50,7 @@ class TestGetResponse(TestCase, OrderedPartsMixin):
             "Included in:",
             "1x in", "123-1 Brick House",
         )
+        self.assertNotIn("All colors", response.text)
 
     def test_part_detail_with_color_id(self):
         response = self.client.get("/lego/part/2345/1/")
@@ -58,6 +59,7 @@ class TestGetResponse(TestCase, OrderedPartsMixin):
         self.assertParts(
             response.text,
             "Lego Part 2345 Brick 2 x 4, Red",
+            "All colors",
             "Included in:",
             "1x in", "111-1 Airport",
         )

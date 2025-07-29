@@ -49,11 +49,19 @@ class TestBrowserUI(LiveServerTestCase):
         # go to part detail
         part_link.click()
         self.assertIn("Lego Part 2345 Brick 2 x 4, Red", self.driver.title)
-        set_link = self.driver.find_element(By.XPATH, "//a[starts-with(@title, '123-1')]")
+        colors_link = self.driver.find_element(By.ID, "all_colors")
 
-        # go back to set detail
+        # go to colors
+        colors_link.click()
+        part_link = self.driver.find_element(By.XPATH, "//a[@title='2345 Brick 2 x 4, White']")
+
+        # go to other part detail
+        part_link.click()
+        set_link = self.driver.find_element(By.XPATH, "//a[starts-with(@title, '111-1')]")
+
+        # go to other set detail
         set_link.click()
-        self.assertIn("Lego Set 123-1 Brick House", self.driver.title)
+        self.assertIn("Lego Set 111-1 Airport", self.driver.title)
         home_link = self.driver.find_element(By.LINK_TEXT, "O&F Lego")
 
         # go back to index page

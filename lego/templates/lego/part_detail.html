@@ -8,7 +8,7 @@
   {% else %}<div class="ti ti-lego icon-96"></div>
   {% endif %}
   {% if legopart.color and legopart.shape.num_code %}
-    <div class="subtitle"><a href="{% url 'search' %}?q={{ legopart.shape.num_code }}&mode=id" id="all_colors">All colors</a></div>
+    <div class="subtitle"><a href="{% url 'search' %}{% querystring q=legopart.shape.num_code mode='id' %}" id="all_colors">All colors</a></div>
   {% endif %}
   <div class="subtitle">Included in:</div>
   <div class="grid">

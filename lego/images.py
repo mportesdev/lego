@@ -39,6 +39,9 @@ def _suffix_and_params(format):
         case "PNG":
             suffix = "png"
             params = {"compress_level": 3}
+        case "WEBP":
+            suffix = "webp"
+            params = {"quality": 85}
         case _:
             suffix = None
             params = {}

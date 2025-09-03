@@ -90,22 +90,6 @@ class TestStoreImage(TestCase, OrderedPartsMixin):
             "INFO", "Deleted `image_url`: LegoPart",
         )
 
-    def test_unknown_image_format(self):
-        pk = LegoPart.objects.filter(image_url__isnull=False).first().pk
-        with (
-            patch("lego.images.Image.Image", autospec=True, format="TEST") as image,
-            patch("lego.images._scaled_image_for_url", return_value=image),
-            self.assertLogs("lego.images", "INFO") as log_obj,
-        ):
-            _store_image(LegoPart, pk, "parts")
-
-        log_output = "\n".join(log_obj.output)
-        self.assertParts(
-            log_output,
-            "WARNING", "Unexpected image format 'TEST'",
-            "INFO", "Deleted `image_url`: LegoPart",
-        )
-
 
 @test_settings
 class TestAuth(TestCase, OrderedPartsMixin):

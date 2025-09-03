@@ -31,23 +31,6 @@ def _scaled_image_for_url(url):
     return scaled_img
 
 
-def _suffix_and_params(format):
-    match format:
-        case "JPEG" | "MPO":
-            suffix = "jpg"
-            params = {"quality": 92}
-        case "PNG":
-            suffix = "png"
-            params = {"compress_level": 3}
-        case "WEBP":
-            suffix = "webp"
-            params = {"quality": 85}
-        case _:
-            suffix = None
-            params = {}
-    return suffix, params
-
-
 def _delete_image_url(obj):
     obj.image_url = None
     obj.save()
@@ -76,15 +59,9 @@ def _store_image(model, pk, subdir):
         _delete_image_url(obj)
         return
 
-    suffix, params = _suffix_and_params(image.format)
-    if suffix is None:
-        logger.warning(f"Unexpected image format {image.format!r} for {obj!r}")
-        _delete_image_url(obj)
-        return
-
-    rel_path = Path("lego") / "img" / subdir / f"{obj.pk}.{suffix}"
+    rel_path = Path("lego") / "img" / subdir / f"{obj.pk}.webp"
     logger.info(f"Saving to static: {rel_path}")
-    image.save(STATIC_DIR / rel_path, **params)
+    image.save(STATIC_DIR / rel_path)
 
     obj.image = rel_path
     obj.save()

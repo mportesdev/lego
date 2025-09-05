@@ -1,6 +1,6 @@
 from django.core.management.base import LabelCommand
 
-from lego.external_api import get_set_info
+from lego.api_calls import get_set_info
 from lego.models import LegoSet
 from lego.orm_utils import save_set_with_parts
 

@@ -1,6 +1,6 @@
 import logging
 
-from .external_api import get_set_parts
+from .api_calls import get_set_parts
 from .images import store_set_image, store_part_image
 from .models import Shape, Color, LegoPart
 

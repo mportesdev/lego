@@ -7,7 +7,7 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic import DetailView, ListView
 
-from .external_api import get_set_info
+from .api_calls import get_set_info
 from .forms import SearchForm, AddSetForm
 from .models import LegoPart, LegoSet
 from .orm_utils import save_set_with_parts

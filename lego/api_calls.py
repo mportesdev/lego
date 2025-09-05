@@ -21,11 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 def get_set_info(set_lego_id):
-    response = requests.get(
-        f"{API_URL}/lego/sets/{set_lego_id}/", auth=auth, headers=headers, timeout=5
-    )
-    response.raise_for_status()
-    data = response.json()
+    data = _get_response(f"{API_URL}/lego/sets/{set_lego_id}/")
     return {
         "name": data["name"],
         "image_url": data["set_img_url"],
@@ -33,14 +29,18 @@ def get_set_info(set_lego_id):
 
 
 def _get_paginated_data(url):
-    response = requests.get(url, auth=auth, headers=headers, timeout=5)
-    response.raise_for_status()
-    data = response.json()
+    data = _get_response(url)
     yield from data["results"]
 
     next_page_url = data.get("next")
     if next_page_url:
         yield from _get_paginated_data(next_page_url)
+
+
+def _get_response(url):
+    response = requests.get(url, auth=auth, headers=headers, timeout=5)
+    response.raise_for_status()
+    return response.json()
 
 
 def _color_name_or_none(color_name):

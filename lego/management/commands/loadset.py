@@ -22,5 +22,6 @@ class Command(LabelCommand):
                 self.stdout.write(f"Set name changed: {set_info["name"]}")
             if set_.image_url != set_info["image_url"]:
                 self.stdout.write(f"Set image URL changed: {set_info["image_url"]}")
+            set_.parts.clear()
 
         save_set_with_parts(set_, set_info, is_new=created)

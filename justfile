@@ -21,7 +21,7 @@ serve $LEGO_DEBUG="0": db-up
     gunicorn project.asgi:application
 
 db-start:
-    docker run -d --rm --name pg_lego -p 5433:5432 --env POSTGRES_PASSWORD=devpgcontainer postgres:15
+    docker run -d --rm --name pg_lego -p 5433:5432 --env POSTGRES_PASSWORD=devpgcontainer postgres:16
 
 db-up:
     docker inspect pg_lego | jq -e '.[0].State.Status == "running"'

@@ -11,12 +11,6 @@ class LegoAdminSite(admin.AdminSite):
 
 admin_site = LegoAdminSite(name="lego_admin")
 
-from django.contrib.auth.models import Group, User
-from django.contrib.auth.admin import GroupAdmin, UserAdmin
-
-admin_site.register(Group, GroupAdmin)
-admin_site.register(User, UserAdmin)
-
 
 class ShapeAdmin(admin.ModelAdmin):
     list_display = ["lego_id", "name"]
@@ -67,3 +61,15 @@ class SetItemAdmin(admin.ModelAdmin):
 
 
 admin_site.register(SetItem, SetItemAdmin)
+
+
+# register admins from django
+from django.contrib.auth.admin import Group, GroupAdmin, User, UserAdmin
+
+admin_site.register(Group, GroupAdmin)
+admin_site.register(User, UserAdmin)
+
+# register admin from django-tasks
+from django_tasks.backends.database.admin import DBTaskResult, DBTaskResultAdmin
+
+admin_site.register(DBTaskResult, DBTaskResultAdmin)

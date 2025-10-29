@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from lego.models import Shape, Color, LegoPart, LegoSet
+from lego.models import Shape, Color, Image, LegoPart, LegoSet
 
 from . import test_settings, get_set_info_mock, get_set_parts_mock
 
@@ -57,15 +57,34 @@ class TestAddSet(TestCase):
         added_part = new_set.parts.get(shape__lego_id="3344a", color__name="Red")
         self.assertEqual(added_part.color.pk, color_pk)
 
-    def test_updated_image_url(self):
-        part = LegoPart.objects.get(shape__lego_id="23456", color__name="White")
+    def test_existing_part_new_image(self):
+        image = Image.objects.get(origin_url="test://cdn.test/img/23456W.jpg")
+        image_pk = image.pk
+        part = LegoPart.objects.get(image=image)
 
         self.client.login(username="test-user", password="test-password")
         with get_set_info_mock(), get_set_parts_mock():
             self.client.post("/lego/set/add/", data={"set_lego_id": "1234-1"})
 
         part.refresh_from_db()
-        self.assertEqual(part.image_url, "test://cdn.test/img/23456W2.jpg")
+        # part references another image that has the new URL
+        self.assertNotEqual(part.image.pk, image_pk)
+        self.assertEqual(part.image.origin_url, "test://cdn.test/img/23456W2.jpg")
+
+    def test_image_created_for_new_object(self):
+        self.client.login(username="test-user", password="test-password")
+        with get_set_info_mock(), get_set_parts_mock():
+            self.client.post("/lego/set/add/", data={"set_lego_id": "1122-1"})
+
+        with self.subTest("part"):
+            new_part = LegoPart.objects.get(shape__lego_id="3344a", color__name="Red")
+            image = Image.objects.get(origin_url="test://cdn.test/img/3344aR.jpg")
+            self.assertEqual(new_part.image, image)
+
+        with self.subTest("set"):
+            new_set = LegoSet.objects.get(lego_id="1122-1")
+            image = Image.objects.get(origin_url="test://cdn.test/img/1122.jpg")
+            self.assertEqual(new_set.image, image)
 
     def test_updated_shape_name(self):
         shape = Shape.objects.get(lego_id="2345")

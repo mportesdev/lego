@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Shape, Color, LegoPart, LegoSet, SetItem
+from .models import Shape, Color, Image, LegoPart, LegoSet, SetItem
 
 
 class LegoAdminSite(admin.AdminSite):
@@ -26,8 +26,15 @@ class ColorAdmin(admin.ModelAdmin):
 admin_site.register(Color, ColorAdmin)
 
 
+class ImageAdmin(admin.ModelAdmin):
+    list_display = ["static_path", "origin_url"]
+
+
+admin_site.register(Image, ImageAdmin)
+
+
 class LegoPartAdmin(admin.ModelAdmin):
-    list_display = ["short_name", "shape", "color", "image_url", "image"]
+    list_display = ["short_name", "shape", "color", "image"]
     list_filter = ["color"]
     search_fields = ["shape__lego_id", "shape__name", "color__name"]
 
@@ -42,7 +49,7 @@ admin_site.register(LegoPart, LegoPartAdmin)
 
 
 class LegoSetAdmin(admin.ModelAdmin):
-    list_display = ["lego_id", "name", "image_url", "image"]
+    list_display = ["lego_id", "name", "image"]
     search_fields = ["lego_id", "name"]
 
 

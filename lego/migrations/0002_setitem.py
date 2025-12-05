@@ -11,47 +11,60 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RenameField(
-            model_name="legoset",
-            old_name="parts",
-            new_name="parts_old",
-        ),
-        migrations.CreateModel(
-            name="SetItem",
-            fields=[
-                (
-                    "id",
-                    models.BigAutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
+        migrations.SeparateDatabaseAndState(
+            database_operations=[
+                migrations.RunSQL(
+                    sql="""
+                        ALTER TABLE lego_legoset_parts RENAME TO lego_setitem;
+                        ALTER TABLE lego_setitem RENAME COLUMN legoset_id TO set_id;
+                        ALTER TABLE lego_setitem RENAME COLUMN legopart_id TO part_id;
+                        """,
+                    reverse_sql="""
+                        ALTER TABLE lego_setitem RENAME COLUMN part_id TO legopart_id;
+                        ALTER TABLE lego_setitem RENAME COLUMN set_id TO legoset_id;
+                        ALTER TABLE lego_setitem RENAME TO lego_legoset_parts;
+                        """,
                 ),
-                ("quantity", models.PositiveSmallIntegerField(default=1)),
-                (
-                    "part",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE, to="lego.legopart"
-                    ),
+            ],
+            state_operations=[
+                migrations.CreateModel(
+                    name="SetItem",
+                    fields=[
+                        (
+                            "id",
+                            models.BigAutoField(
+                                auto_created=True,
+                                primary_key=True,
+                                serialize=False,
+                                verbose_name="ID",
+                            ),
+                        ),
+                        (
+                            "part",
+                            models.ForeignKey(
+                                on_delete=django.db.models.deletion.CASCADE, to="lego.legopart"
+                            ),
+                        ),
+                        (
+                            "set",
+                            models.ForeignKey(
+                                on_delete=django.db.models.deletion.CASCADE, to="lego.legoset"
+                            ),
+                        ),
+                    ],
                 ),
-                (
-                    "set",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE, to="lego.legoset"
+                migrations.AlterField(
+                    model_name="legoset",
+                    name="parts",
+                    field=models.ManyToManyField(
+                        related_name="sets", through="lego.SetItem", to="lego.legopart"
                     ),
                 ),
             ],
         ),
         migrations.AddField(
-            model_name="legoset",
-            name="parts",
-            field=models.ManyToManyField(
-                related_name="sets", through="lego.SetItem", to="lego.legopart"
-            ),
-        ),
-        migrations.RemoveField(
-            model_name="legoset",
-            name="parts_old",
+            model_name="setitem",
+            name="quantity",
+            field=models.PositiveSmallIntegerField(default=1),
         ),
     ]

@@ -194,7 +194,7 @@ LOGGING = {
 # Error reporting
 
 ADMINS = [
-    (os.getenv("LEGO_ADMIN_NAME"), os.getenv("LEGO_ADMIN_EMAIL")),
+    os.getenv("LEGO_ADMIN", ""),
 ]
 
 EMAIL_HOST = os.getenv("LEGO_EMAIL_HOST")

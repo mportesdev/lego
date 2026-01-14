@@ -71,8 +71,6 @@ class Image(models.Model):
 class LegoPart(models.Model):
     shape = models.ForeignKey(Shape, on_delete=models.CASCADE)
     color = models.ForeignKey(Color, on_delete=models.SET_NULL, null=True)
-    image_url = models.URLField(null=True)
-    image_static = models.CharField(max_length=100, null=True)
     image = models.ForeignKey(Image, on_delete=models.SET_NULL, null=True)
 
     class Meta:
@@ -97,8 +95,6 @@ class LegoPart(models.Model):
 class LegoSet(models.Model):
     lego_id = models.CharField(max_length=30, unique=True)
     name = models.CharField(max_length=150)
-    image_url = models.URLField(null=True)
-    image_static = models.CharField(max_length=100, null=True)
     image = models.ForeignKey(Image, on_delete=models.SET_NULL, null=True)
 
     parts = models.ManyToManyField(LegoPart, through="SetItem", related_name="sets")

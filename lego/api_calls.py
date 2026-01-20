@@ -28,17 +28,18 @@ def get_set_info(set_lego_id):
     }
 
 
-def _get_paginated_data(url):
-    data = _get_response(url)
+def _get_paginated_data(url, session):
+    data = _get_response(url, session)
     yield from data["results"]
 
     next_page_url = data.get("next")
     if next_page_url:
-        yield from _get_paginated_data(next_page_url)
+        yield from _get_paginated_data(next_page_url, session)
 
 
-def _get_response(url):
-    response = requests.get(url, auth=auth, headers=headers, timeout=5)
+def _get_response(url, session=None):
+    get_func = session.get if session else requests.get
+    response = get_func(url, auth=auth, headers=headers, timeout=5)
     response.raise_for_status()
     return response.json()
 
@@ -50,7 +51,10 @@ def _color_name_or_none(color_name):
 
 
 def get_set_parts(set_lego_id):
-    for item in _get_paginated_data(f"{API_URL}/lego/sets/{set_lego_id}/minifigs/"):
+    session = requests.Session()
+    for item in _get_paginated_data(
+        f"{API_URL}/lego/sets/{set_lego_id}/minifigs/", session
+    ):
         entry = {
             "lego_id": item["set_num"],
             "name": item["set_name"],
@@ -60,7 +64,9 @@ def get_set_parts(set_lego_id):
         logger.debug(entry)
         yield entry
 
-    for item in _get_paginated_data(f"{API_URL}/lego/sets/{set_lego_id}/parts/"):
+    for item in _get_paginated_data(
+        f"{API_URL}/lego/sets/{set_lego_id}/parts/", session
+    ):
         entry = {
             "lego_id": item["part"]["part_num"],
             "name": item["part"]["name"],

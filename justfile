@@ -36,4 +36,5 @@ tasks: db-health
     python manage.py db_worker --verbosity=2
 
 reinstall:
+    pip install --upgrade pip
     pip install --force-reinstall -r requirements.txt -r test-requirements.txt

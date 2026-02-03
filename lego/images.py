@@ -36,7 +36,7 @@ def _store_image(model, pk, subdir):
         obj = model.objects.get(pk=pk)
     else:
         obj = model.objects.filter(
-            image__isnull=True, image_url__isnull=False
+            image__static_path__isnull=True, image__origin_url__isnull=False
         ).order_by("-pk").first()
         if obj is None:
             logger.info(f"No {model.__name__} candidate to process")

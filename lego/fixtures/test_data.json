@@ -1,12 +1,67 @@
 [
 {
+    "model": "lego.image",
+    "pk": 1,
+    "fields": {
+        "static_path": "lego/img/sets/1.jpg",
+        "origin_url": "test://cdn.test/img/123.jpg"
+    }
+},
+{
+    "model": "lego.image",
+    "pk": 2,
+    "fields": {
+        "static_path": null,
+        "origin_url": "test://cdn.test/img/111.jpg"
+    }
+},
+{
+    "model": "lego.image",
+    "pk": 3,
+    "fields": {
+        "static_path": "lego/img/parts/1.jpg",
+        "origin_url": "test://cdn.test/img/2345R.jpg"
+    }
+},
+{
+    "model": "lego.image",
+    "pk": 4,
+    "fields": {
+        "static_path": "lego/img/parts/2.jpg",
+        "origin_url": "test://cdn.test/img/2345W.jpg"
+    }
+},
+{
+    "model": "lego.image",
+    "pk": 5,
+    "fields": {
+        "static_path": "lego/img/parts/3.jpg",
+        "origin_url": "test://cdn.test/img/fig-0008.jpg"
+    }
+},
+{
+    "model": "lego.image",
+    "pk": 6,
+    "fields": {
+        "static_path": null,
+        "origin_url": "test://cdn.test/img/23456W.jpg"
+    }
+},
+{
+    "model": "lego.image",
+    "pk": 7,
+    "fields": {
+        "static_path": null,
+        "origin_url": "test://cdn.test/img/2345pr0001R.jpg"
+    }
+},
+{
     "model": "lego.legoset",
     "pk": 1,
     "fields": {
         "lego_id": "123-1",
         "name": "Brick House",
-        "image_url": "test://cdn.test/img/123.jpg",
-        "image": "lego/img/sets/1.jpg"
+        "image": 1
     }
 },
 {
@@ -15,8 +70,7 @@
     "fields": {
         "lego_id": "111-1",
         "name": "Airport",
-        "image_url": "test://cdn.test/img/111.jpg",
-        "image": null
+        "image": 2
     }
 },
 {
@@ -71,8 +125,7 @@
     "fields": {
         "shape": 1,
         "color": 1,
-        "image_url": "test://cdn.test/img/2345R.jpg",
-        "image": "lego/img/parts/1.jpg"
+        "image": 3
     }
 },
 {
@@ -81,8 +134,7 @@
     "fields": {
         "shape": 1,
         "color": 2,
-        "image_url": "test://cdn.test/img/2345W.jpg",
-        "image": "lego/img/parts/2.jpg"
+        "image": 4
     }
 },
 {
@@ -91,8 +143,7 @@
     "fields": {
         "shape": 2,
         "color": null,
-        "image_url": "test://cdn.test/img/fig-0008.jpg",
-        "image": "lego/img/parts/3.jpg"
+        "image": 5
     }
 },
 {
@@ -101,8 +152,7 @@
     "fields": {
         "shape": 3,
         "color": 2,
-        "image_url": "test://cdn.test/img/23456W.jpg",
-        "image": null
+        "image": 6
     }
 },
 {
@@ -111,7 +161,6 @@
     "fields": {
         "shape": 3,
         "color": 1,
-        "image_url": null,
         "image": null
     }
 },
@@ -121,8 +170,7 @@
     "fields": {
         "shape": 4,
         "color": 1,
-        "image_url": "test://cdn.test/img/2345pr0001R.jpg",
-        "image": null
+        "image": 7
     }
 },
 {

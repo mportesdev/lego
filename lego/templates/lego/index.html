@@ -6,13 +6,13 @@
   <div class="grid">
   {% for set in page_obj %}
     <div class="box">
-      {% if set.image|is_static_file %}
+      {% if set.image.static_path|is_static_file %}
         <div>
-          <a href="{{ set.get_absolute_url }}" title="{{ set }}"><img src="{% static set.image %}" loading="lazy"></a>
+          <a href="{{ set.get_absolute_url }}" title="{{ set }}"><img src="{% static set.image.static_path %}" loading="lazy"></a>
         </div>
-      {% elif set.image_url %}
+      {% elif set.image.origin_url %}
         <div>
-          <a href="{{ set.get_absolute_url }}" title="{{ set }}"><img src="{{ set.image_url }}" loading="lazy"></a>
+          <a href="{{ set.get_absolute_url }}" title="{{ set }}"><img src="{{ set.image.origin_url }}" loading="lazy"></a>
         </div>
       {% else %}
         <a href="{{ set.get_absolute_url }}" title="{{ set }}" class="ti ti-lego icon-96"></a>

@@ -31,10 +31,10 @@ def _scaled_image_for_url(url):
     return scaled_img
 
 
-def _delete_image_url(obj):
-    obj.image_url = None
-    obj.save()
-    logger.info(f"Deleted `image_url`: {obj!r}")
+def _delete_image_url(image):
+    image.origin_url = None
+    image.save()
+    logger.info(f"Deleted `origin_url`: {image!r}")
 
 
 def _store_image(model, pk, subdir):
@@ -48,23 +48,24 @@ def _store_image(model, pk, subdir):
             logger.info(f"No {model.__name__} candidate to process")
             return
 
-    if obj.image_url is None:
+    obj_image = obj.image
+    if obj_image is None or obj_image.origin_url is None:
         logger.info(f"No image URL: {obj!r}")
         return
 
     try:
-        image = _scaled_image_for_url(obj.image_url)
+        image = _scaled_image_for_url(obj_image.origin_url)
     except OSError as err:    # e.g. requests.HTTPError, PIL.UnidentifiedImageError
         logger.error(f"{err!r} reading image URL for {obj!r}")
-        _delete_image_url(obj)
+        _delete_image_url(obj_image)
         return
 
     rel_path = Path("lego") / "img" / subdir / f"{obj.pk}.webp"
     logger.info(f"Saving to static: {rel_path}")
     image.save(STATIC_DIR / rel_path)
 
-    obj.image = rel_path
-    obj.save()
+    obj_image.static_path = rel_path
+    obj_image.save()
 
 
 @task

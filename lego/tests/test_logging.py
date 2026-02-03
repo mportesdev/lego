@@ -25,14 +25,17 @@ class TestAddSet(TestCase, OrderedPartsMixin):
         log_output = "\n".join(log_obj.output)
         self.assertParts(
             log_output,
+            "INFO", "Created: Image",    # image of the new set
             "INFO", "Created: LegoSet",
             "INFO", "Created: Shape",
+            "INFO", "Created: Image",    # image of a newly created part
             "INFO", "Created: LegoPart",
             "INFO", "Created: Color",
             "INFO", "Skipping spare part:",
             "WARNING", "Outdated: Shape",
             "WARNING", "Updated: Shape",
             "WARNING", "Outdated: LegoPart",
+            "INFO", "Created: Image",    # image of an existing part
             "WARNING", "Updated: LegoPart",
         )
 
@@ -68,7 +71,7 @@ class TestStoreImage(TestCase, OrderedPartsMixin):
     fixtures = ["test_data"]
 
     def test_object_without_image_url(self):
-        pk = LegoPart.objects.filter(image_url__isnull=True).first().pk
+        pk = LegoPart.objects.filter(image__origin_url__isnull=True).first().pk
         with self.assertLogs("lego.images", "INFO") as log_obj:
             _store_image(LegoPart, pk, "parts")
 
@@ -76,7 +79,7 @@ class TestStoreImage(TestCase, OrderedPartsMixin):
         self.assertParts(log_output, "INFO", "No image URL: LegoPart")
 
     def test_unknown_image_data(self):
-        pk = LegoPart.objects.filter(image_url__isnull=False).first().pk
+        pk = LegoPart.objects.filter(image__origin_url__isnull=False).first().pk
         with (
             patch("lego.images._scaled_image_for_url", side_effect=OSError),
             self.assertLogs("lego.images", "INFO") as log_obj,
@@ -87,7 +90,7 @@ class TestStoreImage(TestCase, OrderedPartsMixin):
         self.assertParts(
             log_output,
             "ERROR", "reading image URL for LegoPart",
-            "INFO", "Deleted `image_url`: LegoPart",
+            "INFO", "Deleted `origin_url`: Image",
         )
 
 

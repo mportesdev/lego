@@ -45,11 +45,33 @@ class Color(models.Model):
     __repr__ = _instance_repr
 
 
+class Image(models.Model):
+    static_path = models.CharField(max_length=150, null=True)
+    origin_url = models.URLField(null=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["static_path", "origin_url"], name="unique_static_and_origin"
+            ),
+            models.CheckConstraint(
+                condition=(
+                    models.Q(static_path__isnull=False) | models.Q(origin_url__isnull=False)
+                ),
+                name="static_or_origin_not_null",
+            ),
+        ]
+
+    def __str__(self):
+        return self.static_path or self.origin_url
+
+    __repr__ = _instance_repr
+
+
 class LegoPart(models.Model):
     shape = models.ForeignKey(Shape, on_delete=models.CASCADE)
     color = models.ForeignKey(Color, on_delete=models.SET_NULL, null=True)
-    image_url = models.URLField(null=True)
-    image = models.CharField(max_length=100, null=True)
+    image = models.ForeignKey(Image, on_delete=models.SET_NULL, null=True)
 
     class Meta:
         constraints = [
@@ -73,8 +95,7 @@ class LegoPart(models.Model):
 class LegoSet(models.Model):
     lego_id = models.CharField(max_length=30, unique=True)
     name = models.CharField(max_length=150)
-    image_url = models.URLField(null=True)
-    image = models.CharField(max_length=100, null=True)
+    image = models.ForeignKey(Image, on_delete=models.SET_NULL, null=True)
 
     parts = models.ManyToManyField(LegoPart, through="SetItem", related_name="sets")
 

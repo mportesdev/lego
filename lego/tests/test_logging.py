@@ -25,8 +25,8 @@ class TestAddSet(TestCase, OrderedPartsMixin):
         log_output = "\n".join(log_obj.output)
         self.assertParts(
             log_output,
-            "INFO", "Created: Image",    # image of the new set
             "INFO", "Created: LegoSet",
+            "INFO", "Created: Image",    # image of the new set
             "INFO", "Created: Shape",
             "INFO", "Created: Image",    # image of a newly created part
             "INFO", "Created: LegoPart",

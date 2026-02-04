@@ -25,18 +25,18 @@ class TestAddSet(TestCase, OrderedPartsMixin):
         log_output = "\n".join(log_obj.output)
         self.assertParts(
             log_output,
-            "INFO", "Created: Image",    # image of the new set
             "INFO", "Created: LegoSet",
+            "INFO", "Created: Image",    # image of the new set
             "INFO", "Created: Shape",
             "INFO", "Created: Image",    # image of a newly created part
             "INFO", "Created: LegoPart",
             "INFO", "Created: Color",
             "INFO", "Skipping spare part:",
-            "WARNING", "Outdated: Shape",
-            "WARNING", "Updated: Shape",
-            "WARNING", "Outdated: LegoPart",
+            "INFO", "Outdated name: Shape",
+            "INFO", "Updated name: Shape",
+            "INFO", "Outdated image: LegoPart",
             "INFO", "Created: Image",    # image of an existing part
-            "WARNING", "Updated: LegoPart",
+            "INFO", "Updated image: LegoPart",
         )
 
     def test_existing_lego_id(self):

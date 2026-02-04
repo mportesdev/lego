@@ -2,12 +2,21 @@ import logging
 
 from .api_calls import get_set_parts
 from .images import store_set_image, store_part_image
-from .models import Shape, Color, Image, LegoPart
+from .models import Shape, Color, Image, LegoPart, LegoSet
 
 logger = logging.getLogger(__name__)
 
 
-def save_set_with_parts(set_, set_info, is_new=True):
+def get_set(lego_id):
+    """Get or create a `LegoSet` with the given `lego_id`."""
+
+    set_, created = LegoSet.objects.get_or_create(lego_id=lego_id)
+    if created:
+        logger.info(f"Created: {set_!r}")
+    return set_, created
+
+
+def save_set_with_parts(set_, set_info):
     image_url = set_info["image_url"]
     image_outdated = image_url and (set_.image is None or set_.image.origin_url != image_url)
     if image_outdated:
@@ -15,8 +24,6 @@ def save_set_with_parts(set_, set_info, is_new=True):
 
     set_.name = set_info["name"]
     set_.save()
-    if is_new:
-        logger.info(f"Created: {set_!r}")
     if image_outdated:
         store_set_image.enqueue(pk=set_.pk)
 
@@ -42,10 +49,10 @@ def _get_shape(lego_id, name):
     try:
         shape = Shape.objects.get(lego_id=lego_id)
         if shape.name != name:
-            logger.warning(f"Outdated: {shape!r}")
+            logger.info(f"Outdated name: {shape!r}")
             shape.name = name
             shape.save()
-            logger.warning(f"Updated: {shape!r}")
+            logger.info(f"Updated name: {shape!r}")
     except Shape.DoesNotExist:
         shape = Shape.objects.create(lego_id=lego_id, name=name)
         logger.info(f"Created: {shape!r}")
@@ -59,10 +66,10 @@ def _get_part(shape, color, image_url):
     try:
         part = LegoPart.objects.get(shape=shape, color=color)
         if image_url and (part.image is None or part.image.origin_url != image_url):
-            logger.warning(f"Outdated: {part!r}")
+            logger.info(f"Outdated image: {part!r}")
             part.image = _get_image(image_url)
             part.save()
-            logger.warning(f"Updated: {part!r}")
+            logger.info(f"Updated image: {part!r}")
             store_part_image.enqueue(pk=part.pk)
     except LegoPart.DoesNotExist:
         part = LegoPart.objects.create(

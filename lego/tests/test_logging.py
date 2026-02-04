@@ -87,11 +87,7 @@ class TestStoreImage(TestCase, OrderedPartsMixin):
             _store_image(LegoPart, pk, "parts")
 
         log_output = "\n".join(log_obj.output)
-        self.assertParts(
-            log_output,
-            "ERROR", "reading image URL for LegoPart",
-            "INFO", "Deleted `origin_url`: Image",
-        )
+        self.assertParts(log_output, "ERROR", "reading image URL for LegoPart")
 
 
 @test_settings

@@ -31,12 +31,6 @@ def _scaled_image_for_url(url):
     return scaled_img
 
 
-def _delete_image_url(image):
-    image.origin_url = None
-    image.save()
-    logger.info(f"Deleted `origin_url`: {image!r}")
-
-
 def _store_image(model, pk, subdir):
     if pk is not None:
         obj = model.objects.get(pk=pk)
@@ -57,7 +51,6 @@ def _store_image(model, pk, subdir):
         image = _scaled_image_for_url(obj_image.origin_url)
     except OSError as err:    # e.g. requests.HTTPError, PIL.UnidentifiedImageError
         logger.error(f"{err!r} reading image URL for {obj!r}")
-        _delete_image_url(obj_image)
         return
 
     rel_path = Path("lego") / "img" / subdir / f"{obj.pk}.webp"

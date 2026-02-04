@@ -32,11 +32,11 @@ class TestAddSet(TestCase, OrderedPartsMixin):
             "INFO", "Created: LegoPart",
             "INFO", "Created: Color",
             "INFO", "Skipping spare part:",
-            "WARNING", "Outdated: Shape",
-            "WARNING", "Updated: Shape",
-            "WARNING", "Outdated: LegoPart",
+            "INFO", "Outdated name: Shape",
+            "INFO", "Updated name: Shape",
+            "INFO", "Outdated image: LegoPart",
             "INFO", "Created: Image",    # image of an existing part
-            "WARNING", "Updated: LegoPart",
+            "INFO", "Updated image: LegoPart",
         )
 
     def test_existing_lego_id(self):

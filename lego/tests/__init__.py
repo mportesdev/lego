@@ -245,6 +245,13 @@ _API_DATA = {
             },
         ],
     },
+    "111-1": {
+        "info": {  # existing set, updated name
+            "name": "New Name",
+            "image_url": "test://cdn.test/img/111.jpg",
+        },
+        "parts": [],
+    },
 }
 
 
@@ -264,6 +271,10 @@ def _parts_stub(set_lego_id, _):
 
 def get_set_parts_mock():
     return patch("lego.api_calls._get_set_parts", side_effect=_parts_stub)
+
+
+def api_data_stub(set_lego_id):
+    return _API_DATA[set_lego_id]
 
 
 def _generate_image(pk, size, font):

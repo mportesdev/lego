@@ -19,4 +19,4 @@ class TestTasks(TestCase):
 
         mock.assert_called_once()
         result.refresh()
-        self.assertEqual(result.status, "SUCCEEDED")
+        self.assertEqual(result.status, "SUCCESSFUL")

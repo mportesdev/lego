@@ -15,11 +15,13 @@ STATIC_DIR = Path(__file__).parent / "static"
 logger = logging.getLogger(__name__)
 
 
-def _scaled_image_for_url(url):
+def _download_image(url):
     with requests.get(url) as response:
         response.raise_for_status()
-        img = Image.open(io.BytesIO(response.content))
+        return Image.open(io.BytesIO(response.content))
 
+
+def _scale_down(img):
     scale_factor = min(MAX_WIDTH / img.width, MAX_HEIGHT / img.height)
     if scale_factor >= 1:
         return img
@@ -48,10 +50,12 @@ def _store_image(model, pk, subdir):
         return
 
     try:
-        image = _scaled_image_for_url(obj_image.origin_url)
+        image = _download_image(obj_image.origin_url)
     except OSError as err:    # e.g. requests.HTTPError, PIL.UnidentifiedImageError
         logger.error(f"{err!r} reading image URL for {obj!r}")
         return
+    else:
+        image = _scale_down(image)
 
     rel_path = Path("lego") / "img" / subdir / f"{obj.pk}.webp"
     logger.info(f"Saving to static: {rel_path}")

@@ -77,6 +77,6 @@ admin_site.register(Group, GroupAdmin)
 admin_site.register(User, UserAdmin)
 
 # register admin from django-tasks
-from django_tasks.backends.database.admin import DBTaskResult, DBTaskResultAdmin
+from django_tasks_db.admin import DBTaskResult, DBTaskResultAdmin
 
 admin_site.register(DBTaskResult, DBTaskResultAdmin)

@@ -27,7 +27,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "lego.apps.LegoConfig",
     "django_tasks",
-    "django_tasks.backends.database",
+    "django_tasks_db",
     "debug_toolbar",
 ]
 
@@ -124,7 +124,7 @@ STORAGES = {
 
 TASKS = {
     "default": {
-        "BACKEND": "django_tasks.backends.database.DatabaseBackend",
+        "BACKEND": "django_tasks_db.DatabaseBackend",
     },
 }
 

@@ -12,11 +12,13 @@ MAX_WIDTH = 384
 MAX_HEIGHT = 384
 STATIC_DIR = Path(__file__).parent / "static"
 
+headers = {"Accept": "image/*"}
+
 logger = logging.getLogger(__name__)
 
 
 def _download_image(url):
-    with requests.get(url) as response:
+    with requests.get(url, headers=headers, timeout=5) as response:
         response.raise_for_status()
         return Image.open(io.BytesIO(response.content))
 

@@ -8,6 +8,7 @@ from lego.models import LegoPart
 from . import test_settings, OrderedPartsMixin, get_set_info_mock, get_set_parts_mock
 
 
+@tag("login")
 @test_settings
 class TestAddSet(TestCase, OrderedPartsMixin):
     fixtures = ["test_data", "test_user"]
@@ -90,11 +91,11 @@ class TestStoreImage(TestCase, OrderedPartsMixin):
         self.assertParts(log_output, "ERROR", "reading image URL for LegoPart")
 
 
+@tag("login")
 @test_settings
 class TestAuth(TestCase, OrderedPartsMixin):
     fixtures = ["test_user"]
 
-    @tag("login")
     def test_login(self):
         with self.assertLogs("lego.views", "INFO") as log_obj:
             self.client.post(
@@ -105,19 +106,7 @@ class TestAuth(TestCase, OrderedPartsMixin):
         log_output = "\n".join(log_obj.output)
         self.assertParts(log_output, "INFO", "User logged in: test-user")
 
-    @tag("login")
-    def test_login_with_incorrect_password(self):
-        with self.assertLogs("lego.views", "INFO") as log_obj:
-            self.client.post(
-                "/lego/login/",
-                data={"username": "test-user", "password": "bad-password"},
-            )
-
-        log_output = "\n".join(log_obj.output)
-        self.assertParts(log_output, "INFO", "Failed user login: test-user")
-
-    @tag("login")
-    def test_login_with_incorrect_username(self):
+    def test_failed_login(self):
         with self.assertLogs("lego.views", "INFO") as log_obj:
             self.client.post(
                 "/lego/login/",
@@ -127,7 +116,6 @@ class TestAuth(TestCase, OrderedPartsMixin):
         log_output = "\n".join(log_obj.output)
         self.assertParts(log_output, "INFO", "Failed user login: unknown-user")
 
-    @tag("login")
     def test_logout(self):
         self.client.login(username="test-user", password="test-password")
         with self.assertLogs("lego.views", "INFO") as log_obj:

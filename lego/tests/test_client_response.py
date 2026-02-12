@@ -267,7 +267,7 @@ class TestImageUrls(TestCase, OrderedPartsMixin):
 class TestAddSet(TestCase, OrderedPartsMixin):
     fixtures = ["test_data", "test_user"]
 
-    @tag("write-db")
+    @tag("login", "write-db")
     def test_add_set(self):
         self.client.login(username="test-user", password="test-password")
         with get_set_info_mock() as mock_1, get_set_parts_mock() as mock_2:
@@ -291,7 +291,7 @@ class TestAddSet(TestCase, OrderedPartsMixin):
         self.assertParts(response.text, "1x", "23456 Plate 1 x 3, White")
         self.assertParts(response.text, "3x", "4242 Wheel, Black")
 
-    @tag("write-db")
+    @tag("login", "write-db")
     def test_add_set_without_suffix(self):
         self.client.login(username="test-user", password="test-password")
         with get_set_info_mock() as mock_1, get_set_parts_mock() as mock_2:
@@ -304,6 +304,7 @@ class TestAddSet(TestCase, OrderedPartsMixin):
         self.assertEqual(response.status_code, 200)
         self.assertRedirects(response, "/lego/set/1122-1/")
 
+    @tag("login")
     def test_add_set_existing_lego_id(self):
         self.client.login(username="test-user", password="test-password")
         with get_set_info_mock() as mock_1, get_set_parts_mock() as mock_2:
@@ -316,6 +317,7 @@ class TestAddSet(TestCase, OrderedPartsMixin):
         self.assertEqual(response.status_code, 200)
         self.assertRedirects(response, "/lego/set/add/")
 
+    @tag("login")
     def test_add_set_existing_lego_id_without_suffix(self):
         self.client.login(username="test-user", password="test-password")
         with get_set_info_mock() as mock_1, get_set_parts_mock() as mock_2:
@@ -328,6 +330,7 @@ class TestAddSet(TestCase, OrderedPartsMixin):
         self.assertEqual(response.status_code, 200)
         self.assertRedirects(response, "/lego/set/add/")
 
+    @tag("login")
     def test_add_set_invalid_lego_id(self):
         self.client.login(username="test-user", password="test-password")
         with get_set_info_mock() as mock_1, get_set_parts_mock() as mock_2:
@@ -352,8 +355,22 @@ class TestAddSet(TestCase, OrderedPartsMixin):
 class TestAuth(TestCase, OrderedPartsMixin):
     fixtures = ["test_user"]
 
+    def test_login_page(self):
+        response = self.client.get("/lego/login/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertParts(response.text, "Username:", "Password:")
+
     @tag("login")
-    def test_login_and_logout(self):
+    def test_login_page_when_logged_in(self):
+        self.client.login(username="test-user", password="test-password")
+        response = self.client.get("/lego/login/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("You are already logged in", response.text)
+
+    @tag("login")
+    def test_login(self):
         response = self.client.get("/lego/")
         self.assertEqual(response.status_code, 200)
         self.assertIn("Log in", response.text)
@@ -371,6 +388,23 @@ class TestAuth(TestCase, OrderedPartsMixin):
         self.assertParts(response.text, "test-user", "Log out")
         self.assertIn("Add a New Lego Set", response.text)
         self.assertIn("Admin Page", response.text)
+
+    @tag("login")
+    def test_failed_login(self):
+        response = self.client.post(
+            "/lego/login/",
+            data={"username": "unknown-user", "password": "test-password"},
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("enter a correct username", response.text)
+
+    @tag("login")
+    def test_logout(self):
+        self.client.login(username="test-user", password="test-password")
+        response = self.client.get("/lego/")
+        self.assertIn("Log out", response.text)
 
         # log out
         response = self.client.post("/lego/logout/", follow=True)

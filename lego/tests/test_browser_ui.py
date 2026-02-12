@@ -133,7 +133,7 @@ class TestBrowserUI(LiveServerTestCase):
         )
         self.assertTrue(self.driver.find_element(By.ID, "id_mode_2").is_selected())
 
-    @tag("write-db")
+    @tag("log in", "write-db")
     def test_add_set(self):
         # log in
         self.driver.find_element(By.LINK_TEXT, "Log in").click()

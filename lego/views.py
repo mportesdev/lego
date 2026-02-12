@@ -1,7 +1,6 @@
 import logging
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, render, redirect
@@ -144,10 +143,9 @@ _login = LoginView.as_view(
 def login(request, *args, **kwargs):
     response = _login(request, *args, **kwargs)
     if request.method == "POST":
-        user_id = request.session.get("_auth_user_id")
-        if user_id:
-            username = User.objects.get(pk=user_id).username
-            logger.info(f"User logged in: {username}")
+        user = request.user
+        if user.is_authenticated:
+            logger.info(f"User logged in: {user.username}")
         else:
             username = request.POST["username"]
             logger.info(f"Failed user login: {username}")

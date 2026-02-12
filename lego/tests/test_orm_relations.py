@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, tag
 
 from lego.models import Shape, Color, Image, LegoPart, LegoSet
 
@@ -13,6 +13,7 @@ class TestGeneratedField(TestCase):
         self.assertEqual(Shape.objects.get(lego_id="2345pr0001").num_code, "2345")
 
 
+@tag("login")
 @test_settings
 class TestAddSet(TestCase):
     fixtures = ["test_data", "test_user"]

@@ -117,3 +117,11 @@ class TestAddSet(TestCase):
         )
         # quantity not overwritten by spare part
         self.assertEqual(item.quantity, 3)
+
+    def test_item_quantity(self):
+        self.client.login(username="test-user", password="test-password")
+        with get_set_info_mock(), get_set_parts_mock():
+            self.client.post("/lego/set/add/", data={"set_lego_id": "2002-1"})
+
+        new_set = LegoSet.objects.get(lego_id="2002-1")
+        self.assertEqual(new_set.setitem_set.get().quantity, 10)

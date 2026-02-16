@@ -67,6 +67,8 @@ def _set_info_mock(set_lego_id):
         return {"name": "Miniset", "image_url": "test://cdn.test/img/1122.jpg"}
     elif set_lego_id == "2001-1":
         return {"name": "Test Set 1", "image_url": "test://cdn.test/img/2001.jpg"}
+    elif set_lego_id == "2002-1":
+        return {"name": "Test Set 2", "image_url": "test://cdn.test/img/2002.jpg"}
     raise HTTPError("404 Not Found")
 
 
@@ -81,7 +83,7 @@ def _set_parts_mock(set_lego_id):
             "name": "Brick 2 x 4",
             "color_name": "White",
             "image_url": "test://cdn.test/img/2345W.jpg",
-            "quantity": 2,
+            "quantity": 1,
             "is_spare": False,
         }
         yield {  # part without color
@@ -145,6 +147,15 @@ def _set_parts_mock(set_lego_id):
             "color_name": "Yellow",
             "image_url": "test://cdn.test/img/20001Y.jpg",
             "quantity": 1,
+            "is_spare": False,
+        }
+    elif set_lego_id == "2002-1":
+        yield {  # part with non-default quantity
+            "lego_id": "2345",
+            "name": "Brick 2 x 4",
+            "color_name": "Red",
+            "image_url": "test://cdn.test/img/2345R.jpg",
+            "quantity": 10,
             "is_spare": False,
         }
 

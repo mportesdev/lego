@@ -304,11 +304,23 @@ class TestAddSet(TestCase, OrderedPartsMixin):
             "Contains:",
             "1x", "fig-0006 Pilot, Blue Helmet",
         )
-        self.assertParts(response.text, "2x", "2345 Brick 2 x 4 new, White")
+        self.assertParts(response.text, "1x", "2345 Brick 2 x 4 new, White")
         self.assertParts(response.text, "1x", "2345 Brick 2 x 4 new, Blue")
         self.assertParts(response.text, "1x", "6868 Jet Engine, Blue")
         self.assertParts(response.text, "1x", "23456 Plate 1 x 3, White")
         self.assertParts(response.text, "3x", "4242 Wheel, Black")
+
+    @tag("login", "write-db")
+    def test_item_quantity(self):
+        self.client.login(username="test-user", password="test-password")
+        with get_set_info_mock(), get_set_parts_mock():
+            response = self.client.post(
+                "/lego/set/add/", data={"set_lego_id": "2002-1"}, follow=True
+            )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertRedirects(response, "/lego/set/2002-1/")
+        self.assertParts(response.text, "10x", "2345 Brick 2 x 4, Red")
 
     @tag("login", "write-db")
     def test_add_set_without_suffix(self):

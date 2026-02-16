@@ -268,6 +268,25 @@ class TestAddSet(TestCase, OrderedPartsMixin):
     fixtures = ["test_data", "test_user"]
 
     @tag("login", "write-db")
+    def test_basic_scenario(self):
+        self.client.login(username="test-user", password="test-password")
+        with get_set_info_mock() as mock_1, get_set_parts_mock() as mock_2:
+            response = self.client.post(
+                "/lego/set/add/", data={"set_lego_id": "2001-1"}, follow=True
+            )
+            mock_1.assert_called_once_with("2001-1")
+            mock_2.assert_called_once_with("2001-1")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertRedirects(response, "/lego/set/2001-1/")
+        self.assertParts(
+            response.text,
+            "Lego Set 2001-1 Test Set 1",
+            "Contains:",
+            "1x", "20001 Brick 1 x 1, Yellow",
+        )
+
+    @tag("login", "write-db")
     def test_add_set(self):
         self.client.login(username="test-user", password="test-password")
         with get_set_info_mock() as mock_1, get_set_parts_mock() as mock_2:

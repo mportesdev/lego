@@ -13,7 +13,7 @@ class TestGeneratedField(TestCase):
         self.assertEqual(Shape.objects.get(lego_id="2345pr0001").num_code, "2345")
 
 
-@tag("login")
+@tag("login", "write-db")
 @test_settings
 class TestAddSet(TestCase):
     fixtures = ["test_data", "test_user"]
@@ -35,6 +35,15 @@ class TestAddSet(TestCase):
         new_set = LegoSet.objects.get(lego_id="1234-1")
         added_part = new_set.parts.get(shape__lego_id="2345", color__name="White")
         self.assertEqual(added_part.pk, part_pk)
+
+    def test_new_part(self):
+        self.client.login(username="test-user", password="test-password")
+        with get_set_info_mock(), get_set_parts_mock():
+            self.client.post("/lego/set/add/", data={"set_lego_id": "2001-1"})
+
+        new_set = LegoSet.objects.get(lego_id="2001-1")
+        part = LegoPart.objects.get(shape__lego_id="20001")
+        self.assertIn(part, new_set.parts.all())
 
     def test_new_part_existing_shape(self):
         shape_pk = Shape.objects.get(lego_id="2345").pk

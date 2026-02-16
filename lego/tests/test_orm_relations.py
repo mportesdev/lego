@@ -50,9 +50,9 @@ class TestAddSet(TestCase):
 
         self.client.login(username="test-user", password="test-password")
         with get_set_info_mock(), get_set_parts_mock():
-            self.client.post("/lego/set/add/", data={"set_lego_id": "1234-1"})
+            self.client.post("/lego/set/add/", data={"set_lego_id": "2001-1"})
 
-        new_set = LegoSet.objects.get(lego_id="1234-1")
+        new_set = LegoSet.objects.get(lego_id="2001-1")
         added_part = new_set.parts.get(shape__lego_id="2345", color__name="Blue")
         self.assertEqual(added_part.shape.pk, shape_pk)
 

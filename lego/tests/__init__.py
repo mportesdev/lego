@@ -165,6 +165,14 @@ def _set_parts_mock(set_lego_id):
             "quantity": 1,
             "is_spare": False,
         }
+        yield {  # new part (new shape, existing color)
+            "lego_id": "20002",
+            "name": "Brick 1 x 2",
+            "color_name": "Red",
+            "image_url": "test://cdn.test/img/20002R.jpg",
+            "quantity": 1,
+            "is_spare": False,
+        }
     elif set_lego_id == "2002-1":
         yield {  # part with non-default quantity
             "lego_id": "2345",

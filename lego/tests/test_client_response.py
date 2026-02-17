@@ -287,6 +287,7 @@ class TestAddSet(TestCase, OrderedPartsMixin):
         )
         self.assertParts(response.text, "1x", "2345 Brick 2 x 4, White")
         self.assertParts(response.text, "1x", "2345 Brick 2 x 4, Blue")
+        self.assertParts(response.text, "1x", "20002 Brick 1 x 2, Red")
 
     @tag("login", "write-db")
     def test_add_set(self):

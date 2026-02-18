@@ -69,6 +69,8 @@ def _set_info_mock(set_lego_id):
         return {"name": "Test Set 1", "image_url": "test://cdn.test/img/2001.jpg"}
     elif set_lego_id == "2002-1":
         return {"name": "Test Set 2", "image_url": "test://cdn.test/img/2002.jpg"}
+    elif set_lego_id == "2003-1":
+        return {"name": "Test Set 3", "image_url": "test://cdn.test/img/2003.jpg"}
     raise HTTPError("404 Not Found")
 
 
@@ -181,6 +183,23 @@ def _set_parts_mock(set_lego_id):
             "image_url": "test://cdn.test/img/2345R.jpg",
             "quantity": 10,
             "is_spare": False,
+        }
+    elif set_lego_id == "2003-1":
+        yield {  # part followed by a spare part
+            "lego_id": "2345",
+            "name": "Brick 2 x 4",
+            "color_name": "Red",
+            "image_url": "test://cdn.test/img/2345R.jpg",
+            "quantity": 5,
+            "is_spare": False,
+        }
+        yield {  # spare part
+            "lego_id": "2345",
+            "name": "Brick 2 x 4",
+            "color_name": "Red",
+            "image_url": "test://cdn.test/img/2345R.jpg",
+            "quantity": 1,
+            "is_spare": True,
         }
 
 

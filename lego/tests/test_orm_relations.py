@@ -109,14 +109,13 @@ class TestAddSet(TestCase):
     def test_spare_part_ignored(self):
         self.client.login(username="test-user", password="test-password")
         with get_set_info_mock(), get_set_parts_mock():
-            self.client.post("/lego/set/add/", data={"set_lego_id": "1234-1"})
+            self.client.post("/lego/set/add/", data={"set_lego_id": "2003-1"})
 
-        new_set = LegoSet.objects.get(lego_id="1234-1")
-        item = new_set.setitem_set.get(
-            part__shape__lego_id="4242", part__color__name="Black",
-        )
+        new_set = LegoSet.objects.get(lego_id="2003-1")
+        # only one part added to set
+        item = new_set.setitem_set.get()
         # quantity not overwritten by spare part
-        self.assertEqual(item.quantity, 3)
+        self.assertEqual(item.quantity, 5)
 
     def test_item_quantity(self):
         self.client.login(username="test-user", password="test-password")

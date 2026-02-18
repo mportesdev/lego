@@ -59,6 +59,19 @@ class TestAddSet(TestCase, OrderedPartsMixin):
             "INFO", "Created: LegoPart",
         )
 
+    @tag("write-db")
+    def test_spare_part(self):
+        self.client.login(username="test-user", password="test-password")
+        with (
+            get_set_info_mock(),
+            get_set_parts_mock(),
+            self.assertLogs("lego.orm_utils", "INFO") as log_obj,
+        ):
+            self.client.post("/lego/set/add/", data={"set_lego_id": "2003-1"})
+
+        log_output = "\n".join(log_obj.output)
+        self.assertParts(log_output, "INFO", "Skipping spare part:")
+
     def test_existing_lego_id(self):
         self.client.login(username="test-user", password="test-password")
         with (

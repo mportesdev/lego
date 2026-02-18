@@ -99,6 +99,16 @@ class TestAddSet(TestCase):
         self.assertNotEqual(part.image.pk, image_pk)
         self.assertEqual(part.image.origin_url, "test://cdn.test/img/2345W2.jpg")
 
+    def test_existing_part_new_shape_name(self):
+        shape = Shape.objects.get(lego_id="2345")
+
+        self.client.login(username="test-user", password="test-password")
+        with get_set_info_mock(), get_set_parts_mock():
+            self.client.post("/lego/set/add/", data={"set_lego_id": "2008-1"})
+
+        shape.refresh_from_db()
+        self.assertEqual(shape.name, "Brick 2 x 4 new")
+
     def test_image_created_for_new_object(self):
         self.client.login(username="test-user", password="test-password")
         with get_set_info_mock(), get_set_parts_mock():
@@ -113,16 +123,6 @@ class TestAddSet(TestCase):
             new_set = LegoSet.objects.get(lego_id="1122-1")
             image = Image.objects.get(origin_url="test://cdn.test/img/1122.jpg")
             self.assertEqual(new_set.image, image)
-
-    def test_updated_shape_name(self):
-        shape = Shape.objects.get(lego_id="2345")
-
-        self.client.login(username="test-user", password="test-password")
-        with get_set_info_mock(), get_set_parts_mock():
-            self.client.post("/lego/set/add/", data={"set_lego_id": "1234-1"})
-
-        shape.refresh_from_db()
-        self.assertEqual(shape.name, "Brick 2 x 4 new")
 
     def test_spare_part_ignored(self):
         self.client.login(username="test-user", password="test-password")

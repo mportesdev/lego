@@ -89,6 +89,22 @@ class TestAddSet(TestCase, OrderedPartsMixin):
             "INFO", "Updated image: LegoPart",
         )
 
+    def test_existing_part_new_shape_name(self):
+        self.client.login(username="test-user", password="test-password")
+        with (
+            get_set_info_mock(),
+            get_set_parts_mock(),
+            self.assertLogs("lego.orm_utils", "INFO") as log_obj,
+        ):
+            self.client.post("/lego/set/add/", data={"set_lego_id": "2008-1"})
+
+        log_output = "\n".join(log_obj.output)
+        self.assertParts(
+            log_output,
+            "INFO", "Outdated name: Shape",
+            "INFO", "Updated name: Shape",
+        )
+
     def test_existing_lego_id(self):
         self.client.login(username="test-user", password="test-password")
         with (

@@ -112,16 +112,16 @@ class TestAddSet(TestCase):
     def test_image_created_for_new_object(self):
         self.client.login(username="test-user", password="test-password")
         with get_set_info_mock(), get_set_parts_mock():
-            self.client.post("/lego/set/add/", data={"set_lego_id": "1122-1"})
+            self.client.post("/lego/set/add/", data={"set_lego_id": "2002-1"})
 
         with self.subTest("part"):
-            new_part = LegoPart.objects.get(shape__lego_id="3344a", color__name="Red")
-            image = Image.objects.get(origin_url="test://cdn.test/img/3344aR.jpg")
+            new_part = LegoPart.objects.get(shape__lego_id="2345", color__name="Red")
+            image = Image.objects.get(origin_url="test://cdn.test/img/2345R.jpg")
             self.assertEqual(new_part.image, image)
 
         with self.subTest("set"):
-            new_set = LegoSet.objects.get(lego_id="1122-1")
-            image = Image.objects.get(origin_url="test://cdn.test/img/1122.jpg")
+            new_set = LegoSet.objects.get(lego_id="2002-1")
+            image = Image.objects.get(origin_url="test://cdn.test/img/2002.jpg")
             self.assertEqual(new_set.image, image)
 
     def test_spare_part_ignored(self):

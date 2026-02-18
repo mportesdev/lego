@@ -21,38 +21,13 @@ class TestAddSet(TestCase, OrderedPartsMixin):
             get_set_parts_mock(),
             self.assertLogs("lego.orm_utils", "INFO") as log_obj,
         ):
-            self.client.post("/lego/set/add/", data={"set_lego_id": "1234-1"})
+            self.client.post("/lego/set/add/", data={"set_lego_id": "2001-1"})
 
         log_output = "\n".join(log_obj.output)
         self.assertParts(
             log_output,
             "INFO", "Created: LegoSet",
             "INFO", "Created: Image",    # image of the new set
-            "INFO", "Created: Shape",
-            "INFO", "Created: Image",    # image of a newly created part
-            "INFO", "Created: LegoPart",
-            "INFO", "Created: Color",
-            "INFO", "Skipping spare part:",
-            "INFO", "Outdated name: Shape",
-            "INFO", "Updated name: Shape",
-            "INFO", "Outdated image: LegoPart",
-            "INFO", "Created: Image",    # image of an existing part
-            "INFO", "Updated image: LegoPart",
-        )
-
-    @tag("write-db")
-    def test_new_part(self):
-        self.client.login(username="test-user", password="test-password")
-        with (
-            get_set_info_mock(),
-            get_set_parts_mock(),
-            self.assertLogs("lego.orm_utils", "INFO") as log_obj,
-        ):
-            self.client.post("/lego/set/add/", data={"set_lego_id": "2001-1"})
-
-        log_output = "\n".join(log_obj.output)
-        self.assertParts(
-            log_output,
             "INFO", "Created: Shape",
             "INFO", "Created: Color",
             "INFO", "Created: Image",    # image of the new part

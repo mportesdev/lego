@@ -67,6 +67,15 @@ class TestAddSet(TestCase):
         added_part = new_set.parts.get(shape__lego_id="20002", color__name="Red")
         self.assertEqual(added_part.color.pk, color_pk)
 
+    def test_new_part_no_color(self):
+        self.client.login(username="test-user", password="test-password")
+        with get_set_info_mock(), get_set_parts_mock():
+            self.client.post("/lego/set/add/", data={"set_lego_id": "2005-1"})
+
+        new_set = LegoSet.objects.get(lego_id="2005-1")
+        part = new_set.parts.get()
+        self.assertIsNone(part.color)
+
     def test_existing_part_new_image(self):
         image = Image.objects.get(origin_url="test://cdn.test/img/23456W.jpg")
         image_pk = image.pk

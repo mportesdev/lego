@@ -86,18 +86,18 @@ class TestAddSet(TestCase):
         self.assertIsNone(part.image)
 
     def test_existing_part_new_image(self):
-        image = Image.objects.get(origin_url="test://cdn.test/img/23456W.jpg")
+        image = Image.objects.get(origin_url="test://cdn.test/img/2345W.jpg")
         image_pk = image.pk
         part = LegoPart.objects.get(image=image)
 
         self.client.login(username="test-user", password="test-password")
         with get_set_info_mock(), get_set_parts_mock():
-            self.client.post("/lego/set/add/", data={"set_lego_id": "1234-1"})
+            self.client.post("/lego/set/add/", data={"set_lego_id": "2007-1"})
 
         part.refresh_from_db()
         # part references another image that has the new URL
         self.assertNotEqual(part.image.pk, image_pk)
-        self.assertEqual(part.image.origin_url, "test://cdn.test/img/23456W2.jpg")
+        self.assertEqual(part.image.origin_url, "test://cdn.test/img/2345W2.jpg")
 
     def test_image_created_for_new_object(self):
         self.client.login(username="test-user", password="test-password")

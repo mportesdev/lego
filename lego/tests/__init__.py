@@ -60,83 +60,182 @@ class OrderedPartsMixin:
         self.assertRegex(text, regex)
 
 
-def _set_info_mock(set_lego_id):
-    if set_lego_id == "1234-1":
-        return {"name": "Fighter Jet", "image_url": "test://cdn.test/img/1234.jpg"}
-    elif set_lego_id == "1122-1":
-        return {"name": "Miniset", "image_url": "test://cdn.test/img/1122.jpg"}
+_API_DATA = {
+    "2001-1": {
+        "info": {
+            "name": "Test Set 1",
+            "image_url": "test://cdn.test/img/2001.jpg",
+        },
+        "parts": [
+            {  # new part (new shape, new color)
+                "lego_id": "20001",
+                "name": "Brick 1 x 1",
+                "color_name": "Yellow",
+                "image_url": "test://cdn.test/img/20001Y.jpg",
+                "quantity": 1,
+                "is_spare": False,
+            },
+            {  # existing part
+                "lego_id": "2345",
+                "name": "Brick 2 x 4",
+                "color_name": "White",
+                "image_url": "test://cdn.test/img/2345W.jpg",
+                "quantity": 1,
+                "is_spare": False,
+            },
+            {  # new part (existing shape, new color)
+                "lego_id": "2345",
+                "name": "Brick 2 x 4",
+                "color_name": "Blue",
+                "image_url": "test://cdn.test/img/2345B.jpg",
+                "quantity": 1,
+                "is_spare": False,
+            },
+            {  # new part (new shape, existing color)
+                "lego_id": "20002",
+                "name": "Brick 1 x 2",
+                "color_name": "Red",
+                "image_url": "test://cdn.test/img/20002R.jpg",
+                "quantity": 1,
+                "is_spare": False,
+            },
+        ],
+    },
+    "2002-1": {
+        "info": {
+            "name": "Test Set 2",
+            "image_url": "test://cdn.test/img/2002.jpg",
+        },
+        "parts": [
+            {  # part with non-default quantity
+                "lego_id": "2345",
+                "name": "Brick 2 x 4",
+                "color_name": "Red",
+                "image_url": "test://cdn.test/img/2345R.jpg",
+                "quantity": 10,
+                "is_spare": False,
+            },
+        ],
+    },
+    "2003-1": {
+        "info": {
+            "name": "Test Set 3",
+            "image_url": "test://cdn.test/img/2003.jpg",
+        },
+        "parts": [
+            {  # part followed by a spare part
+                "lego_id": "2345",
+                "name": "Brick 2 x 4",
+                "color_name": "Red",
+                "image_url": "test://cdn.test/img/2345R.jpg",
+                "quantity": 5,
+                "is_spare": False,
+            },
+            {  # spare part
+                "lego_id": "2345",
+                "name": "Brick 2 x 4",
+                "color_name": "Red",
+                "image_url": "test://cdn.test/img/2345R.jpg",
+                "quantity": 1,
+                "is_spare": True,
+            },
+        ],
+    },
+    "2004-1": {
+        "info": {
+            "name": "Test Set 4",
+            "image_url": "test://cdn.test/img/2004.jpg",
+        },
+        "parts": [
+            {  # part with non-numeric lego_id
+                "lego_id": "2345a",
+                "name": "Brick 2 x 4",
+                "color_name": "White",
+                "image_url": "test://cdn.test/img/2345aW.jpg",
+                "quantity": 1,
+                "is_spare": False,
+            },
+        ],
+    },
+    "2005-1": {
+        "info": {
+            "name": "Test Set 5",
+            "image_url": "test://cdn.test/img/2005.jpg",
+        },
+        "parts": [
+            {  # part without color
+                "lego_id": "2345",
+                "name": "Brick 2 x 4",
+                "image_url": "test://cdn.test/img/2345.jpg",
+                "quantity": 1,
+                "is_spare": False,
+            },
+        ],
+    },
+    "2006-1": {
+        "info": {
+            "name": "Test Set 6",
+            "image_url": "test://cdn.test/img/2006.jpg",
+        },
+        "parts": [
+            {  # part without image
+                "lego_id": "2345",
+                "name": "Brick 2 x 4",
+                "color_name": "Blue",
+                "image_url": None,
+                "quantity": 1,
+                "is_spare": False,
+            },
+        ],
+    },
+    "2007-1": {
+        "info": {
+            "name": "Test Set 7",
+            "image_url": "test://cdn.test/img/2007.jpg",
+        },
+        "parts": [
+            {  # existing part, new image_url
+                "lego_id": "2345",
+                "name": "Brick 2 x 4",
+                "color_name": "White",
+                "image_url": "test://cdn.test/img/2345W2.jpg",
+                "quantity": 1,
+                "is_spare": False,
+            },
+        ],
+    },
+    "2008-1": {
+        "info": {
+            "name": "Test Set 8",
+            "image_url": "test://cdn.test/img/2008.jpg",
+        },
+        "parts": [
+            {  # existing part, new shape name
+                "lego_id": "2345",
+                "name": "Brick 2 x 4 new",
+                "color_name": "Red",
+                "image_url": "test://cdn.test/img/2345R.jpg",
+                "quantity": 1,
+                "is_spare": False,
+            },
+        ],
+    },
+}
+
+
+def _info_stub(set_lego_id):
+    if set_lego_id in _API_DATA:
+        return _API_DATA[set_lego_id]["info"]
     raise HTTPError("404 Not Found")
 
 
 def get_set_info_mock():
-    return patch("lego.views.get_set_info", side_effect=_set_info_mock)
+    return patch("lego.views.get_set_info", side_effect=_info_stub)
 
 
-def _set_parts_mock(set_lego_id):
-    if set_lego_id == "1234-1":
-        yield {  # existing part
-            "lego_id": "2345",
-            "name": "Brick 2 x 4",
-            "color_name": "White",
-            "image_url": "test://cdn.test/img/2345W.jpg",
-            "quantity": 2,
-            "is_spare": False,
-        }
-        yield {  # part without color
-            "lego_id": "fig-0006",
-            "name": "Pilot, Blue Helmet",
-            "image_url": "test://cdn.test/img/fig-0006.jpg",
-            "quantity": 1,
-        }
-        yield {  # part without image
-            "lego_id": "6868",
-            "name": "Jet Engine",
-            "color_name": "Blue",
-            "image_url": None,
-            "quantity": 1,
-        }
-        yield {  # new shape, new color
-            "lego_id": "4242",
-            "name": "Wheel",
-            "color_name": "Black",
-            "image_url": "test://cdn.test/img/4242K.jpg",
-            "quantity": 3,
-            "is_spare": False,
-        }
-        yield {  # spare part
-            "lego_id": "4242",
-            "name": "Wheel",
-            "color_name": "Black",
-            "image_url": "test://cdn.test/img/4242K.jpg",
-            "quantity": 1,
-            "is_spare": True,
-        }
-        yield {  # new part, existing shape, updated shape name
-            "lego_id": "2345",
-            "name": "Brick 2 x 4 new",
-            "color_name": "Blue",
-            "image_url": "test://cdn.test/img/2345B.jpg",
-            "quantity": 1,
-            "is_spare": False,
-        }
-        yield {  # existing part, updated image_url
-            "lego_id": "23456",
-            "name": "Plate 1 x 3",
-            "color_name": "White",
-            "image_url": "test://cdn.test/img/23456W2.jpg",
-            "quantity": 1,
-            "is_spare": False,
-        }
-    elif set_lego_id == "1122-1":
-        yield {  # new shape, existing color
-            "lego_id": "3344a",
-            "name": "Brick 2 x 2",
-            "color_name": "Red",
-            "image_url": "test://cdn.test/img/3344aR.jpg",
-            "quantity": 1,
-            "is_spare": False,
-        }
+def _parts_stub(set_lego_id):
+    yield from _API_DATA[set_lego_id]["parts"]
 
 
 def get_set_parts_mock():
-    return patch("lego.orm_utils.get_set_parts", side_effect=_set_parts_mock)
+    return patch("lego.orm_utils.get_set_parts", side_effect=_parts_stub)

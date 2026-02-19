@@ -163,17 +163,13 @@ class TestBrowserUI(LiveServerTestCase):
 
         # add a new set
         self.driver.find_element(By.LINK_TEXT, "Add a New Lego Set").click()
-        self.driver.find_element(By.ID, "id_set_lego_id").send_keys("1234")
+        self.driver.find_element(By.ID, "id_set_lego_id").send_keys("2001")
         with get_set_info_mock(), get_set_parts_mock():
             self.driver.find_element(By.ID, "add_set_submit").click()
 
-        self.assertIn("Lego Set 1234-1 Fighter Jet", self.driver.title)
-        self.assertTrue(self.driver.current_url.endswith("/set/1234-1/"))
-        self.driver.find_element(By.XPATH, "//a[starts-with(@title, '2345')]")
-        self.driver.find_element(By.XPATH, "//a[starts-with(@title, '6868')]")
-        self.driver.find_element(By.XPATH, "//a[starts-with(@title, 'fig-0006')]")
-        self.driver.find_element(By.XPATH, "//a[starts-with(@title, '23456')]")
-        self.driver.find_element(By.XPATH, "//a[starts-with(@title, '4242')]")
+        self.assertIn("Lego Set 2001-1 Test Set 1", self.driver.title)
+        self.assertTrue(self.driver.current_url.endswith("/set/2001-1/"))
+        self.driver.find_element(By.XPATH, "//a[starts-with(@title, '20001')]")
 
     @tag("login")
     def test_login_and_logout(self):

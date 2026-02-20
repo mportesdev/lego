@@ -149,7 +149,7 @@ class TestBrowserUI(LiveServerTestCase):
 
         # nothing was added
         self.assertIn("Add a New Lego Set", self.driver.title)
-        self.assertTrue(self.driver.current_url.endswith("/set/add/"))
+        self.assertEndsWith(self.driver.current_url, "/set/add/")
 
         # attempt to add invalid set
         self.driver.find_element(By.LINK_TEXT, "Add a New Lego Set").click()
@@ -159,7 +159,7 @@ class TestBrowserUI(LiveServerTestCase):
 
         # nothing was added
         self.assertIn("Add a New Lego Set", self.driver.title)
-        self.assertTrue(self.driver.current_url.endswith("/set/add/"))
+        self.assertEndsWith(self.driver.current_url, "/set/add/")
 
         # add a new set
         self.driver.find_element(By.LINK_TEXT, "Add a New Lego Set").click()
@@ -168,7 +168,7 @@ class TestBrowserUI(LiveServerTestCase):
             self.driver.find_element(By.ID, "add_set_submit").click()
 
         self.assertIn("Lego Set 2001-1 Test Set 1", self.driver.title)
-        self.assertTrue(self.driver.current_url.endswith("/set/2001-1/"))
+        self.assertEndsWith(self.driver.current_url, "/set/2001-1/")
         self.driver.find_element(By.XPATH, "//a[starts-with(@title, '20001')]")
 
     @tag("login")
@@ -198,7 +198,7 @@ class TestBrowserUI(LiveServerTestCase):
         self.driver.find_element(By.ID, "login_submit").click()
 
         # redirected back to set detail page
-        self.assertTrue(self.driver.current_url.endswith("/lego/set/123-1/"))
+        self.assertEndsWith(self.driver.current_url, "/lego/set/123-1/")
 
     @tag("login")
     def test_login_redirects_to_index_if_referer_is_missing(self):
@@ -211,4 +211,4 @@ class TestBrowserUI(LiveServerTestCase):
         self.driver.find_element(By.ID, "login_submit").click()
 
         # redirected to index page
-        self.assertTrue(self.driver.current_url.endswith("/lego/"))
+        self.assertEndsWith(self.driver.current_url, "/lego/")

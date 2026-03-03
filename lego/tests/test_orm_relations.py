@@ -43,7 +43,16 @@ class TestAddSet(TestCase):
 
         new_set = LegoSet.objects.get(lego_id="2001-1")
         part = LegoPart.objects.get(shape__lego_id="20001")
+        # m2m relation set-part
         self.assertIn(part, new_set.parts.all())
+
+        shape = Shape.objects.get(lego_id=20001)
+        # foreign relation part-shape
+        self.assertEqual(part.shape.pk, shape.pk)
+
+        color = Color.objects.get(name="Yellow")
+        # foreign relation part-color
+        self.assertEqual(part.color.pk, color.pk)
 
     def test_new_part_existing_shape(self):
         shape_pk = Shape.objects.get(lego_id="2345").pk

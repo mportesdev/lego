@@ -123,7 +123,7 @@ class TestStoreImage(TestCase, OrderedPartsMixin):
         pk = LegoPart.objects.filter(image__origin_url__isnull=False).first().pk
         with (
             patch("lego.images._download_image", side_effect=OSError),
-            self.assertLogs("lego.images", "INFO") as log_obj,
+            self.assertLogs("lego.images", "ERROR") as log_obj,
         ):
             _store_image(LegoPart, pk, "parts")
 

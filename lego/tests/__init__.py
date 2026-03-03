@@ -220,6 +220,22 @@ _API_DATA = {
             },
         ],
     },
+    "2009-1": {
+        "info": {
+            "name": "Test Set 9",
+            "image_url": "test://cdn.test/img/2009.jpg",
+        },
+        "parts": [
+            {  # new part, existing shape, new shape name
+                "lego_id": "2345",
+                "name": "Brick 2 x 4 update",
+                "color_name": "Blue",
+                "image_url": "test://cdn.test/img/2345B.jpg",
+                "quantity": 1,
+                "is_spare": False,
+            },
+        ],
+    },
 }
 
 

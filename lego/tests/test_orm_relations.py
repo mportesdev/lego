@@ -43,7 +43,16 @@ class TestAddSet(TestCase):
 
         new_set = LegoSet.objects.get(lego_id="2001-1")
         part = LegoPart.objects.get(shape__lego_id="20001")
+        # m2m relation set-part
         self.assertIn(part, new_set.parts.all())
+
+        shape = Shape.objects.get(lego_id=20001)
+        # foreign relation part-shape
+        self.assertEqual(part.shape.pk, shape.pk)
+
+        color = Color.objects.get(name="Yellow")
+        # foreign relation part-color
+        self.assertEqual(part.color.pk, color.pk)
 
     def test_new_part_existing_shape(self):
         shape_pk = Shape.objects.get(lego_id="2345").pk
@@ -108,6 +117,21 @@ class TestAddSet(TestCase):
 
         shape.refresh_from_db()
         self.assertEqual(shape.name, "Brick 2 x 4 new")
+
+    def test_new_part_existing_shape_new_shape_name(self):
+        shape = Shape.objects.get(lego_id="2345")
+        shape_pk = shape.pk
+        part = LegoPart.objects.filter(shape=shape).first()
+
+        self.client.login(username="test-user", password="test-password")
+        with get_set_info_mock(), get_set_parts_mock():
+            self.client.post("/lego/set/add/", data={"set_lego_id": "2009-1"})
+
+        shape.refresh_from_db()
+        self.assertEqual(shape.name, "Brick 2 x 4 update")
+        # old relation preserved
+        part.refresh_from_db()
+        self.assertEqual(part.shape.pk, shape_pk)
 
     def test_image_created_for_new_object(self):
         self.client.login(username="test-user", password="test-password")

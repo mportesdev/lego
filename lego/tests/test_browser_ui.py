@@ -23,7 +23,7 @@ class TestBrowserUI(LiveServerTestCase):
         os.environ["TMPDIR"] = cls.temp_dir = mkdtemp(dir=Path(__file__).parent)
         cls.addClassCleanup(shutil.rmtree, cls.temp_dir)
         options = Options()
-        if os.getenv("FIREFOX_HEADLESS"):
+        if not os.getenv("LEGO_TEST_FIREFOX_GUI"):
             options.add_argument("-headless")
         cls.driver = Firefox(options=options)
 

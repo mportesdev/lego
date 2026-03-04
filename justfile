@@ -1,5 +1,3 @@
-export LEGO_TEST_LOGFILE := "tests.log"
-
 test-fast *args: db-health
     python -Wd manage.py test --keepdb --failfast --verbosity=2 --durations=10 --exclude-tag=browser {{args}} lego
 

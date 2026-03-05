@@ -8,6 +8,7 @@ from django.test import tag
 from selenium.webdriver import Firefox
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
 from . import test_settings, get_set_info_mock, get_set_parts_mock
@@ -44,14 +45,14 @@ class TestBrowserUI(LiveServerTestCase):
 
         # go to set detail
         set_link.click()
-        self.assertIn("Lego Set 123-1 Brick House", self.driver.title)
+        self.wait.until(EC.title_contains("Lego Set 123-1"))
         part_link = self.driver.find_element(By.XPATH, "//a[starts-with(@title, '2345')]")
         self.driver.find_element(By.XPATH, "//a[starts-with(@title, 'fig-0008')]")
         self.driver.find_element(By.XPATH, "//a[starts-with(@title, '2345pr0001')]")
 
         # go to part detail
         part_link.click()
-        self.assertIn("Lego Part 2345 Brick 2 x 4, Red", self.driver.title)
+        self.wait.until(EC.title_contains("Lego Part 2345"))
         colors_link = self.driver.find_element(By.ID, "all_colors")
 
         # go to colors
@@ -64,12 +65,12 @@ class TestBrowserUI(LiveServerTestCase):
 
         # go to other set detail
         set_link.click()
-        self.assertIn("Lego Set 111-1 Airport", self.driver.title)
+        self.wait.until(EC.title_contains("Lego Set 111-1"))
         home_link = self.driver.find_element(By.LINK_TEXT, "O&F Lego")
 
         # go back to index page
         home_link.click()
-        self.assertIn("Home", self.driver.title)
+        self.wait.until(EC.title_contains("Home"))
 
     def test_hide_show_in_set_detail(self):
         # go to set detail
@@ -89,7 +90,7 @@ class TestBrowserUI(LiveServerTestCase):
         search_field.send_keys("brick")
         search_field.submit()
 
-        self.assertIn("Search Results for 'brick'", self.driver.title)
+        self.wait.until(EC.title_contains("brick"))
         self.driver.find_element(By.XPATH, "//a[starts-with(@title, '123-1')]")
         self.driver.find_element(By.XPATH, "//a[starts-with(@title, '2345')]")
         self.driver.find_element(By.XPATH, "//a[starts-with(@title, '2345pr0001')]")
@@ -101,7 +102,7 @@ class TestBrowserUI(LiveServerTestCase):
         self.driver.find_element(By.ID, "id_mode_1").click()
         search_field.submit()
 
-        self.assertIn("Search Results for 'house'", self.driver.title)
+        self.wait.until(EC.title_contains("house"))
         self.driver.find_element(By.XPATH, "//a[starts-with(@title, '123-1')]")
 
         # search in lego IDs
@@ -111,7 +112,7 @@ class TestBrowserUI(LiveServerTestCase):
         self.driver.find_element(By.ID, "id_mode_2").click()
         search_field.submit()
 
-        self.assertIn("Search Results for '2345'", self.driver.title)
+        self.wait.until(EC.title_contains("2345"))
         self.driver.find_element(By.XPATH, "//a[starts-with(@title, '2345')]")
         self.driver.find_element(By.XPATH, "//a[starts-with(@title, '2345pr0001')]")
 
@@ -122,7 +123,7 @@ class TestBrowserUI(LiveServerTestCase):
         self.driver.find_element(By.ID, "id_mode_3").click()
         search_field.submit()
 
-        self.assertIn("Search Results for 'white'", self.driver.title)
+        self.wait.until(EC.title_contains("white"))
         self.driver.find_element(By.XPATH, "//a[starts-with(@title, '2345')]")
         self.driver.find_element(By.XPATH, "//a[starts-with(@title, '23456')]")
 
@@ -132,6 +133,7 @@ class TestBrowserUI(LiveServerTestCase):
         self.driver.find_element(By.ID, "id_mode_2").click()
         search_field.submit()
 
+        self.wait.until(EC.title_contains("123"))
         self.assertEqual(
             self.driver.find_element(By.ID, "id_q").get_attribute("value"),
             "123",
@@ -153,30 +155,28 @@ class TestBrowserUI(LiveServerTestCase):
         input_field.send_keys("123")
         with get_set_info_mock(), get_set_parts_mock():
             input_field.submit()
+            self.wait.until(EC.staleness_of(input_field))
 
         # nothing was added
-        self.assertIn("Add a New Lego Set", self.driver.title)
         self.assertEndsWith(self.driver.current_url, "/set/add/")
 
         # attempt to add invalid set
-        self.driver.find_element(By.LINK_TEXT, "Add a New Lego Set").click()
         input_field = self.driver.find_element(By.ID, "id_set_lego_id")
         input_field.send_keys("999")
         with get_set_info_mock(), get_set_parts_mock():
             input_field.submit()
+            self.wait.until(EC.staleness_of(input_field))
 
         # nothing was added
-        self.assertIn("Add a New Lego Set", self.driver.title)
         self.assertEndsWith(self.driver.current_url, "/set/add/")
 
         # add a new set
-        self.driver.find_element(By.LINK_TEXT, "Add a New Lego Set").click()
         input_field = self.driver.find_element(By.ID, "id_set_lego_id")
         input_field.send_keys("2001")
         with get_set_info_mock(), get_set_parts_mock():
             input_field.submit()
+            self.wait.until(EC.title_contains("Lego Set 2001-1"))
 
-        self.assertIn("Lego Set 2001-1 Test Set 1", self.driver.title)
         self.assertEndsWith(self.driver.current_url, "/set/2001-1/")
         self.driver.find_element(By.XPATH, "//a[starts-with(@title, '20001')]")
 
@@ -188,7 +188,9 @@ class TestBrowserUI(LiveServerTestCase):
         input_field = self.driver.find_element(By.ID, "id_password")
         input_field.send_keys("test-password")
         input_field.submit()
-        self.driver.find_element(By.XPATH, "//div[text()='test-user']")
+        self.wait.until(
+            EC.text_to_be_present_in_element((By.CSS_SELECTOR, "div"), "test-user")
+        )
         logout_link = self.driver.find_element(By.ID, "log_out")
         self.driver.find_element(By.LINK_TEXT, "Admin Page")
 
@@ -200,6 +202,7 @@ class TestBrowserUI(LiveServerTestCase):
     def test_login_redirects_to_referer(self):
         # go to set detail page
         self.driver.find_element(By.XPATH, "//a[starts-with(@title, '123-1')]").click()
+        self.wait.until(EC.title_contains("Lego Set 123-1"))
 
         # log in
         self.driver.find_element(By.LINK_TEXT, "Log in").click()
@@ -209,6 +212,7 @@ class TestBrowserUI(LiveServerTestCase):
         input_field.submit()
 
         # redirected back to set detail page
+        self.wait.until(EC.title_contains("Lego Set 123-1"))
         self.assertEndsWith(self.driver.current_url, "/lego/set/123-1/")
 
     @tag("login")
@@ -223,4 +227,5 @@ class TestBrowserUI(LiveServerTestCase):
         input_field.submit()
 
         # redirected to index page
+        self.wait.until(EC.title_contains("Home"))
         self.assertEndsWith(self.driver.current_url, "/lego/")

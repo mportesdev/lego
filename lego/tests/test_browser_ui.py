@@ -8,6 +8,7 @@ from django.test import tag
 from selenium.webdriver import Firefox
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.support.wait import WebDriverWait
 
 from . import test_settings, get_set_info_mock, get_set_parts_mock
 
@@ -26,6 +27,8 @@ class TestBrowserUI(LiveServerTestCase):
         if not os.getenv("LEGO_TEST_FIREFOX_GUI"):
             options.add_argument("-headless")
         cls.driver = Firefox(options=options)
+        cls.driver.implicitly_wait(5)
+        cls.wait = WebDriverWait(cls.driver, 5)
 
     @classmethod
     def tearDownClass(cls):

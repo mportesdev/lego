@@ -44,4 +44,4 @@ jobs:
       run: |
         python manage.py collectstatic --no-input
         python manage.py check
-        python manage.py test --noinput --failfast --shuffle --verbosity=2 --durations=10 --exclude-tag=browser lego
+        python manage.py test --noinput --failfast --shuffle --verbosity=2 --durations=10 lego

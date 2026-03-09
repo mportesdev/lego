@@ -1,16 +1,17 @@
 import io
 import logging
+import os
 from pathlib import Path
 
 import requests
 from django_tasks import task
 from PIL import Image
 
+from . import STATIC_DIR
 from .models import LegoPart, LegoSet
 
 MAX_WIDTH = 384
 MAX_HEIGHT = 384
-STATIC_DIR = Path(__file__).parent / "static"
 
 headers = {"Accept": "image/*"}
 
@@ -63,7 +64,7 @@ def _store_image(model, pk, subdir):
     logger.info(f"Saving to static: {rel_path}")
     image.save(STATIC_DIR / rel_path)
 
-    obj_image.static_path = rel_path
+    obj_image.static_path = os.fspath(rel_path)
     obj_image.save()
 
 

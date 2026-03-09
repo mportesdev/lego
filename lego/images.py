@@ -1,5 +1,6 @@
 import io
 import logging
+import os
 from pathlib import Path
 
 import requests
@@ -63,7 +64,7 @@ def _store_image(model, pk, subdir):
     logger.info(f"Saving to static: {rel_path}")
     image.save(STATIC_DIR / rel_path)
 
-    obj_image.static_path = rel_path
+    obj_image.static_path = os.fspath(rel_path)
     obj_image.save()
 
 

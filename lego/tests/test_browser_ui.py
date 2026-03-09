@@ -2,8 +2,7 @@ import os
 import shutil
 from tempfile import mkdtemp
 
-from django.contrib.staticfiles.testing import LiveServerTestCase
-from django.test import tag
+from django.test import LiveServerTestCase, tag
 from selenium.webdriver import Firefox
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options

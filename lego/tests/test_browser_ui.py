@@ -1,6 +1,5 @@
 import os
 import shutil
-from pathlib import Path
 from tempfile import mkdtemp
 
 from django.contrib.staticfiles.testing import LiveServerTestCase
@@ -11,7 +10,7 @@ from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
-from . import test_settings, get_set_info_mock, get_set_parts_mock
+from . import TESTS_DIR, test_settings, get_set_info_mock, get_set_parts_mock
 
 
 @tag("browser")
@@ -22,7 +21,7 @@ class TestBrowserUI(LiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        os.environ["TMPDIR"] = cls.temp_dir = mkdtemp(dir=Path(__file__).parent)
+        os.environ["TMPDIR"] = cls.temp_dir = mkdtemp(dir=TESTS_DIR)
         cls.addClassCleanup(shutil.rmtree, cls.temp_dir)
         options = Options()
         if not os.getenv("LEGO_TEST_FIREFOX_GUI"):

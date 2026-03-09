@@ -6,11 +6,11 @@ import requests
 from django_tasks import task
 from PIL import Image
 
+from . import STATIC_DIR
 from .models import LegoPart, LegoSet
 
 MAX_WIDTH = 384
 MAX_HEIGHT = 384
-STATIC_DIR = Path(__file__).parent / "static"
 
 headers = {"Accept": "image/*"}
 

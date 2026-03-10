@@ -19,9 +19,9 @@ logger = logging.getLogger(__name__)
 
 
 def _download_image(url):
-    with requests.get(url, headers=headers, timeout=5) as response:
-        response.raise_for_status()
-        return Image.open(io.BytesIO(response.content))
+    response = requests.get(url, headers=headers, timeout=5)
+    response.raise_for_status()
+    return Image.open(io.BytesIO(response.content))
 
 
 def _scale_down(img):

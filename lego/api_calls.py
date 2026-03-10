@@ -39,9 +39,9 @@ def _get_paginated_data(url, session):
 
 def _get_response(url, session=None):
     get_func = session.get if session else requests.get
-    with get_func(url, auth=auth, headers=headers, timeout=5) as response:
-        response.raise_for_status()
-        return response.json()
+    response = get_func(url, auth=auth, headers=headers, timeout=5)
+    response.raise_for_status()
+    return response.json()
 
 
 def _color_name_or_none(color_name):

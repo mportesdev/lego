@@ -1,4 +1,4 @@
-from django.contrib.auth.models import AnonymousUser
+from django.contrib.auth.models import AnonymousUser, User
 from django.test import TestCase, RequestFactory
 
 from lego.views import add_set, search
@@ -13,7 +13,7 @@ class TestSearch(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
 
-    def test_get_request(self):
+    def test_get_request_anonymous_user(self):
         request = self.factory.get(
             "/lego/search/", query_params={"q": "brick", "mode": "name"}
         )
@@ -28,12 +28,21 @@ class TestSearch(TestCase):
 
 @test_settings
 class TestAddSet(TestCase):
-    fixtures = ["test_data"]
+    fixtures = ["test_data", "test_user"]
 
     def setUp(self):
         self.factory = RequestFactory()
 
     def test_get_request(self):
+        request = self.factory.get("/lego/set/add/")
+        request.user = User.objects.get()
+
+        response = add_set(request)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Lego Set ID:", response.text)
+
+    def test_get_request_anonymous_user(self):
         request = self.factory.get("/lego/set/add/")
         request.user = AnonymousUser()
 

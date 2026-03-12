@@ -51,3 +51,23 @@ class TestAddSet(TestCase):
         # redirect to login
         self.assertEqual(response.status_code, 302)
         self.assertIn("/login", response.url)
+
+    def test_post_request(self):
+        request = self.factory.post("/lego/set/add/", data={"set_lego_id": "123-1"})
+        request.user = User.objects.get()
+
+        response = add_set(request)
+
+        # set already exists, redirect to itself
+        self.assertEqual(response.status_code, 302)
+        self.assertIn("/set/add", response.url)
+
+    def test_post_request_anonymous_user(self):
+        request = self.factory.post("/lego/set/add/", data={"set_lego_id": "123-1"})
+        request.user = AnonymousUser()
+
+        response = add_set(request)
+
+        # redirect to login
+        self.assertEqual(response.status_code, 302)
+        self.assertIn("/login", response.url)

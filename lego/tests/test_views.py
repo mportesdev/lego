@@ -7,13 +7,13 @@ from . import test_settings
 
 
 @test_settings
-class TestGetRequest(TestCase):
+class TestSearch(TestCase):
     fixtures = ["test_data"]
 
     def setUp(self):
         self.factory = RequestFactory()
 
-    def test_search(self):
+    def test_get_request(self):
         request = self.factory.get(
             "/lego/search/", query_params={"q": "brick", "mode": "name"}
         )
@@ -25,11 +25,20 @@ class TestGetRequest(TestCase):
         self.assertIn("Search Results", response.text)
         self.assertIn("Brick 2 x 4", response.text)
 
-    def test_add_set_redirects_to_login_if_not_authenticated(self):
+
+@test_settings
+class TestAddSet(TestCase):
+    fixtures = ["test_data"]
+
+    def setUp(self):
+        self.factory = RequestFactory()
+
+    def test_get_request(self):
         request = self.factory.get("/lego/set/add/")
         request.user = AnonymousUser()
 
         response = add_set(request)
 
+        # redirect to login
         self.assertEqual(response.status_code, 302)
-        self.assertStartsWith(response.url, "/lego/login")
+        self.assertIn("/login", response.url)

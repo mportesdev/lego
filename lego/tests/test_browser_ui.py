@@ -19,6 +19,13 @@ from . import (
 )
 
 
+class Locator:
+    SEARCH_FIELD = (By.ID, "id_q")
+    SET_ID_FIELD = (By.ID, "id_set_lego_id")
+    SET_LINK = (By.XPATH, "//a[starts-with(@title, '123-1')]")
+    PART_LINK = (By.XPATH, "//a[starts-with(@title, '2345')]")
+
+
 @tag("browser")
 @test_settings
 class TestBrowserUI(StaticLiveServerTestCase):
@@ -50,12 +57,12 @@ class TestBrowserUI(StaticLiveServerTestCase):
 
     def test_index_and_detail_pages(self):
         self.assertIn("Home", self.driver.title)
-        set_link = self.driver.find_element(By.XPATH, "//a[starts-with(@title, '123-1')]")
+        set_link = self.driver.find_element(*Locator.SET_LINK)
 
         # go to set detail
         set_link.click()
         self.wait.until(EC.title_contains("Lego Set 123-1"))
-        part_link = self.driver.find_element(By.XPATH, "//a[starts-with(@title, '2345')]")
+        part_link = self.driver.find_element(*Locator.PART_LINK)
         self.driver.find_element(By.XPATH, "//a[starts-with(@title, 'fig-0008')]")
         self.driver.find_element(By.XPATH, "//a[starts-with(@title, '2345pr0001')]")
 
@@ -83,7 +90,7 @@ class TestBrowserUI(StaticLiveServerTestCase):
 
     def test_hide_show_in_set_detail(self):
         # go to set detail
-        self.driver.find_element(By.XPATH, "//a[starts-with(@title, '123-1')]").click()
+        self.driver.find_element(*Locator.SET_LINK).click()
         item = self.driver.find_element(By.ID, "item_1")
         toggle = self.driver.find_element(By.ID, "hide_show_1")
         # hide
@@ -95,56 +102,56 @@ class TestBrowserUI(StaticLiveServerTestCase):
 
     def test_search(self):
         # search everywhere
-        search_field = self.driver.find_element(By.ID, "id_q")
+        search_field = self.driver.find_element(*Locator.SEARCH_FIELD)
         search_field.send_keys("brick")
         search_field.submit()
 
         self.wait.until(EC.title_contains("brick"))
-        self.driver.find_element(By.XPATH, "//a[starts-with(@title, '123-1')]")
-        self.driver.find_element(By.XPATH, "//a[starts-with(@title, '2345')]")
+        self.driver.find_element(*Locator.SET_LINK)
+        self.driver.find_element(*Locator.PART_LINK)
         self.driver.find_element(By.XPATH, "//a[starts-with(@title, '2345pr0001')]")
 
         # search in names
-        search_field = self.driver.find_element(By.ID, "id_q")
+        search_field = self.driver.find_element(*Locator.SEARCH_FIELD)
         search_field.clear()
         search_field.send_keys("house")
         self.driver.find_element(By.ID, "id_mode_1").click()
         search_field.submit()
 
         self.wait.until(EC.title_contains("house"))
-        self.driver.find_element(By.XPATH, "//a[starts-with(@title, '123-1')]")
+        self.driver.find_element(*Locator.SET_LINK)
 
         # search in lego IDs
-        search_field = self.driver.find_element(By.ID, "id_q")
+        search_field = self.driver.find_element(*Locator.SEARCH_FIELD)
         search_field.clear()
         search_field.send_keys("2345")
         self.driver.find_element(By.ID, "id_mode_2").click()
         search_field.submit()
 
         self.wait.until(EC.title_contains("2345"))
-        self.driver.find_element(By.XPATH, "//a[starts-with(@title, '2345')]")
+        self.driver.find_element(*Locator.PART_LINK)
         self.driver.find_element(By.XPATH, "//a[starts-with(@title, '2345pr0001')]")
 
         # search in colors
-        search_field = self.driver.find_element(By.ID, "id_q")
+        search_field = self.driver.find_element(*Locator.SEARCH_FIELD)
         search_field.clear()
         search_field.send_keys("white")
         self.driver.find_element(By.ID, "id_mode_3").click()
         search_field.submit()
 
         self.wait.until(EC.title_contains("white"))
-        self.driver.find_element(By.XPATH, "//a[starts-with(@title, '2345')]")
+        self.driver.find_element(*Locator.PART_LINK)
         self.driver.find_element(By.XPATH, "//a[starts-with(@title, '23456')]")
 
     def test_search_form_populated_from_get(self):
-        search_field = self.driver.find_element(By.ID, "id_q")
+        search_field = self.driver.find_element(*Locator.SEARCH_FIELD)
         search_field.send_keys("123")
         self.driver.find_element(By.ID, "id_mode_2").click()
         search_field.submit()
 
         self.wait.until(EC.title_contains("123"))
         self.assertEqual(
-            self.driver.find_element(By.ID, "id_q").get_attribute("value"),
+            self.driver.find_element(*Locator.SEARCH_FIELD).get_attribute("value"),
             "123",
         )
         self.assertTrue(self.driver.find_element(By.ID, "id_mode_2").is_selected())
@@ -160,7 +167,7 @@ class TestBrowserUI(StaticLiveServerTestCase):
 
         # attempt to add existing set
         self.driver.find_element(By.LINK_TEXT, "Add a New Lego Set").click()
-        input_field = self.driver.find_element(By.ID, "id_set_lego_id")
+        input_field = self.driver.find_element(*Locator.SET_ID_FIELD)
         input_field.send_keys("123")
         with get_set_info_mock(), get_set_parts_mock():
             input_field.submit()
@@ -171,7 +178,7 @@ class TestBrowserUI(StaticLiveServerTestCase):
             )
 
         # attempt to add invalid set
-        input_field = self.driver.find_element(By.ID, "id_set_lego_id")
+        input_field = self.driver.find_element(*Locator.SET_ID_FIELD)
         input_field.send_keys("999")
         with get_set_info_mock(), get_set_parts_mock():
             input_field.submit()
@@ -182,7 +189,7 @@ class TestBrowserUI(StaticLiveServerTestCase):
             )
 
         # add a new set
-        input_field = self.driver.find_element(By.ID, "id_set_lego_id")
+        input_field = self.driver.find_element(*Locator.SET_ID_FIELD)
         input_field.send_keys("2001")
         with get_set_info_mock(), get_set_parts_mock():
             input_field.submit()
@@ -213,7 +220,7 @@ class TestBrowserUI(StaticLiveServerTestCase):
     @tag("login")
     def test_login_redirects_to_referer(self):
         # go to set detail page
-        self.driver.find_element(By.XPATH, "//a[starts-with(@title, '123-1')]").click()
+        self.driver.find_element(*Locator.SET_LINK).click()
         self.wait.until(EC.title_contains("Lego Set 123-1"))
 
         # log in

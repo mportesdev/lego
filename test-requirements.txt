@@ -1,3 +1,3 @@
 django-debug-toolbar
-selenium==4.*
-coverage>=7.14.0,<8
+selenium
+coverage

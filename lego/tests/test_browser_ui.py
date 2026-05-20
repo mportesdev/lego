@@ -9,7 +9,13 @@ from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
-from . import TESTS_DIR, test_settings, get_set_info_mock, get_set_parts_mock
+from . import (
+    TESTS_DIR,
+    test_settings,
+    get_set_info_mock,
+    get_set_parts_mock,
+    prepare_assets,
+)
 
 
 @tag("browser")
@@ -22,6 +28,10 @@ class TestBrowserUI(LiveServerTestCase):
         super().setUpClass()
         os.environ["TMPDIR"] = cls.temp_dir = mkdtemp(dir=TESTS_DIR)
         cls.addClassCleanup(shutil.rmtree, cls.temp_dir)
+
+        asset_dir = prepare_assets()
+        cls.addClassCleanup(shutil.rmtree, asset_dir)
+
         options = Options()
         if not os.getenv("LEGO_TEST_FIREFOX_GUI"):
             options.add_argument("-headless")

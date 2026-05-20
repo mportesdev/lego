@@ -266,15 +266,16 @@ def get_set_parts_mock():
 
 
 def _generate_image(pk, size, font):
-    image = Image.new("RGB", (size, size), color="#ddd")
+    image = Image.new("RGBA", (size, size), color="#ddd")
     draw = ImageDraw.Draw(image)
     draw.text((20, 20), f"Image {pk}", fill="#888", font=font)
     stream = BytesIO()
-    image.save(stream, format="JPEG")
+    image.save(stream, format="WEBP")
     return stream
 
 
 def prepare_assets():
+    default_storage = storages["default"]
     static_storage = storages["staticfiles"]
 
     # generate images
@@ -286,6 +287,11 @@ def prepare_assets():
         (5, 192, "parts"),
     ):
         image = _generate_image(pk, size, font)
-        static_storage.save(f"lego/img/{subdir}/{pk}.jpg", image)
+        static_storage.save(f"lego/img/{subdir}/test{pk:04d}.webp", image)
+
+    # copy existing asset
+    rel_path = "lego/css/styles.css"
+    with default_storage.open(f"lego/static/{rel_path}", "rb") as f:
+        static_storage.save(rel_path, f)
 
     return Path(static_storage.location) / "lego"

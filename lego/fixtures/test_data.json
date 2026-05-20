@@ -3,7 +3,7 @@
     "model": "lego.image",
     "pk": 1,
     "fields": {
-        "static_path": "lego/img/sets/1.jpg",
+        "static_path": "lego/img/sets/test0001.webp",
         "origin_url": "test://cdn.test/img/123.jpg"
     }
 },
@@ -19,7 +19,7 @@
     "model": "lego.image",
     "pk": 3,
     "fields": {
-        "static_path": "lego/img/parts/3.jpg",
+        "static_path": "lego/img/parts/test0003.webp",
         "origin_url": "test://cdn.test/img/2345R.jpg"
     }
 },
@@ -27,7 +27,7 @@
     "model": "lego.image",
     "pk": 4,
     "fields": {
-        "static_path": "lego/img/parts/4.jpg",
+        "static_path": "lego/img/parts/test0004.webp",
         "origin_url": "test://cdn.test/img/2345W.jpg"
     }
 },
@@ -35,7 +35,7 @@
     "model": "lego.image",
     "pk": 5,
     "fields": {
-        "static_path": "lego/img/parts/5.jpg",
+        "static_path": "lego/img/parts/test0005.webp",
         "origin_url": "test://cdn.test/img/fig-0008.jpg"
     }
 },

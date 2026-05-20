@@ -11,6 +11,12 @@ test *args: dbhealth
 
 alias t := test
 
+[env("LEGO_TEST_FIREFOX_GUI", "1")]
+test-gui *args: dbhealth
+    python manage.py test --keepdb --verbosity=2 --durations=10 --tag=browser {{args}} lego
+
+alias tg := test-gui
+
 serve-develop: dbhealth
     python manage.py runserver --nostatic
 

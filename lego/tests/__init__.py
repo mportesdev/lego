@@ -1,15 +1,22 @@
 import logging.config
 import os
 import re
+from io import BytesIO
+from pathlib import Path
 from unittest.mock import patch
 
+from django.core.files.storage import storages
 from django.test import override_settings
+from PIL import Image, ImageDraw, ImageFont
 from requests import HTTPError
 
-from .. import TESTS_DIR
+from lego import TESTS_DIR
+
+TESTS_STATIC_ROOT = TESTS_DIR / "teststatic"
+TESTS_STATIC_ROOT.mkdir(parents=True, exist_ok=True)
 
 test_settings = override_settings(
-    STATIC_ROOT=TESTS_DIR / "teststatic",
+    STATIC_ROOT=TESTS_STATIC_ROOT,
     STORAGES={
         "default": {
             "BACKEND": "django.core.files.storage.FileSystemStorage",
@@ -256,3 +263,29 @@ def _parts_stub(set_lego_id):
 
 def get_set_parts_mock():
     return patch("lego.orm_utils.get_set_parts", side_effect=_parts_stub)
+
+
+def _generate_image(pk, size, font):
+    image = Image.new("RGB", (size, size), color="#ddd")
+    draw = ImageDraw.Draw(image)
+    draw.text((20, 20), f"Image {pk}", fill="#888", font=font)
+    stream = BytesIO()
+    image.save(stream, format="JPEG")
+    return stream
+
+
+def prepare_assets():
+    static_storage = storages["staticfiles"]
+
+    # generate images
+    font = ImageFont.load_default(size=28)
+    for pk, size, subdir in (
+        (1, 384, "sets"),
+        (3, 192, "parts"),
+        (4, 192, "parts"),
+        (5, 192, "parts"),
+    ):
+        image = _generate_image(pk, size, font)
+        static_storage.save(f"lego/img/{subdir}/{pk}.jpg", image)
+
+    return Path(static_storage.location) / "lego"

@@ -1,8 +1,15 @@
+import shutil
 from operator import attrgetter
 
 from django.test import TestCase, tag
 
-from . import test_settings, OrderedPartsMixin, get_set_info_mock, get_set_parts_mock
+from . import (
+    test_settings,
+    OrderedPartsMixin,
+    get_set_info_mock,
+    get_set_parts_mock,
+    prepare_assets,
+)
 
 
 @test_settings
@@ -237,6 +244,12 @@ class TestSearch(TestCase, OrderedPartsMixin):
 @test_settings
 class TestImageUrls(TestCase, OrderedPartsMixin):
     fixtures = ["test_data"]
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        asset_dir = prepare_assets()
+        cls.addClassCleanup(shutil.rmtree, asset_dir)
 
     def test_set_image_urls(self):
         response = self.client.get("/lego/")

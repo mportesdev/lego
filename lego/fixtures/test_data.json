@@ -226,5 +226,14 @@
         "part": 1,
         "quantity": 1
     }
+},
+{
+    "model": "lego.setitem",
+    "pk": 7,
+    "fields": {
+        "set": 1,
+        "part": 5,
+        "quantity": 1
+    }
 }
 ]

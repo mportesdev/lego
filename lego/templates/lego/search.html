@@ -3,7 +3,7 @@
 {% load lego_extras %}
 {% block content %}
   <div class="title is-4">{{ title }}</div>
-  {% if sets.exists or parts.exists %}
+  {% if sets or parts %}
   <div class="grid">
     {% for set in sets %}
       <div class="box">

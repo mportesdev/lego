@@ -26,7 +26,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "lego.apps.LegoConfig",
-    "django_tasks",
     "django_tasks_db",
     "debug_toolbar",
 ]

@@ -4,7 +4,7 @@ import os
 from pathlib import Path
 
 import requests
-from django_tasks import task
+from django.tasks import task
 from PIL import Image
 
 from . import STATIC_DIR

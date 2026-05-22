@@ -26,7 +26,16 @@ class SetDetail(DetailView):
     template_name = "lego/set_detail.html"
 
     def get_object(self, **kwargs):
-        return get_object_or_404(LegoSet, lego_id=self.kwargs["lego_id"])
+        qs = (
+            LegoSet.objects
+            .select_related("image")
+            .prefetch_related(
+                "setitem_set__part__shape",
+                "setitem_set__part__color",
+                "setitem_set__part__image",
+            )
+        )
+        return get_object_or_404(qs, lego_id=self.kwargs["lego_id"])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

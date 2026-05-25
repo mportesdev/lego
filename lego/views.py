@@ -46,8 +46,13 @@ class PartDetail(DetailView):
     template_name = "lego/part_detail.html"
 
     def get_object(self, **kwargs):
+        qs = (
+            LegoPart.objects
+            .select_related("shape", "color", "image")
+            .prefetch_related("setitem_set__set__image")
+        )
         return get_object_or_404(
-            LegoPart,
+            qs,
             shape__lego_id=self.kwargs["lego_id"],
             color=self.kwargs.get("color_id"),
         )

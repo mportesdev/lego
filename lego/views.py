@@ -15,11 +15,12 @@ logger = logging.getLogger(__name__)
 
 
 class IndexView(ListView):
-    model = LegoSet
     template_name = "lego/index.html"
     paginate_by = 24
-    ordering = "-pk"
     extra_context = {"title": "Home"}
+
+    def get_queryset(self):
+        return LegoSet.objects.select_related("image").order_by("-pk")
 
 
 class SetDetail(DetailView):

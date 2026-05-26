@@ -26,8 +26,8 @@ class IndexView(ListView):
 class SetDetail(DetailView):
     template_name = "lego/set_detail.html"
 
-    def get_object(self, **kwargs):
-        qs = (
+    def get_queryset(self):
+        return (
             LegoSet.objects
             .select_related("image")
             .prefetch_related(
@@ -36,7 +36,12 @@ class SetDetail(DetailView):
                 "setitem_set__part__image",
             )
         )
-        return get_object_or_404(qs, lego_id=self.kwargs["lego_id"])
+
+    def get_object(self, **kwargs):
+        return get_object_or_404(
+            self.get_queryset(),
+            lego_id=self.kwargs["lego_id"],
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -46,14 +51,16 @@ class SetDetail(DetailView):
 class PartDetail(DetailView):
     template_name = "lego/part_detail.html"
 
-    def get_object(self, **kwargs):
-        qs = (
+    def get_queryset(self):
+        return (
             LegoPart.objects
             .select_related("shape", "color", "image")
             .prefetch_related("setitem_set__set__image")
         )
+
+    def get_object(self, **kwargs):
         return get_object_or_404(
-            qs,
+            self.get_queryset(),
             shape__lego_id=self.kwargs["lego_id"],
             color=self.kwargs.get("color_id"),
         )

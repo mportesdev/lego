@@ -4,7 +4,7 @@
 {% block content %}
   <div class="title is-4">Latest Additions</div>
   <div class="grid">
-  {% for set in page_obj %}
+  {% for set in object_list %}
     <div class="box">
       {% if set.image.static_path|is_static_file %}
         <div>

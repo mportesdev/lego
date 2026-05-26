@@ -7,6 +7,10 @@ from lego.tests import test_settings
 class TestNumberOfQueries(TestCase):
     fixtures = ["test_data"]
 
+    def test_index_page(self):
+        with self.assertNumQueries(2):
+            self.client.get("/lego/")
+
     def test_set_detail(self):
         """
         1. select LegoSet + related many-to-one (select_related)

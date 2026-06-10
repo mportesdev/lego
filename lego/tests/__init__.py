@@ -12,10 +12,14 @@ from requests import HTTPError
 
 from lego import TESTS_DIR
 
+TESTS_MEDIA_ROOT = TESTS_DIR / "testmedia"
+TESTS_MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
+
 TESTS_STATIC_ROOT = TESTS_DIR / "teststatic"
 TESTS_STATIC_ROOT.mkdir(parents=True, exist_ok=True)
 
 test_settings = override_settings(
+    MEDIA_ROOT=TESTS_MEDIA_ROOT,
     STATIC_ROOT=TESTS_STATIC_ROOT,
     STORAGES={
         "default": {

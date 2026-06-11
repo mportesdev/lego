@@ -29,8 +29,9 @@ class TestBrowserUI(LiveServerTestCase):
         os.environ["TMPDIR"] = cls.temp_dir = mkdtemp(dir=TESTS_DIR)
         cls.addClassCleanup(shutil.rmtree, cls.temp_dir)
 
-        asset_dir = prepare_assets()
-        cls.addClassCleanup(shutil.rmtree, asset_dir)
+        media_dir, static_dir = prepare_assets()
+        cls.addClassCleanup(shutil.rmtree, media_dir)
+        cls.addClassCleanup(shutil.rmtree, static_dir)
 
         options = Options()
         if not os.getenv("LEGO_TEST_FIREFOX_GUI"):

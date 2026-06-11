@@ -298,4 +298,7 @@ def prepare_assets():
     with (STATIC_DIR / rel_path).open("rb") as f:
         static_storage.save(rel_path, f)
 
-    return Path(static_storage.location) / "lego"
+    return (
+        Path(default_storage.location) / "lego",
+        Path(static_storage.location) / "lego",
+    )

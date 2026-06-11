@@ -10,7 +10,7 @@ from django.test import override_settings
 from PIL import Image, ImageDraw, ImageFont
 from requests import HTTPError
 
-from lego import TESTS_DIR
+from lego import STATIC_DIR, TESTS_DIR
 
 TESTS_MEDIA_ROOT = TESTS_DIR / "testmedia"
 TESTS_MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
@@ -291,11 +291,11 @@ def prepare_assets():
         (5, 192, "parts"),
     ):
         image = _generate_image(pk, size, font)
-        static_storage.save(f"lego/img/{subdir}/test{pk:04d}.webp", image)
+        default_storage.save(f"lego/img/{subdir}/test{pk:04d}.webp", image)
 
     # copy existing asset
     rel_path = "lego/css/styles.css"
-    with default_storage.open(f"lego/static/{rel_path}", "rb") as f:
+    with (STATIC_DIR / rel_path).open("rb") as f:
         static_storage.save(rel_path, f)
 
     return Path(static_storage.location) / "lego"

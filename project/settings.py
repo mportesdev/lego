@@ -103,7 +103,11 @@ USE_I18N = False
 USE_TZ = True
 
 
-# Static files
+# Files and storages
+
+MEDIA_URL = "/media/"
+
+MEDIA_ROOT = BASE_DIR / "mediafiles"
 
 STATIC_URL = "/static/"
 

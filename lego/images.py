@@ -36,6 +36,13 @@ def _scale_down(img):
     return scaled_img
 
 
+def _save_to_media(image, rel_path):
+    logger.info(f"Saving to media: {rel_path}")
+    stream = io.BytesIO()
+    image.save(stream, format="WEBP")
+    storages["default"].save(rel_path, stream)
+
+
 def _store_image(model, pk, subdir):
     if pk is not None:
         obj = model.objects.get(pk=pk)
@@ -61,11 +68,7 @@ def _store_image(model, pk, subdir):
         image = _scale_down(image)
 
     rel_path = Path("lego") / "img" / subdir / f"{obj.pk}.webp"
-    logger.info(f"Saving to media: {rel_path}")
-    stream = io.BytesIO()
-    image.save(stream, format="WEBP")
-    storages["default"].save(rel_path, stream)
-
+    _save_to_media(image, rel_path)
     obj_image.static_path = os.fspath(rel_path)
     obj_image.save()
 

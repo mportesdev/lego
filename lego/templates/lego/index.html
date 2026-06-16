@@ -1,5 +1,4 @@
 {% extends "lego/base.html" %}
-{% load static %}
 {% load lego_extras %}
 {% block content %}
   <div class="title is-4">Latest Additions</div>
@@ -8,7 +7,7 @@
     <div class="box">
       {% if set.image.static_path|is_static_file %}
         <div>
-          <a href="{{ set.get_absolute_url }}" title="{{ set }}"><img src="{% static set.image.static_path %}" loading="lazy"></a>
+          <a href="{{ set.get_absolute_url }}" title="{{ set }}"><img src="{{ MEDIA_URL }}{{ set.image.static_path }}" loading="lazy"></a>
         </div>
       {% elif set.image.origin_url %}
         <div>

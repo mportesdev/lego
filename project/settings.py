@@ -53,6 +53,7 @@ TEMPLATES = [
             "context_processors": [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
+                "django.template.context_processors.media",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "lego.context_processors.common_context",
@@ -103,7 +104,11 @@ USE_I18N = False
 USE_TZ = True
 
 
-# Static files
+# Files and storages
+
+MEDIA_URL = "/media/"
+
+MEDIA_ROOT = BASE_DIR / "mediafiles"
 
 STATIC_URL = "/static/"
 

@@ -248,8 +248,9 @@ class TestImageUrls(TestCase, OrderedPartsMixin):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        asset_dir = prepare_assets()
-        cls.addClassCleanup(shutil.rmtree, asset_dir)
+        media_dir, static_dir = prepare_assets()
+        cls.addClassCleanup(shutil.rmtree, media_dir)
+        cls.addClassCleanup(shutil.rmtree, static_dir)
 
     def test_set_image_urls(self):
         response = self.client.get("/lego/")
@@ -257,7 +258,7 @@ class TestImageUrls(TestCase, OrderedPartsMixin):
         self.assertEqual(response.status_code, 200)
         # 111-1 has external image URL
         self.assertParts(response.text, "111-1", "test://cdn.test/img/111.jpg")
-        # 123-1 has local static file
+        # 123-1 has local media file
         self.assertParts(response.text, "123-1", "/img/sets/test0001.webp")
 
     def test_part_image_urls(self):

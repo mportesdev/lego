@@ -1,9 +1,8 @@
 {% extends "lego/base.html" %}
-{% load static %}
 {% load lego_extras %}
 {% block content %}
   <div class="title is-4">{{ title }}</div>
-  {% if legopart.image.static_path|is_static_file %}<div><img src="{% static legopart.image.static_path %}"></div>
+  {% if legopart.image.static_path|is_static_file %}<div><img src="{{ MEDIA_URL }}{{ legopart.image.static_path }}"></div>
   {% elif legopart.image.origin_url %}<div><figure class="image is-128x128"><img src="{{ legopart.image.origin_url }}"></figure></div>
   {% else %}<div class="ti ti-lego icon-96"></div>
   {% endif %}
@@ -17,7 +16,7 @@
       <div>{{ item.quantity }}x in</div>
       {% if item.set.image.static_path|is_static_file %}
         <div>
-          <a href="{{ item.set.get_absolute_url }}" title="{{ item.set }}"><img src="{% static item.set.image.static_path %}" loading="lazy"></a>
+          <a href="{{ item.set.get_absolute_url }}" title="{{ item.set }}"><img src="{{ MEDIA_URL }}{{ item.set.image.static_path }}" loading="lazy"></a>
         </div>
       {% elif item.set.image.origin_url %}
         <div>

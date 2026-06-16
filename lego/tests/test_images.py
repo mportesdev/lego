@@ -1,9 +1,12 @@
+import shutil
+from pathlib import Path
 from unittest.mock import patch, create_autospec
 
+from django.conf import settings
 from django.test import TestCase
-from PIL.Image import Image
+from PIL.Image import Image, new
 
-from lego.images import _scale_down, _store_image
+from lego.images import _scale_down, _save_to_media, _store_image
 from lego.models import LegoPart
 
 from . import test_settings
@@ -22,6 +25,22 @@ class TestScaleDown(TestCase):
         _scale_down(img)
 
         img.resize.assert_not_called()
+
+
+@test_settings
+class TestSaveToMedia(TestCase):
+    def setUp(self):
+        super().setUp()
+        self.subdir = settings.MEDIA_ROOT / "lego"
+        self.subdir.mkdir()
+        self.addCleanup(shutil.rmtree, self.subdir)
+
+    def test_image_saved(self):
+        img = new("RGBA", (192, 192), color="#000")
+        rel_path = Path("lego") / "img" / "test0099.webp"
+        _save_to_media(img, rel_path)
+
+        self.assertTrue((self.subdir / "img" / "test0099.webp").is_file())
 
 
 @test_settings

@@ -1,5 +1,4 @@
 {% extends "lego/base.html" %}
-{% load static %}
 {% load lego_extras %}
 {% block append_head %}
 <script type="text/javascript">
@@ -19,7 +18,7 @@ function toggleHideShow(partPk) {
 {% endblock %}
 {% block content %}
   <div class="title is-4">{{ title }}</div>
-  {% if legoset.image.static_path|is_static_file %}<div><img src="{% static legoset.image.static_path %}"></div>
+  {% if legoset.image.static_path|is_static_file %}<div><img src="{{ MEDIA_URL }}{{ legoset.image.static_path }}"></div>
   {% elif legoset.image.origin_url %}<div><figure class="image is-128x128"><img src="{{ legoset.image.origin_url }}"></figure></div>
   {% else %}<div class="ti ti-lego icon-96"></div>
   {% endif %}
@@ -31,7 +30,7 @@ function toggleHideShow(partPk) {
       <div>{{ item.quantity }}x</div>
       {% if item.part.image.static_path|is_static_file %}
         <div>
-          <a href="{{ item.part.get_absolute_url }}" title="{{ item.part }}"><img src="{% static item.part.image.static_path %}" loading="lazy"></a>
+          <a href="{{ item.part.get_absolute_url }}" title="{{ item.part }}"><img src="{{ MEDIA_URL }}{{ item.part.image.static_path }}" loading="lazy"></a>
         </div>
       {% elif item.part.image.origin_url %}
         <div>

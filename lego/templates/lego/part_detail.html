@@ -14,17 +14,14 @@
   {% for item in legopart.setitem_set.all %}
     <div class="box">
       <div>{{ item.quantity }}x in</div>
-      {% if item.set.image.static_path %}
-        <div>
-          <a href="{{ item.set.get_absolute_url }}" title="{{ item.set }}"><img src="{{ MEDIA_URL }}{{ item.set.image.static_path }}" loading="lazy"></a>
-        </div>
-      {% elif item.set.image.origin_url %}
-        <div>
-          <a href="{{ item.set.get_absolute_url }}" title="{{ item.set }}"><img src="{{ item.set.image.origin_url }}" loading="lazy"></a>
-        </div>
-      {% else %}
-        <a href="{{ item.set.get_absolute_url }}" title="{{ item.set }}" class="ti ti-lego icon-96"></a>
-      {% endif %}
+      <div>
+        <a href="{{ item.set.get_absolute_url }}" title="{{ item.set }}">
+          {% if item.set.image.static_path %}<img src="{{ MEDIA_URL }}{{ item.set.image.static_path }}" loading="lazy">
+          {% elif item.set.image.origin_url %}<img src="{{ item.set.image.origin_url }}" loading="lazy">
+          {% else %}<span class="ti ti-lego icon-96"></span>
+          {% endif %}
+        </a>
+      </div>
     </div>
   {% endfor %}
   </div>

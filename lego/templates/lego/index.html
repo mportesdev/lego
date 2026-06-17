@@ -5,17 +5,14 @@
   <div class="grid">
   {% for set in object_list %}
     <div class="box">
-      {% if set.image.static_path %}
-        <div>
-          <a href="{{ set.get_absolute_url }}" title="{{ set }}"><img src="{{ MEDIA_URL }}{{ set.image.static_path }}" loading="lazy"></a>
-        </div>
-      {% elif set.image.origin_url %}
-        <div>
-          <a href="{{ set.get_absolute_url }}" title="{{ set }}"><img src="{{ set.image.origin_url }}" loading="lazy"></a>
-        </div>
-      {% else %}
-        <a href="{{ set.get_absolute_url }}" title="{{ set }}" class="ti ti-lego icon-96"></a>
-      {% endif %}
+      <div>
+        <a href="{{ set.get_absolute_url }}" title="{{ set }}">
+          {% if set.image.static_path %}<img src="{{ MEDIA_URL }}{{ set.image.static_path }}" loading="lazy">
+          {% elif set.image.origin_url %}<img src="{{ set.image.origin_url }}" loading="lazy">
+          {% else %}<span class="ti ti-lego icon-96"></span>
+          {% endif %}
+        </a>
+      </div>
     </div>
   {% endfor %}
   </div>

@@ -6,7 +6,7 @@
   <div class="grid">
     {% for set in sets %}
       <div class="box">
-        {% if set.image.static_path|is_static_file %}
+        {% if set.image.static_path %}
           <div>
             <a href="{{ set.get_absolute_url }}" title="{{ set }}"><img src="{{ MEDIA_URL }}{{ set.image.static_path }}" loading="lazy"></a>
           </div>
@@ -21,7 +21,7 @@
     {% endfor %}
     {% for part in parts %}
       <div class="box">
-        {% if part.image.static_path|is_static_file %}
+        {% if part.image.static_path %}
           <div>
             <a href="{{ part.get_absolute_url }}" title="{{ part }}"><img src="{{ MEDIA_URL }}{{ part.image.static_path }}" loading="lazy"></a>
           </div>

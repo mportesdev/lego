@@ -106,6 +106,18 @@ class TestAddSet(TestCase, OrderedPartsMixin):
             log_output, "ERROR", "Error calling external API:", "Not Found",
         )
 
+    def test_set_not_created_for_invalid_lego_id(self):
+        """
+        `orm_utils.get_set` does not log 'Created: LegoSet...'
+        """
+        self.client.login(username="test-user", password="test-password")
+        with (
+            get_set_info_mock(),
+            get_set_parts_mock(),
+            self.assertNoLogs("lego.orm_utils"),
+        ):
+            self.client.post("/lego/set/add/", data={"set_lego_id": "999-1"})
+
 
 @test_settings
 class TestStoreImage(TestCase, OrderedPartsMixin):

@@ -2,7 +2,7 @@
 {% load lego_extras %}
 {% block content %}
   <div class="title is-4">{{ title }}</div>
-  {% if legopart.image.static_path|is_static_file %}<div><img src="{{ MEDIA_URL }}{{ legopart.image.static_path }}"></div>
+  {% if legopart.image.static_path %}<div><img src="{{ MEDIA_URL }}{{ legopart.image.static_path }}"></div>
   {% elif legopart.image.origin_url %}<div><figure class="image is-128x128"><img src="{{ legopart.image.origin_url }}"></figure></div>
   {% else %}<div class="ti ti-lego icon-96"></div>
   {% endif %}
@@ -14,17 +14,14 @@
   {% for item in legopart.setitem_set.all %}
     <div class="box">
       <div>{{ item.quantity }}x in</div>
-      {% if item.set.image.static_path|is_static_file %}
-        <div>
-          <a href="{{ item.set.get_absolute_url }}" title="{{ item.set }}"><img src="{{ MEDIA_URL }}{{ item.set.image.static_path }}" loading="lazy"></a>
-        </div>
-      {% elif item.set.image.origin_url %}
-        <div>
-          <a href="{{ item.set.get_absolute_url }}" title="{{ item.set }}"><img src="{{ item.set.image.origin_url }}" loading="lazy"></a>
-        </div>
-      {% else %}
-        <a href="{{ item.set.get_absolute_url }}" title="{{ item.set }}" class="ti ti-lego icon-96"></a>
-      {% endif %}
+      <div>
+        <a href="{{ item.set.get_absolute_url }}" title="{{ item.set }}">
+          {% if item.set.image.static_path %}<img src="{{ MEDIA_URL }}{{ item.set.image.static_path }}" loading="lazy">
+          {% elif item.set.image.origin_url %}<img src="{{ item.set.image.origin_url }}" loading="lazy">
+          {% else %}<span class="ti ti-lego icon-96"></span>
+          {% endif %}
+        </a>
+      </div>
     </div>
   {% endfor %}
   </div>

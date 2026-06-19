@@ -148,9 +148,9 @@ def add_set(request):
     if "-" not in set_lego_id:
         set_lego_id += "-1"
 
-    set_, created = get_set(set_lego_id)
-    if not created:
-        logger.warning(f"Already exists: {set_!r}")
+    q = LegoSet.objects.filter(lego_id=set_lego_id)
+    if q:
+        logger.warning(f"Already exists: {q.get()!r}")
         return redirect("add_set")
 
     try:
@@ -159,6 +159,7 @@ def add_set(request):
         logger.error(f"Error calling external API: {err}")
         return redirect("add_set")
 
+    set_, _ = get_set(set_lego_id)
     save_set_with_parts(set_, set_info)
     return redirect("set_detail", set_lego_id)
 

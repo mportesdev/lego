@@ -1,5 +1,6 @@
 import logging
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
 from django.db.models import Q
@@ -150,13 +151,16 @@ def add_set(request):
 
     q = LegoSet.objects.filter(lego_id=set_lego_id)
     if q:
-        logger.warning(f"Already exists: {q.get()!r}")
+        set_ = q.get()
+        logger.warning(f"Already exists: {set_!r}")
+        messages.warning(request, f"Already exists: {set_}")
         return redirect("add_set")
 
     try:
         set_info = get_set_info(set_lego_id)
     except OSError as err:
         logger.error(f"Error calling external API: {err}")
+        messages.error(request, f"Data not found: {set_lego_id}")
         return redirect("add_set")
 
     set_, _ = get_set(set_lego_id)

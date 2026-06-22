@@ -166,3 +166,12 @@ class TestAddSet(TestCase):
 
         new_set = LegoSet.objects.get(lego_id="2002-1")
         self.assertEqual(new_set.setitem_set.get().quantity, 10)
+
+    def test_set_not_created_for_invalid_lego_id(self):
+        num_sets = LegoSet.objects.count()
+
+        self.client.login(username="test-user", password="test-password")
+        with get_set_info_mock(), get_set_parts_mock():
+            self.client.post("/lego/set/add/", data={"set_lego_id": "999-1"})
+
+        self.assertEqual(LegoSet.objects.count(), num_sets)

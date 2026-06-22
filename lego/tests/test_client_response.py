@@ -374,6 +374,36 @@ class TestAddSet(TestCase, OrderedPartsMixin):
         self.assertEqual(response.status_code, 200)
         self.assertRedirects(response, "/lego/login/?next=/lego/set/add/")
 
+    @tag("login", "write-db")
+    def test_success_message(self):
+        self.client.login(username="test-user", password="test-password")
+        with get_set_info_mock(), get_set_parts_mock():
+            response = self.client.post(
+                "/lego/set/add/", data={"set_lego_id": "2005-1"}, follow=True
+            )
+
+        self.assertIn("Added to queue: 2005-1 Test Set 5", response.text)
+
+    @tag("login")
+    def test_exists_message(self):
+        self.client.login(username="test-user", password="test-password")
+        with get_set_info_mock(), get_set_parts_mock():
+            response = self.client.post(
+                "/lego/set/add/", data={"set_lego_id": "123-1"}, follow=True
+            )
+
+        self.assertIn("Already exists: 123-1 Brick House", response.text)
+
+    @tag("login")
+    def test_invalid_message(self):
+        self.client.login(username="test-user", password="test-password")
+        with get_set_info_mock(), get_set_parts_mock():
+            response = self.client.post(
+                "/lego/set/add/", data={"set_lego_id": "999-1"}, follow=True
+            )
+
+        self.assertIn("Data not found: 999-1", response.text)
+
 
 @test_settings
 class TestAuth(TestCase, OrderedPartsMixin):

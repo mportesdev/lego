@@ -170,9 +170,6 @@ class TestBrowserUI(LiveServerTestCase):
                 )
             )
 
-        # nothing was added
-        self.assertEndsWith(self.driver.current_url, "/set/add/")
-
         # attempt to add invalid set
         input_field = self.driver.find_element(By.ID, "id_set_lego_id")
         input_field.send_keys("999")
@@ -184,9 +181,6 @@ class TestBrowserUI(LiveServerTestCase):
                 )
             )
 
-        # nothing was added
-        self.assertEndsWith(self.driver.current_url, "/set/add/")
-
         # add a new set
         input_field = self.driver.find_element(By.ID, "id_set_lego_id")
         input_field.send_keys("2001")
@@ -197,9 +191,6 @@ class TestBrowserUI(LiveServerTestCase):
                     (By.CLASS_NAME, "notification"), "Added to queue:"
                 )
             )
-
-        self.assertEndsWith(self.driver.current_url, "/set/2001-1/")
-        self.driver.find_element(By.XPATH, "//a[starts-with(@title, '20001')]")
 
     @tag("login")
     def test_login_and_logout(self):

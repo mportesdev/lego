@@ -165,7 +165,7 @@ def add_set(request):
 
     set_, _ = get_set(set_lego_id)
     save_set_with_parts(set_, set_info)
-    return redirect("set_detail", set_lego_id)
+    return redirect("add_set")
 
 
 _login = LoginView.as_view(

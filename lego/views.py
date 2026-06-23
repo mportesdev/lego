@@ -153,19 +153,25 @@ def add_set(request):
     if q:
         set_ = q.get()
         logger.warning(f"Already exists: {set_!r}")
-        messages.warning(request, f"Already exists: {set_}")
+        messages.warning(
+            request, f"Already exists: {set_}", extra_tags="is-warning"
+        )
         return redirect("add_set")
 
     try:
         set_info = get_set_info(set_lego_id)
     except OSError as err:
         logger.error(f"Error calling external API: {err}")
-        messages.error(request, f"Data not found: {set_lego_id}")
+        messages.error(
+            request, f"Data not found: {set_lego_id}", extra_tags="is-danger"
+        )
         return redirect("add_set")
 
     set_, _ = get_set(set_lego_id)
     save_set_with_parts(set_, set_info)
-    messages.success(request, f"Added to queue: {set_}")
+    messages.success(
+        request, f"Added to queue: {set_}", extra_tags="is-success"
+    )
     return redirect("add_set")
 
 

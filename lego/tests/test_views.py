@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from django.contrib.auth.models import AnonymousUser, User
 from django.test import TestCase, RequestFactory
 
@@ -56,7 +58,8 @@ class TestAddSet(TestCase):
         request = self.factory.post("/lego/set/add/", data={"set_lego_id": "123-1"})
         request.user = User.objects.get()
 
-        response = add_set(request)
+        with patch.object(request, "_messages", create=True):
+            response = add_set(request)
 
         # set already exists, redirect to itself
         self.assertEqual(response.status_code, 302)

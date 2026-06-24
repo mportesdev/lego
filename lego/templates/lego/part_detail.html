@@ -1,5 +1,4 @@
 {% extends "lego/base.html" %}
-{% load lego_extras %}
 {% block content %}
   <div class="title is-4">{{ title }}</div>
   {% if legopart.image.static_path %}<div><img src="{{ MEDIA_URL }}{{ legopart.image.static_path }}"></div>

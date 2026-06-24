@@ -292,7 +292,11 @@ class TestAddSet(TestCase, OrderedPartsMixin):
             mock_2.assert_called_once_with("2001-1")
 
         self.assertEqual(response.status_code, 200)
-        self.assertRedirects(response, "/lego/set/2001-1/")
+        self.assertRedirects(response, "/lego/set/add/")
+
+        # go to the new set detail
+        response = self.client.get("/lego/set/2001-1/")
+
         self.assertParts(
             response.text,
             "Lego Set 2001-1 Test Set 1",
@@ -312,7 +316,11 @@ class TestAddSet(TestCase, OrderedPartsMixin):
             )
 
         self.assertEqual(response.status_code, 200)
-        self.assertRedirects(response, "/lego/set/2002-1/")
+        self.assertRedirects(response, "/lego/set/add/")
+
+        # go to the new set detail
+        response = self.client.get("/lego/set/2002-1/")
+
         self.assertParts(response.text, "10x", "2345 Brick 2 x 4, Red")
 
     @tag("login", "write-db")
@@ -326,7 +334,7 @@ class TestAddSet(TestCase, OrderedPartsMixin):
             mock_2.assert_called_once_with("2001-1")
 
         self.assertEqual(response.status_code, 200)
-        self.assertRedirects(response, "/lego/set/2001-1/")
+        self.assertRedirects(response, "/lego/set/add/")
 
     @tag("login")
     def test_add_set_existing_lego_id(self):
@@ -373,6 +381,36 @@ class TestAddSet(TestCase, OrderedPartsMixin):
         )
         self.assertEqual(response.status_code, 200)
         self.assertRedirects(response, "/lego/login/?next=/lego/set/add/")
+
+    @tag("login", "write-db")
+    def test_success_message(self):
+        self.client.login(username="test-user", password="test-password")
+        with get_set_info_mock(), get_set_parts_mock():
+            response = self.client.post(
+                "/lego/set/add/", data={"set_lego_id": "2005-1"}, follow=True
+            )
+
+        self.assertIn("Added to queue: 2005-1 Test Set 5", response.text)
+
+    @tag("login")
+    def test_exists_message(self):
+        self.client.login(username="test-user", password="test-password")
+        with get_set_info_mock(), get_set_parts_mock():
+            response = self.client.post(
+                "/lego/set/add/", data={"set_lego_id": "123-1"}, follow=True
+            )
+
+        self.assertIn("Already exists: 123-1 Brick House", response.text)
+
+    @tag("login")
+    def test_invalid_message(self):
+        self.client.login(username="test-user", password="test-password")
+        with get_set_info_mock(), get_set_parts_mock():
+            response = self.client.post(
+                "/lego/set/add/", data={"set_lego_id": "999-1"}, follow=True
+            )
+
+        self.assertIn("Data not found: 999-1", response.text)
 
 
 @test_settings

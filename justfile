@@ -24,7 +24,7 @@ alias s := serve-develop
 
 [env("LEGO_DEBUG", "0")]
 serve: dbhealth
-    gunicorn project.asgi:application
+    gunicorn project.wsgi:application
 
 dbup:
     docker run -d --rm --name pg_lego -p 5433:5432 --env POSTGRES_PASSWORD=pglego postgres:16

@@ -85,7 +85,7 @@ class LegoPart(models.Model):
         return f"{self.shape}, {self.color}" if self.color else f"{self.shape}"
 
     def __repr__(self):
-        return _repr(self, ("id", "shape_id", "color_id", "image_id"))
+        return _repr(self)
 
 
 class LegoSet(models.Model):
@@ -102,7 +102,7 @@ class LegoSet(models.Model):
         return f"{self.lego_id} {self.name}"
 
     def __repr__(self):
-        return _repr(self, ("id", "lego_id", "name", "image_id"))
+        return _repr(self)
 
 
 class SetItem(models.Model):
@@ -114,12 +114,12 @@ class SetItem(models.Model):
         ordering = ["part__shape__name"]
 
     def __repr__(self):
-        return _repr(self, ("id", "set_id", "part_id", "quantity"))
+        return _repr(self)
 
 
 def _repr(instance, field_names=None):
     if field_names is None:
-        field_names = (field.name for field in instance._meta.fields)
+        field_names = (field.attname for field in instance._meta.fields)
 
     fields_repr = ", ".join(
         f"{field_name}={getattr(instance, field_name)!r}"

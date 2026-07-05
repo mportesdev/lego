@@ -27,7 +27,7 @@ admin_site.register(Color, ColorAdmin)
 
 
 class ImageAdmin(admin.ModelAdmin):
-    list_display = ["static_path", "origin_url"]
+    list_display = ["path", "origin_url"]
 
 
 admin_site.register(Image, ImageAdmin)

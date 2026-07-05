@@ -7,7 +7,7 @@
       <div class="box">
         <div>
           <a href="{{ set.get_absolute_url }}" title="{{ set }}">
-            {% if set.image.static_path %}<img src="{{ MEDIA_URL }}{{ set.image.static_path }}" loading="lazy">
+            {% if set.image.path %}<img src="{{ MEDIA_URL }}{{ set.image.path }}" loading="lazy">
             {% elif set.image.origin_url %}<img src="{{ set.image.origin_url }}" loading="lazy">
             {% else %}<span class="ti ti-lego icon-96"></span>
             {% endif %}
@@ -19,7 +19,7 @@
       <div class="box">
         <div>
           <a href="{{ part.get_absolute_url }}" title="{{ part }}">
-            {% if part.image.static_path %}<img src="{{ MEDIA_URL }}{{ part.image.static_path }}" loading="lazy">
+            {% if part.image.path %}<img src="{{ MEDIA_URL }}{{ part.image.path }}" loading="lazy">
             {% elif part.image.origin_url %}<img src="{{ part.image.origin_url }}" loading="lazy">
             {% else %}<span class="ti ti-lego icon-96"></span>
             {% endif %}

@@ -248,9 +248,8 @@ class TestImageUrls(TestCase, OrderedPartsMixin):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        media_dir, static_dir = prepare_assets()
+        media_dir = prepare_assets()
         cls.addClassCleanup(shutil.rmtree, media_dir)
-        cls.addClassCleanup(shutil.rmtree, static_dir)
 
     def test_set_image_urls(self):
         response = self.client.get("/lego/")

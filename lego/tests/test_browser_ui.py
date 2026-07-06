@@ -2,7 +2,8 @@ import os
 import shutil
 from tempfile import mkdtemp
 
-from django.test import LiveServerTestCase, tag
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.test import tag
 from selenium.webdriver import Firefox
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
@@ -20,7 +21,7 @@ from . import (
 
 @tag("browser")
 @test_settings
-class TestBrowserUI(LiveServerTestCase):
+class TestBrowserUI(StaticLiveServerTestCase):
     fixtures = ["test_data", "test_user"]
 
     @classmethod
@@ -29,9 +30,8 @@ class TestBrowserUI(LiveServerTestCase):
         os.environ["TMPDIR"] = cls.temp_dir = mkdtemp(dir=TESTS_DIR)
         cls.addClassCleanup(shutil.rmtree, cls.temp_dir)
 
-        media_dir, static_dir = prepare_assets()
+        media_dir = prepare_assets()
         cls.addClassCleanup(shutil.rmtree, media_dir)
-        cls.addClassCleanup(shutil.rmtree, static_dir)
 
         options = Options()
         if not os.getenv("LEGO_TEST_FIREFOX_GUI"):

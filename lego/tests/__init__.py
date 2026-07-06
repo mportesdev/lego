@@ -11,6 +11,7 @@ from PIL import Image, ImageDraw, ImageFont
 from requests import HTTPError
 
 from lego import TESTS_DIR
+from lego.images import DEFAULT_IMAGE_FORMAT
 
 TESTS_MEDIA_ROOT = TESTS_DIR / "testmedia"
 TESTS_MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
@@ -270,7 +271,7 @@ def _generate_image(pk, size, font):
     draw = ImageDraw.Draw(image)
     draw.text((20, 20), f"Image {pk}", fill="#888", font=font)
     stream = BytesIO()
-    image.save(stream, format="WEBP")
+    image.save(stream, format=DEFAULT_IMAGE_FORMAT)
     return stream
 
 
@@ -286,6 +287,9 @@ def prepare_assets():
         (5, 192, "parts"),
     ):
         image = _generate_image(pk, size, font)
-        default_storage.save(f"lego/img/{subdir}/test{pk:04d}.webp", image)
+        default_storage.save(
+            f"lego/img/{subdir}/test{pk:04d}.{DEFAULT_IMAGE_FORMAT}",
+            image,
+        )
 
     return Path(default_storage.location) / "lego"

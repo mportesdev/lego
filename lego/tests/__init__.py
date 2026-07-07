@@ -10,17 +10,13 @@ from django.test import override_settings
 from PIL import Image, ImageDraw, ImageFont
 from requests import HTTPError
 
-from lego import STATIC_DIR, TESTS_DIR
+from lego import TESTS_DIR
 
 TESTS_MEDIA_ROOT = TESTS_DIR / "testmedia"
 TESTS_MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
 
-TESTS_STATIC_ROOT = TESTS_DIR / "teststatic"
-TESTS_STATIC_ROOT.mkdir(parents=True, exist_ok=True)
-
 test_settings = override_settings(
     MEDIA_ROOT=TESTS_MEDIA_ROOT,
-    STATIC_ROOT=TESTS_STATIC_ROOT,
     STORAGES={
         "default": {
             "BACKEND": "django.core.files.storage.FileSystemStorage",
@@ -280,7 +276,6 @@ def _generate_image(pk, size, font):
 
 def prepare_assets():
     default_storage = storages["default"]
-    static_storage = storages["staticfiles"]
 
     # generate images
     font = ImageFont.load_default(size=28)
@@ -293,12 +288,4 @@ def prepare_assets():
         image = _generate_image(pk, size, font)
         default_storage.save(f"lego/img/{subdir}/test{pk:04d}.webp", image)
 
-    # copy existing asset
-    rel_path = "lego/css/styles.css"
-    with (STATIC_DIR / rel_path).open("rb") as f:
-        static_storage.save(rel_path, f)
-
-    return (
-        Path(default_storage.location) / "lego",
-        Path(static_storage.location) / "lego",
-    )
+    return Path(default_storage.location) / "lego"

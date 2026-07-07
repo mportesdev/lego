@@ -10,6 +10,7 @@ from PIL import Image
 
 from .models import LegoPart, LegoSet
 
+DEFAULT_IMAGE_FORMAT = "webp"
 MAX_WIDTH = 384
 MAX_HEIGHT = 384
 
@@ -39,7 +40,7 @@ def _scale_down(img):
 def _save_to_media(image, rel_path):
     logger.info(f"Saving to media: {rel_path}")
     stream = io.BytesIO()
-    image.save(stream, format="WEBP")
+    image.save(stream, format=DEFAULT_IMAGE_FORMAT)
     storages["default"].save(rel_path, stream)
 
 
@@ -67,7 +68,7 @@ def _store_image(model, pk, subdir):
     else:
         image = _scale_down(image)
 
-    rel_path = Path("lego") / "img" / subdir / f"{obj.pk}.webp"
+    rel_path = Path("lego") / "img" / subdir / f"{obj.pk}.{DEFAULT_IMAGE_FORMAT}"
     _save_to_media(image, rel_path)
     obj_image.path = os.fspath(rel_path)
     obj_image.save()

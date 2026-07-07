@@ -17,7 +17,7 @@ function toggleHideShow(partPk) {
 {% endblock %}
 {% block content %}
   <div class="title is-4">{{ title }}</div>
-  {% if legoset.image.static_path %}<div><img src="{{ MEDIA_URL }}{{ legoset.image.static_path }}"></div>
+  {% if legoset.image.path %}<div><img src="{{ MEDIA_URL }}{{ legoset.image.path }}"></div>
   {% elif legoset.image.origin_url %}<div><figure class="image is-128x128"><img src="{{ legoset.image.origin_url }}"></figure></div>
   {% else %}<div class="ti ti-lego icon-96"></div>
   {% endif %}
@@ -29,7 +29,7 @@ function toggleHideShow(partPk) {
       <div>{{ item.quantity }}x</div>
       <div>
         <a href="{{ item.part.get_absolute_url }}" title="{{ item.part }}">
-          {% if item.part.image.static_path %}<img src="{{ MEDIA_URL }}{{ item.part.image.static_path }}" loading="lazy">
+          {% if item.part.image.path %}<img src="{{ MEDIA_URL }}{{ item.part.image.path }}" loading="lazy">
           {% elif item.part.image.origin_url %}<img src="{{ item.part.image.origin_url }}" loading="lazy">
           {% else %}<span class="ti ti-lego icon-96"></span>
           {% endif %}

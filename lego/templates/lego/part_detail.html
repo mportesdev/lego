@@ -1,7 +1,7 @@
 {% extends "lego/base.html" %}
 {% block content %}
   <div class="title is-4">{{ title }}</div>
-  {% if legopart.image.static_path %}<div><img src="{{ MEDIA_URL }}{{ legopart.image.static_path }}"></div>
+  {% if legopart.image.path %}<div><img src="{{ MEDIA_URL }}{{ legopart.image.path }}"></div>
   {% elif legopart.image.origin_url %}<div><figure class="image is-128x128"><img src="{{ legopart.image.origin_url }}"></figure></div>
   {% else %}<div class="ti ti-lego icon-96"></div>
   {% endif %}
@@ -15,7 +15,7 @@
       <div>{{ item.quantity }}x in</div>
       <div>
         <a href="{{ item.set.get_absolute_url }}" title="{{ item.set }}">
-          {% if item.set.image.static_path %}<img src="{{ MEDIA_URL }}{{ item.set.image.static_path }}" loading="lazy">
+          {% if item.set.image.path %}<img src="{{ MEDIA_URL }}{{ item.set.image.path }}" loading="lazy">
           {% elif item.set.image.origin_url %}<img src="{{ item.set.image.origin_url }}" loading="lazy">
           {% else %}<span class="ti ti-lego icon-96"></span>
           {% endif %}

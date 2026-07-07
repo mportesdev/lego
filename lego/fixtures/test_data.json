@@ -3,7 +3,7 @@
     "model": "lego.image",
     "pk": 1,
     "fields": {
-        "static_path": "lego/img/sets/test0001.webp",
+        "path": "lego/img/sets/test0001.webp",
         "origin_url": "test://cdn.test/img/123.jpg"
     }
 },
@@ -11,7 +11,7 @@
     "model": "lego.image",
     "pk": 2,
     "fields": {
-        "static_path": null,
+        "path": null,
         "origin_url": "test://cdn.test/img/111.jpg"
     }
 },
@@ -19,7 +19,7 @@
     "model": "lego.image",
     "pk": 3,
     "fields": {
-        "static_path": "lego/img/parts/test0003.webp",
+        "path": "lego/img/parts/test0003.webp",
         "origin_url": "test://cdn.test/img/2345R.jpg"
     }
 },
@@ -27,7 +27,7 @@
     "model": "lego.image",
     "pk": 4,
     "fields": {
-        "static_path": "lego/img/parts/test0004.webp",
+        "path": "lego/img/parts/test0004.webp",
         "origin_url": "test://cdn.test/img/2345W.jpg"
     }
 },
@@ -35,7 +35,7 @@
     "model": "lego.image",
     "pk": 5,
     "fields": {
-        "static_path": "lego/img/parts/test0005.webp",
+        "path": "lego/img/parts/test0005.webp",
         "origin_url": "test://cdn.test/img/fig-0008.jpg"
     }
 },
@@ -43,7 +43,7 @@
     "model": "lego.image",
     "pk": 6,
     "fields": {
-        "static_path": null,
+        "path": null,
         "origin_url": "test://cdn.test/img/23456W.jpg"
     }
 },
@@ -51,7 +51,7 @@
     "model": "lego.image",
     "pk": 7,
     "fields": {
-        "static_path": null,
+        "path": null,
         "origin_url": "test://cdn.test/img/2345pr0001R.jpg"
     }
 },

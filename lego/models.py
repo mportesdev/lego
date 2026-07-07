@@ -40,24 +40,24 @@ class Color(models.Model):
 
 
 class Image(models.Model):
-    static_path = models.CharField(max_length=150, null=True)
+    path = models.CharField(max_length=150, null=True)
     origin_url = models.URLField(null=True)
 
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=["static_path", "origin_url"], name="unique_static_and_origin"
+                fields=["path", "origin_url"], name="unique_path_and_origin"
             ),
             models.CheckConstraint(
                 condition=(
-                    models.Q(static_path__isnull=False) | models.Q(origin_url__isnull=False)
+                    models.Q(path__isnull=False) | models.Q(origin_url__isnull=False)
                 ),
-                name="static_or_origin_not_null",
+                name="path_or_origin_not_null",
             ),
         ]
 
     def __str__(self):
-        return self.static_path or self.origin_url
+        return self.path or self.origin_url
 
     def __repr__(self):
         return _repr(self)

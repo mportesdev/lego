@@ -48,7 +48,7 @@ def _store_image(model, pk, subdir):
         obj = model.objects.get(pk=pk)
     else:
         obj = model.objects.filter(
-            image__static_path__isnull=True, image__origin_url__isnull=False
+            image__path__isnull=True, image__origin_url__isnull=False
         ).order_by("-pk").first()
         if obj is None:
             logger.info(f"No {model.__name__} candidate to process")
@@ -69,7 +69,7 @@ def _store_image(model, pk, subdir):
 
     rel_path = Path("lego") / "img" / subdir / f"{obj.pk}.webp"
     _save_to_media(image, rel_path)
-    obj_image.static_path = os.fspath(rel_path)
+    obj_image.path = os.fspath(rel_path)
     obj_image.save()
 
 

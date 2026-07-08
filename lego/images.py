@@ -45,16 +45,7 @@ def _save_to_media(image, rel_path):
 
 
 def _store_image(model, pk, subdir):
-    if pk is not None:
-        obj = model.objects.get(pk=pk)
-    else:
-        obj = model.objects.filter(
-            image__path__isnull=True, image__origin_url__isnull=False
-        ).order_by("-pk").first()
-        if obj is None:
-            logger.info(f"No {model.__name__} candidate to process")
-            return
-
+    obj = model.objects.get(pk=pk)
     obj_image = obj.image
     if obj_image is None or obj_image.origin_url is None:
         logger.info(f"No image URL: {obj!r}")
@@ -68,17 +59,17 @@ def _store_image(model, pk, subdir):
     else:
         image = _scale_down(image)
 
-    rel_path = Path("lego") / "img" / subdir / f"{obj.pk}.{DEFAULT_IMAGE_FORMAT}"
+    rel_path = Path("lego") / "img" / subdir / f"{pk}.{DEFAULT_IMAGE_FORMAT}"
     _save_to_media(image, rel_path)
     obj_image.path = os.fspath(rel_path)
     obj_image.save()
 
 
 @task
-def store_set_image(pk=None):
+def store_set_image(pk):
     _store_image(LegoSet, pk, "sets")
 
 
 @task
-def store_part_image(pk=None):
+def store_part_image(pk):
     _store_image(LegoPart, pk, "parts")

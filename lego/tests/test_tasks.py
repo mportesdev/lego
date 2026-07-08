@@ -11,7 +11,7 @@ from . import test_settings
 @test_settings
 class TestTasks(TestCase):
     def test_enqueue_and_run(self):
-        result = store_part_image.enqueue()
+        result = store_part_image.enqueue(pk=1)
         self.assertEqual(result.status, "READY")
 
         with patch("lego.images._store_image") as mock:

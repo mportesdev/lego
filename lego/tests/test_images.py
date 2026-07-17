@@ -37,7 +37,7 @@ class TestSaveToMedia(TestCase):
 
     def test_image_saved(self):
         img = new("RGBA", (192, 192), color="#000")
-        rel_path = Path("lego") / "img" / "test0099.webp"
+        rel_path = "lego/img/test0099.webp"
         _save_to_media(img, rel_path)
 
         self.assertTrue((self.subdir / "img" / "test0099.webp").is_file())

@@ -1,7 +1,5 @@
 import io
 import logging
-import os
-from pathlib import Path
 
 import requests
 from django.core.files.storage import storages
@@ -59,9 +57,9 @@ def _store_image(model, pk, subdir):
     else:
         image = _scale_down(image)
 
-    rel_path = Path("lego") / "img" / subdir / f"{pk}.{DEFAULT_IMAGE_FORMAT}"
+    rel_path = f"lego/img/{subdir}/{pk}.{DEFAULT_IMAGE_FORMAT}"
     _save_to_media(image, rel_path)
-    obj_image.path = os.fspath(rel_path)
+    obj_image.path = rel_path
     obj_image.save()
 
 

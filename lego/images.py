@@ -45,8 +45,11 @@ def _save_to_media(image, rel_path):
 def _store_image(model, pk, subdir):
     obj = model.objects.get(pk=pk)
     obj_image = obj.image
-    if obj_image is None or obj_image.origin_url is None:
-        logger.info(f"No image URL: {obj!r}")
+    if obj_image is None:
+        logger.info(f"No image: {obj!r}")
+        return
+    if obj_image.origin_url is None:
+        logger.info(f"No image URL: {obj_image!r}")
         return
 
     try:

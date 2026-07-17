@@ -123,13 +123,13 @@ class TestAddSet(TestCase, OrderedPartsMixin):
 class TestStoreImage(TestCase, OrderedPartsMixin):
     fixtures = ["test_data"]
 
-    def test_object_without_image_url(self):
-        pk = LegoPart.objects.filter(image__origin_url__isnull=True).first().pk
+    def test_object_without_image(self):
+        pk = LegoPart.objects.filter(image__isnull=True).first().pk
         with self.assertLogs("lego.images", "INFO") as log_obj:
             _store_image(LegoPart, pk, "parts")
 
         log_output = "\n".join(log_obj.output)
-        self.assertParts(log_output, "INFO", "No image URL: LegoPart")
+        self.assertParts(log_output, "INFO", "No image: LegoPart")
 
     def test_invalid_image_url(self):
         pk = LegoPart.objects.filter(image__origin_url__isnull=False).first().pk

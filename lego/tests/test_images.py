@@ -49,9 +49,19 @@ class TestStoreImage(TestCase):
     def setUpTestData(cls):
         LegoPartFactory.create()
         LegoPartFactory.create(image__origin_url=None)
+        LegoPartFactory.create(image=None)
+
+    def test_skips_object_without_image(self):
+        pk = LegoPart.objects.filter(image__isnull=True).first().pk
+        with patch("lego.images._download_image") as mock:
+            _store_image(LegoPart, pk, "parts")
+
+        mock.assert_not_called()
 
     def test_skips_object_without_image_url(self):
-        pk = LegoPart.objects.filter(image__origin_url__isnull=True).first().pk
+        pk = LegoPart.objects.filter(
+            image__isnull=False, image__origin_url__isnull=True
+        ).first().pk
         with patch("lego.images._download_image") as mock:
             _store_image(LegoPart, pk, "parts")
 

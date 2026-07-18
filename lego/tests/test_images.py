@@ -1,5 +1,4 @@
 import shutil
-from pathlib import Path
 from unittest.mock import patch, create_autospec
 
 from django.conf import settings
@@ -10,6 +9,7 @@ from lego.images import _scale_down, _save_to_media, _store_image
 from lego.models import LegoPart
 
 from . import test_settings
+from .factories import LegoPartFactory
 
 
 @test_settings
@@ -45,7 +45,10 @@ class TestSaveToMedia(TestCase):
 
 @test_settings
 class TestStoreImage(TestCase):
-    fixtures = ["test_data"]
+    @classmethod
+    def setUpTestData(cls):
+        LegoPartFactory.create()
+        LegoPartFactory.create(image__origin_url=None)
 
     def test_skips_object_without_image_url(self):
         pk = LegoPart.objects.filter(image__origin_url__isnull=True).first().pk

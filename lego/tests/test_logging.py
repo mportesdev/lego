@@ -6,6 +6,7 @@ from lego.images import _store_image
 from lego.models import LegoPart
 
 from . import test_settings, OrderedPartsMixin, get_set_info_mock, get_set_parts_mock
+from .factories import LegoPartFactory
 
 
 @tag("login")
@@ -121,7 +122,10 @@ class TestAddSet(TestCase, OrderedPartsMixin):
 
 @test_settings
 class TestStoreImage(TestCase, OrderedPartsMixin):
-    fixtures = ["test_data"]
+    @classmethod
+    def setUpTestData(cls):
+        LegoPartFactory.create()
+        LegoPartFactory.create(image=None)
 
     def test_object_without_image(self):
         pk = LegoPart.objects.filter(image__isnull=True).first().pk

@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('lego', '0014_remove_image_unique_static_and_origin_and_more'),
+        ('lego', '0014_image_path'),
     ]
 
     operations = [

@@ -101,14 +101,67 @@ class TestResponseContent(TestCase, OrderedPartsMixin):
 class TestResponseQuerySet(TestCase):
     fixtures = ["test_data"]
 
+    def test_index_page(self):
+        response = self.client.get("/lego/")
+
+        self.assertQuerySetEqual(
+            response.context["object_list"],
+            (("111-1", "Airport"), ("123-1", "Brick House")),
+            transform=attrgetter("lego_id", "name"),
+            ordered=False,
+        )
+
+    def test_set_and_parts_found_by_name(self):
+        response = self.client.get(
+            "/lego/search/", query_params={"q": "brick", "mode": "name"}
+        )
+
+        self.assertQuerySetEqual(
+            response.context["sets"],
+            (("123-1", "Brick House"),),
+            transform=attrgetter("lego_id", "name"),
+        )
+        self.assertQuerySetEqual(
+            response.context["parts"],
+            (("2345", "Red"), ("2345pr0001", "Red"), ("2345", "White")),
+            transform=attrgetter("shape.lego_id", "color.name"),
+            ordered=False,
+        )
+
+    def test_set_found_by_lego_id(self):
+        response = self.client.get(
+            "/lego/search/", query_params={"q": "123", "mode": "id"}
+        )
+
+        self.assertQuerySetEqual(
+            response.context["sets"],
+            (("123-1", "Brick House"),),
+            transform=attrgetter("lego_id", "name"),
+        )
+        self.assertFalse(response.context["parts"])
+
     def test_parts_found_by_num_code(self):
         response = self.client.get(
             "/lego/search/", query_params={"q": "2345", "mode": "id"}
         )
 
+        self.assertFalse(response.context["sets"])
         self.assertQuerySetEqual(
             response.context["parts"],
             (("2345", "Red"), ("2345pr0001", "Red"), ("2345", "White")),
+            transform=attrgetter("shape.lego_id", "color.name"),
+            ordered=False,
+        )
+
+    def test_parts_found_by_color(self):
+        response = self.client.get(
+            "/lego/search/", query_params={"q": "red", "mode": "color"}
+        )
+
+        self.assertFalse(response.context["sets"])
+        self.assertQuerySetEqual(
+            response.context["parts"],
+            (("2345", "Red"), ("2345pr0001", "Red"), ("23456", "Red")),
             transform=attrgetter("shape.lego_id", "color.name"),
             ordered=False,
         )

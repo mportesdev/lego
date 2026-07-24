@@ -61,7 +61,7 @@ class TestAddSet(TestCase):
         with patch.object(request, "_messages", create=True):
             response = add_set(request)
 
-        # set already exists, redirect to itself
+        # redirect to itself
         self.assertEqual(response.status_code, 302)
         self.assertIn("/set/add", response.url)
 

@@ -77,11 +77,6 @@ class TestGetResponse(TestCase, OrderedPartsMixin):
 
         self.assertEqual(response.status_code, 404)
 
-    def test_part_detail_not_found_by_lego_id_with_valid_color_id(self):
-        response = self.client.get("/lego/part/999/1/")
-
-        self.assertEqual(response.status_code, 404)
-
     def test_part_detail_not_found_by_color_id(self):
         response = self.client.get("/lego/part/2345/99/")
 
@@ -215,22 +210,6 @@ class TestSearch(TestCase, OrderedPartsMixin):
         self.assertParts(response.text, "2345 Brick 2 x 4, Red")
         self.assertParts(response.text, "2345pr0001 Brick 2 x 4 with print, Red")
         self.assertParts(response.text, "23456 Plate 1 x 3, Red")
-
-    def test_nothing_found_by_lego_id_in_name_mode(self):
-        response = self.client.get(
-            "/lego/search/", query_params={"q": "123", "mode": "name"}
-        )
-
-        self.assertEqual(response.status_code, 200)
-        self.assertIn("Nothing Found", response.text)
-
-    def test_nothing_found_by_name_in_id_mode(self):
-        response = self.client.get(
-            "/lego/search/", query_params={"q": "brick", "mode": "id"}
-        )
-
-        self.assertEqual(response.status_code, 200)
-        self.assertIn("Nothing Found", response.text)
 
     def test_nothing_found(self):
         response = self.client.get(

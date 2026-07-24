@@ -13,13 +13,45 @@ from . import (
 
 
 @test_settings
-class TestGetResponse(TestCase, OrderedPartsMixin):
+class TestResponseStatus(TestCase):
+    fixtures = ["test_data"]
+
+    def test_index_page(self):
+        response = self.client.get("/lego/")
+        self.assertEqual(response.status_code, 200)
+
+    def test_set_detail(self):
+        response = self.client.get("/lego/set/123-1/")
+        self.assertEqual(response.status_code, 200)
+
+    def test_set_detail_not_found(self):
+        response = self.client.get("/lego/set/999/")
+        self.assertEqual(response.status_code, 404)
+
+    def test_part_detail(self):
+        response = self.client.get("/lego/part/fig-0008/")
+        self.assertEqual(response.status_code, 200)
+
+    def test_part_detail_with_color_id(self):
+        response = self.client.get("/lego/part/2345/1/")
+        self.assertEqual(response.status_code, 200)
+
+    def test_part_detail_not_found_by_lego_id(self):
+        response = self.client.get("/lego/part/999/")
+        self.assertEqual(response.status_code, 404)
+
+    def test_part_detail_not_found_by_color_id(self):
+        response = self.client.get("/lego/part/2345/99/")
+        self.assertEqual(response.status_code, 404)
+
+
+@test_settings
+class TestResponseContent(TestCase, OrderedPartsMixin):
     fixtures = ["test_data"]
 
     def test_index_page(self):
         response = self.client.get("/lego/")
 
-        self.assertEqual(response.status_code, 200)
         self.assertParts(
             response.text,
             "Latest Additions",
@@ -30,7 +62,6 @@ class TestGetResponse(TestCase, OrderedPartsMixin):
     def test_set_detail(self):
         response = self.client.get("/lego/set/123-1/")
 
-        self.assertEqual(response.status_code, 200)
         self.assertParts(
             response.text,
             "Lego Set 123-1 Brick House",
@@ -42,15 +73,9 @@ class TestGetResponse(TestCase, OrderedPartsMixin):
             response.text, "2x", "2345pr0001 Brick 2 x 4 with print, Red",
         )
 
-    def test_set_detail_not_found(self):
-        response = self.client.get("/lego/set/999/")
-
-        self.assertEqual(response.status_code, 404)
-
     def test_part_detail(self):
         response = self.client.get("/lego/part/fig-0008/")
 
-        self.assertEqual(response.status_code, 200)
         self.assertParts(
             response.text,
             "Lego Part fig-0008 Man, Brown Hat",
@@ -62,7 +87,6 @@ class TestGetResponse(TestCase, OrderedPartsMixin):
     def test_part_detail_with_color_id(self):
         response = self.client.get("/lego/part/2345/1/")
 
-        self.assertEqual(response.status_code, 200)
         self.assertParts(
             response.text,
             "Lego Part 2345 Brick 2 x 4, Red",
@@ -71,16 +95,6 @@ class TestGetResponse(TestCase, OrderedPartsMixin):
             "1x in", "111-1 Airport",
         )
         self.assertParts(response.text, "1x in", "123-1 Brick House")
-
-    def test_part_detail_not_found_by_lego_id(self):
-        response = self.client.get("/lego/part/999/")
-
-        self.assertEqual(response.status_code, 404)
-
-    def test_part_detail_not_found_by_color_id(self):
-        response = self.client.get("/lego/part/2345/99/")
-
-        self.assertEqual(response.status_code, 404)
 
 
 @test_settings

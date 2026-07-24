@@ -1,10 +1,10 @@
-test-fast *args: dbhealth
+test-fast *args: dbhealth check
     python -Wd manage.py test --keepdb --failfast --verbosity=2 --durations=10 --exclude-tag=browser {{args}} lego
 
 alias f := test-fast
 
 [env("LEGO_TEST_LOGFILE", "tests.log")]
-test *args: dbhealth
+test *args: dbhealth check
     python -Wa -m coverage run manage.py test --noinput --shuffle --verbosity=2 --durations=10 {{args}} lego
     coverage report --show-missing
     coverage html
@@ -12,10 +12,13 @@ test *args: dbhealth
 alias t := test
 
 [env("LEGO_TEST_FIREFOX_GUI", "1")]
-test-gui *args: dbhealth
+test-gui *args: dbhealth check
     python manage.py test --keepdb --verbosity=2 --durations=10 --tag=browser {{args}} lego
 
 alias tg := test-gui
+
+check:
+    python manage.py makemigrations --check
 
 serve-develop: dbhealth
     python manage.py runserver --nostatic

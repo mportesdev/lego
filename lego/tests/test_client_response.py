@@ -120,6 +120,15 @@ class TestSearch(TestCase, OrderedPartsMixin):
 
     def test_set_found_by_name(self):
         response = self.client.get(
+            "/lego/search/", query_params={"q": "house", "mode": "name"}
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertInHTML("Search Results for 'house'", response.text)
+        self.assertParts(response.text, "123-1 Brick House")
+
+    def test_set_found_by_name_in_all_mode(self):
+        response = self.client.get(
             "/lego/search/", query_params={"q": "house", "mode": "all"}
         )
 
@@ -129,7 +138,7 @@ class TestSearch(TestCase, OrderedPartsMixin):
 
     def test_parts_found_by_name(self):
         response = self.client.get(
-            "/lego/search/", query_params={"q": "plate", "mode": "all"}
+            "/lego/search/", query_params={"q": "plate", "mode": "name"}
         )
 
         self.assertEqual(response.status_code, 200)
@@ -139,7 +148,7 @@ class TestSearch(TestCase, OrderedPartsMixin):
 
     def test_set_and_parts_found_by_name(self):
         response = self.client.get(
-            "/lego/search/", query_params={"q": "brick", "mode": "all"}
+            "/lego/search/", query_params={"q": "brick", "mode": "name"}
         )
 
         self.assertEqual(response.status_code, 200)
@@ -154,6 +163,15 @@ class TestSearch(TestCase, OrderedPartsMixin):
 
     def test_set_found_by_lego_id(self):
         response = self.client.get(
+            "/lego/search/", query_params={"q": "123", "mode": "id"}
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertInHTML("Search Results for '123'", response.text)
+        self.assertParts(response.text, "123-1 Brick House")
+
+    def test_set_found_by_lego_id_in_all_mode(self):
+        response = self.client.get(
             "/lego/search/", query_params={"q": "123", "mode": "all"}
         )
 
@@ -162,6 +180,18 @@ class TestSearch(TestCase, OrderedPartsMixin):
         self.assertParts(response.text, "123-1 Brick House")
 
     def test_parts_found_by_num_code(self):
+        response = self.client.get(
+            "/lego/search/", query_params={"q": "2345", "mode": "id"}
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertInHTML("Search Results for '2345'", response.text)
+        self.assertParts(response.text, "2345 Brick 2 x 4, Red")
+        self.assertParts(response.text, "2345 Brick 2 x 4, White")
+        self.assertParts(response.text, "2345pr0001 Brick 2 x 4 with print, Red")
+        self.assertNotIn("23456", response.text)
+
+    def test_parts_found_by_num_code_in_all_mode(self):
         response = self.client.get(
             "/lego/search/", query_params={"q": "2345", "mode": "all"}
         )
@@ -175,7 +205,7 @@ class TestSearch(TestCase, OrderedPartsMixin):
 
     def test_parts_found_by_color(self):
         response = self.client.get(
-            "/lego/search/", query_params={"q": "red", "mode": "all"}
+            "/lego/search/", query_params={"q": "red", "mode": "color"}
         )
 
         self.assertEqual(response.status_code, 200)
@@ -184,39 +214,9 @@ class TestSearch(TestCase, OrderedPartsMixin):
         self.assertParts(response.text, "2345pr0001 Brick 2 x 4 with print, Red")
         self.assertParts(response.text, "23456 Plate 1 x 3, Red")
 
-    def test_set_found_by_name_in_name_mode(self):
+    def test_parts_found_by_color_in_all_mode(self):
         response = self.client.get(
-            "/lego/search/", query_params={"q": "house", "mode": "name"}
-        )
-
-        self.assertEqual(response.status_code, 200)
-        self.assertInHTML("Search Results for 'house'", response.text)
-        self.assertParts(response.text, "123-1 Brick House")
-
-    def test_set_found_by_lego_id_in_id_mode(self):
-        response = self.client.get(
-            "/lego/search/", query_params={"q": "123", "mode": "id"}
-        )
-
-        self.assertEqual(response.status_code, 200)
-        self.assertInHTML("Search Results for '123'", response.text)
-        self.assertParts(response.text, "123-1 Brick House")
-
-    def test_parts_found_by_num_code_in_id_mode(self):
-        response = self.client.get(
-            "/lego/search/", query_params={"q": "2345", "mode": "id"}
-        )
-
-        self.assertEqual(response.status_code, 200)
-        self.assertInHTML("Search Results for '2345'", response.text)
-        self.assertParts(response.text, "2345 Brick 2 x 4, Red")
-        self.assertParts(response.text, "2345 Brick 2 x 4, White")
-        self.assertParts(response.text, "2345pr0001 Brick 2 x 4 with print, Red")
-        self.assertNotIn("23456", response.text)
-
-    def test_parts_found_by_color_in_color_mode(self):
-        response = self.client.get(
-            "/lego/search/", query_params={"q": "red", "mode": "color"}
+            "/lego/search/", query_params={"q": "red", "mode": "all"}
         )
 
         self.assertEqual(response.status_code, 200)

@@ -38,10 +38,10 @@ class SetDetail(DetailView):
             )
         )
 
-    def get_object(self, **kwargs):
+    def get_object(self, queryset=None):
         return get_object_or_404(
             self.get_queryset(),
-            lego_id=self.kwargs["lego_id"],
+            **self.kwargs,
         )
 
     def get_context_data(self, **kwargs):
@@ -59,7 +59,7 @@ class PartDetail(DetailView):
             .prefetch_related("setitem_set__set__image")
         )
 
-    def get_object(self, **kwargs):
+    def get_object(self, queryset=None):
         return get_object_or_404(
             self.get_queryset(),
             shape__lego_id=self.kwargs["lego_id"],

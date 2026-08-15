@@ -18,7 +18,8 @@ jobs:
       postgres:
         image: postgres:16
         env:
-          POSTGRES_USER: test_user
+          POSTGRES_DB: postgres
+          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: test_password
         options: >-
           --health-cmd pg_isready
@@ -42,7 +43,7 @@ jobs:
 
     - name: Run Tests
       env:
-        DATABASE_URL: "postgresql://test_user:test_password@localhost:5432/lego"
+        DATABASE_URL: "postgresql://postgres:test_password@localhost:5432/postgres"
         LEGO_SECRET_KEY: ${{ secrets.TEST_LEGO_SECRET_KEY }}
       run: |
         python manage.py collectstatic --no-input

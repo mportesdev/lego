@@ -202,10 +202,17 @@ ADMINS = [
     os.getenv("LEGO_ADMIN", ""),
 ]
 
-EMAIL_HOST = os.getenv("LEGO_EMAIL_HOST")
-EMAIL_PORT = 587
-EMAIL_HOST_USER = os.getenv("LEGO_EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.getenv("LEGO_EMAIL_HOST_PASSWORD")
-EMAIL_USE_TLS = True
+MAILERS = {
+    "default": {
+        "BACKEND": "django.core.mail.backends.smtp.EmailBackend",
+        "OPTIONS": {
+            "host": os.getenv("LEGO_EMAIL_HOST"),
+            "use_tls": True,
+            "port": 587,
+            "username": os.getenv("LEGO_EMAIL_HOST_USER"),
+            "password": os.getenv("LEGO_EMAIL_HOST_PASSWORD"),
+        },
+    },
+}
 
 SERVER_EMAIL = os.getenv("LEGO_SERVER_EMAIL")

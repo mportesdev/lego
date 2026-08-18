@@ -65,9 +65,9 @@ class Image(models.Model):
 
 
 class LegoPart(models.Model):
-    shape = models.ForeignKey(Shape, on_delete=models.CASCADE)
-    color = models.ForeignKey(Color, on_delete=models.SET_NULL, null=True)
-    image = models.ForeignKey(Image, on_delete=models.SET_NULL, null=True)
+    shape = models.ForeignKey(Shape, on_delete=models.DB_CASCADE)
+    color = models.ForeignKey(Color, on_delete=models.DB_SET_NULL, null=True)
+    image = models.ForeignKey(Image, on_delete=models.DB_SET_NULL, null=True)
 
     class Meta:
         constraints = [
@@ -93,7 +93,7 @@ class LegoPart(models.Model):
 class LegoSet(models.Model):
     lego_id = models.CharField(max_length=30, unique=True)
     name = models.CharField(max_length=150)
-    image = models.ForeignKey(Image, on_delete=models.SET_NULL, null=True)
+    image = models.ForeignKey(Image, on_delete=models.DB_SET_NULL, null=True)
 
     parts = models.ManyToManyField(LegoPart, through="SetItem", related_name="sets")
 
@@ -108,8 +108,8 @@ class LegoSet(models.Model):
 
 
 class SetItem(models.Model):
-    set = models.ForeignKey(LegoSet, on_delete=models.CASCADE)
-    part = models.ForeignKey(LegoPart, on_delete=models.CASCADE)
+    set = models.ForeignKey(LegoSet, on_delete=models.DB_CASCADE)
+    part = models.ForeignKey(LegoPart, on_delete=models.DB_CASCADE)
     quantity = models.PositiveSmallIntegerField(default=1)
 
     class Meta:

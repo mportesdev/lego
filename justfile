@@ -1,4 +1,4 @@
-test-fast *args: dbhealth check
+test-fast *args: dbhealth
     python -Wd manage.py test --keepdb --failfast --verbosity=2 --durations=10 --exclude-tag=browser {{args}} lego
 
 alias f := test-fast
@@ -12,7 +12,7 @@ test *args: dbhealth check
 alias t := test
 
 [env("LEGO_TEST_FIREFOX_GUI", "1")]
-test-gui *args: dbhealth check
+test-gui *args: dbhealth
     python manage.py test --keepdb --verbosity=2 --durations=10 --tag=browser {{args}} lego
 
 alias tg := test-gui

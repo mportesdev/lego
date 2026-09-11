@@ -18,7 +18,9 @@ test-gui *args: dbhealth check
 alias tg := test-gui
 
 check:
-    python manage.py makemigrations --check
+    python -Wa manage.py makemigrations --check
+    python -Wa manage.py migrate --check
+    python -Wa manage.py check
 
 serve-develop: dbhealth
     python manage.py runserver --nostatic

@@ -21,7 +21,7 @@ class ImageFactory(DjangoModelFactory):
     class Meta:
         model = "lego.Image"
 
-    path = factory.Sequence(lambda n: f"/lego/img/test{n:04}.webp")
+    path = factory.Sequence(lambda n: f"lego/img/test{n:04}.webp")
     origin_url = factory.Sequence(lambda n: f"test://{n}.jpg")
 
 

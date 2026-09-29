@@ -32,3 +32,12 @@ class LegoPartFactory(DjangoModelFactory):
     shape = factory.SubFactory(ShapeFactory)
     color = factory.SubFactory(ColorFactory)
     image = factory.SubFactory(ImageFactory)
+
+
+class LegoSetFactory(DjangoModelFactory):
+    class Meta:
+        model = "lego.LegoSet"
+
+    lego_id = factory.Sequence(lambda n: f"{n:04}")
+    name = factory.Sequence(lambda n: f"Test Set {n}")
+    image = factory.SubFactory(ImageFactory)

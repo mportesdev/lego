@@ -1,13 +1,11 @@
 {% partialdef main_image %}
   {% if image.path %}<div><img src="{{ MEDIA_URL }}{{ image.path }}"></div>
-  {% elif image.origin_url %}<div><figure class="image is-128x128"><img src="{{ image.origin_url }}"></figure></div>
   {% else %}<div class="ti ti-lego icon-96"></div>
   {% endif %}
 {% endpartialdef %}
 
 {% partialdef item_image %}
   {% if image.path %}<img src="{{ MEDIA_URL }}{{ image.path }}" loading="lazy">
-  {% elif image.origin_url %}<img src="{{ image.origin_url }}" loading="lazy">
   {% else %}<span class="ti ti-lego icon-96"></span>
   {% endif %}
 {% endpartialdef %}

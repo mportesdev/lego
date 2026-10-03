@@ -302,9 +302,10 @@ class TestImageUrls(TestCase, OrderedPartsMixin):
 
         self.assertEqual(response.status_code, 200)
         # 111-1 has external image URL
-        self.assertParts(response.text, "111-1", "test://cdn.test/img/111.jpg")
+        self.assertParts(response.text, "111-1", "ti-lego")
+        self.assertNotIn("test://", response.text)
         # 123-1 has local media file
-        self.assertParts(response.text, "123-1", "/img/sets/test0001.webp")
+        self.assertParts(response.text, "123-1", "media/lego/img/sets/test0001.webp")
 
     def test_part_image_urls(self):
         response = self.client.get(
@@ -313,13 +314,11 @@ class TestImageUrls(TestCase, OrderedPartsMixin):
 
         self.assertEqual(response.status_code, 200)
         # 23456 White has external image URL
-        self.assertParts(
-            response.text, "23456", "White", "test://cdn.test/img/23456W.jpg",
-        )
+        self.assertParts(response.text, "23456", "White", "ti-lego")
+        self.assertNotIn("test://", response.text)
         # 23456 Red has no image
-        self.assertParts(response.text, "23456", "Red")
-        self.assertNotIn("23456R", response.text)
-        self.assertNotIn("img/parts", response.text)
+        self.assertParts(response.text, "23456", "Red", "ti-lego")
+        self.assertNotIn("media/lego", response.text)
 
 
 @test_settings

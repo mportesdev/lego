@@ -300,8 +300,9 @@ class TestImageUrls(TestCase, OrderedPartsMixin):
     def setUpTestData(cls):
         LegoSetFactory.create()    # test0000.webp
         LegoSetFactory.create(image__path=None)
-        LegoPartFactory.create()    # test0002.webp
-        LegoPartFactory.create(image__path=None)
+        LegoPartFactory.create(shape__lego_id="1001", color=None)
+        LegoPartFactory.create(shape__lego_id="1002", color=None, image__path=None)
+        LegoPartFactory.create(shape__lego_id="1003", color=None, image=None)
 
     def test_set_image_urls(self):
         response = self.client.get("/lego/")
@@ -323,11 +324,59 @@ class TestImageUrls(TestCase, OrderedPartsMixin):
         self.assertEqual(response.status_code, 200)
         self.assertParts(
             response.text,
-            "0000", "Test Shape 0", "media/lego/img/test0002.webp",    # local media file
-            "0001", "Test Shape 1", "ti-lego",    # no local media file
+            "1001", "media/lego/img/test0002.webp",    # local media file
+            "1002", "ti-lego",    # no local media file
         )
         # external CDN image not displayed
         self.assertNotIn("test://", response.text)
+
+    def test_part_with_image_path_as_main_image(self):
+        """LegoPart.image.path rendered via the main_image partial."""
+
+        response = self.client.get("/lego/part/1001/")
+
+        self.assertIn("media/lego/img/test", response.text)
+
+    def test_part_with_image_path_as_item_image(self):
+        """LegoPart.image.path rendered via the item_image partial."""
+
+        response = self.client.get(
+            "/lego/search/", query_params={"q": "1001", "mode": "id"}
+        )
+
+        self.assertIn("media/lego/img/test", response.text)
+
+    def test_part_without_image_path_as_main_image(self):
+        """`.image.path=None` rendered via the main_image partial."""
+
+        response = self.client.get("/lego/part/1002/")
+
+        self.assertIn("ti-lego", response.text)
+        self.assertNotIn("test://", response.text)
+
+    def test_part_without_image_path_as_item_image(self):
+        """`.image.path=None` rendered via the item_image partial."""
+
+        response = self.client.get(
+            "/lego/search/", query_params={"q": "1002", "mode": "id"}
+        )
+
+        self.assertIn("ti-lego", response.text)
+        self.assertNotIn("test://", response.text)
+
+    def test_part_with_no_image_as_main_image(self):
+        """`.image=None` rendered via the main_image partial."""
+
+        response = self.client.get("/lego/part/1003/")
+        self.assertIn("ti-lego", response.text)
+
+    def test_part_with_no_image_as_item_image(self):
+        """`.image=None` rendered via the item_image partial."""
+
+        response = self.client.get(
+            "/lego/search/", query_params={"q": "1003", "mode": "id"}
+        )
+        self.assertIn("ti-lego", response.text)
 
 
 @test_settings

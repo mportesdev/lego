@@ -10,6 +10,7 @@ from . import (
     get_set_parts_mock,
     prepare_assets,
 )
+from .factories import LegoPartFactory, LegoSetFactory
 
 
 @test_settings
@@ -289,36 +290,44 @@ class TestSearch(TestCase, OrderedPartsMixin):
 
 @test_settings
 class TestImageUrls(TestCase, OrderedPartsMixin):
-    fixtures = ["test_data"]
-
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
         media_dir = prepare_assets()
         cls.addClassCleanup(shutil.rmtree, media_dir)
 
+    @classmethod
+    def setUpTestData(cls):
+        LegoSetFactory.create()    # test0000.webp
+        LegoSetFactory.create(image__path=None)
+        LegoPartFactory.create()    # test0002.webp
+        LegoPartFactory.create(image__path=None)
+
     def test_set_image_urls(self):
         response = self.client.get("/lego/")
 
         self.assertEqual(response.status_code, 200)
-        # 111-1 has external image URL
-        self.assertParts(response.text, "111-1", "ti-lego")
+        self.assertParts(
+            response.text,
+            "0001", "ti-lego",    # no local media file
+            "0000", "media/lego/img/test0000.webp",    # local media file
+        )
+        # external CDN image not displayed
         self.assertNotIn("test://", response.text)
-        # 123-1 has local media file
-        self.assertParts(response.text, "123-1", "media/lego/img/sets/test0001.webp")
 
     def test_part_image_urls(self):
         response = self.client.get(
-            "/lego/search/", query_params={"q": "23456", "mode": "id"}
+            "/lego/search/", query_params={"q": "Test Shape", "mode": "name"}
         )
 
         self.assertEqual(response.status_code, 200)
-        # 23456 White has external image URL
-        self.assertParts(response.text, "23456", "White", "ti-lego")
+        self.assertParts(
+            response.text,
+            "0000", "Test Shape 0", "media/lego/img/test0002.webp",    # local media file
+            "0001", "Test Shape 1", "ti-lego",    # no local media file
+        )
+        # external CDN image not displayed
         self.assertNotIn("test://", response.text)
-        # 23456 Red has no image
-        self.assertParts(response.text, "23456", "Red", "ti-lego")
-        self.assertNotIn("media/lego", response.text)
 
 
 @test_settings

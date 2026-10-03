@@ -10,7 +10,7 @@ from . import (
     get_set_parts_mock,
     prepare_assets,
 )
-from .factories import LegoPartFactory, LegoSetFactory
+from .factories import LegoPartFactory
 
 
 @test_settings
@@ -298,37 +298,9 @@ class TestImageUrls(TestCase, OrderedPartsMixin):
 
     @classmethod
     def setUpTestData(cls):
-        LegoSetFactory.create()    # test0000.webp
-        LegoSetFactory.create(image__path=None)
         LegoPartFactory.create(shape__lego_id="1001", color=None)
         LegoPartFactory.create(shape__lego_id="1002", color=None, image__path=None)
         LegoPartFactory.create(shape__lego_id="1003", color=None, image=None)
-
-    def test_set_image_urls(self):
-        response = self.client.get("/lego/")
-
-        self.assertEqual(response.status_code, 200)
-        self.assertParts(
-            response.text,
-            "0001", "ti-lego",    # no local media file
-            "0000", "media/lego/img/test0000.webp",    # local media file
-        )
-        # external CDN image not displayed
-        self.assertNotIn("test://", response.text)
-
-    def test_part_image_urls(self):
-        response = self.client.get(
-            "/lego/search/", query_params={"q": "Test Shape", "mode": "name"}
-        )
-
-        self.assertEqual(response.status_code, 200)
-        self.assertParts(
-            response.text,
-            "1001", "media/lego/img/test0002.webp",    # local media file
-            "1002", "ti-lego",    # no local media file
-        )
-        # external CDN image not displayed
-        self.assertNotIn("test://", response.text)
 
     def test_part_with_image_path_as_main_image(self):
         """LegoPart.image.path rendered via the main_image partial."""

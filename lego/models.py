@@ -14,6 +14,7 @@ class Shape(models.Model):
         expression=NumericPrefix("lego_id"),
         output_field=models.CharField(max_length=30),
         db_persist=True,
+        null=True,
     )
 
     class Meta:

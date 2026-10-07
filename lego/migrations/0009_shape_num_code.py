@@ -17,6 +17,7 @@ class Migration(migrations.Migration):
             field=models.GeneratedField(
                 db_persist=True,
                 expression=lego.models.NumericPrefix('lego_id'),
+                null=True,
                 output_field=models.CharField(max_length=30),
             ),
         ),

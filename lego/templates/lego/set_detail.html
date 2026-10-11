@@ -20,7 +20,7 @@ function toggleHideShow(partPk) {
   {% with image=legoset.image %}{% include "lego/partials.html#main_image" %}{% endwith %}
   <div class="subtitle">Contains:</div>
   <div class="grid">
-  {% for item in legoset.setitem_set.all %}
+  {% for item in items %}
     <div id="item_{{ item.part.pk }}" class="box">
       <div><button onclick="toggleHideShow({{ item.part.pk }})" title="Hide/Show" id="hide_show_{{ item.part.pk }}" class="ti ti-eye icon-24"></button></div>
       <div>{{ item.quantity }}x</div>

@@ -46,7 +46,10 @@ class SetDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        return context | {"title": f"Lego Set {self.object}"}
+        return context | {
+            "title": f"Lego Set {self.object}",
+            "items": self.object.setitem_set.all(),
+        }
 
 
 class PartDetail(DetailView):
@@ -68,7 +71,10 @@ class PartDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        return context | {"title": f"Lego Part {self.object}"}
+        return context | {
+            "title": f"Lego Part {self.object}",
+            "items": self.object.setitem_set.all(),
+        }
 
 
 def search(request):

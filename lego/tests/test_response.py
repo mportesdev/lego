@@ -112,6 +112,25 @@ class TestResponseQuerySet(TestCase):
             ordered=False,
         )
 
+    def test_ordering_in_set_detail(self):
+        response = self.client.get("/lego/set/123-1/")
+
+        self.assertQuerySetEqual(
+            response.context["items"],
+            ("2345", "2345pr0001", "23456", "fig-0008"),
+            transform=attrgetter("part.shape.lego_id"),
+        )
+
+    def test_part_detail(self):
+        response = self.client.get("/lego/part/2345/1/")
+
+        self.assertQuerySetEqual(
+            response.context["items"],
+            ("123-1", "111-1"),
+            transform=attrgetter("set.lego_id"),
+            ordered=False,
+        )
+
     def test_set_and_parts_found_by_name(self):
         response = self.client.get(
             "/lego/search/", query_params={"q": "brick", "mode": "name"}

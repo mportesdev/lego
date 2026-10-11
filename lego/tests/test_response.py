@@ -74,6 +74,15 @@ class TestResponseContent(TestCase, OrderedPartsMixin):
             response.text, "2x", "2345pr0001 Brick 2 x 4 with print, Red",
         )
 
+    def test_ordering_in_set_detail(self):
+        response = self.client.get("/lego/set/111-1/")
+
+        self.assertParts(
+            response.text,
+            "1x", "2345 Brick 2 x 4, Red",    # SetItem pk=6
+            "1x", "23456 Plate 1 x 3, White",    # SetItem pk=4
+        )
+
     def test_part_detail(self):
         response = self.client.get("/lego/part/fig-0008/")
 

@@ -28,15 +28,7 @@ class SetDetail(DetailView):
     template_name = "lego/set_detail.html"
 
     def get_queryset(self):
-        return (
-            LegoSet.objects
-            .select_related("image")
-            .prefetch_related(
-                "setitem_set__part__shape",
-                "setitem_set__part__color",
-                "setitem_set__part__image",
-            )
-        )
+        return LegoSet.objects.select_related("image")
 
     def get_object(self, queryset=None):
         return get_object_or_404(
@@ -46,9 +38,14 @@ class SetDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        ordered_items = (
+            self.object.setitem_set
+            .prefetch_related("part__shape", "part__color", "part__image")
+            .order_by("part__shape__num_code")
+        )
         return context | {
             "title": f"Lego Set {self.object}",
-            "items": self.object.setitem_set.all(),
+            "items": ordered_items,
         }
 
 

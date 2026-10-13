@@ -61,6 +61,7 @@ admin_site.register(LegoSet, LegoSetAdmin)
 
 class SetItemAdmin(admin.ModelAdmin):
     list_display = ["short_name", "set", "part", "quantity"]
+    list_select_related = ["set", "part__shape", "part__color"]
 
     def short_name(self, obj):
         part_str = (

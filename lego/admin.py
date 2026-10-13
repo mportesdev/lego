@@ -13,7 +13,8 @@ admin_site = LegoAdminSite(name="lego_admin")
 
 
 class ShapeAdmin(admin.ModelAdmin):
-    list_display = ["lego_id", "name"]
+    list_display = ["lego_id", "name", "num_code"]
+    readonly_fields = ["num_code"]
 
 
 admin_site.register(Shape, ShapeAdmin)

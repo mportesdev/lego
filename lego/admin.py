@@ -14,6 +14,7 @@ admin_site = LegoAdminSite(name="lego_admin")
 
 class ShapeAdmin(admin.ModelAdmin):
     list_display = ["lego_id", "name", "num_code"]
+    search_fields = ["lego_id", "name"]
     readonly_fields = ["num_code"]
 
 
@@ -22,6 +23,7 @@ admin_site.register(Shape, ShapeAdmin)
 
 class ColorAdmin(admin.ModelAdmin):
     list_display = ["name"]
+    search_fields = ["name"]
 
 
 admin_site.register(Color, ColorAdmin)

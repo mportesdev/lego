@@ -37,15 +37,9 @@ admin_site.register(Image, ImageAdmin)
 
 
 class LegoPartAdmin(admin.ModelAdmin):
-    list_display = ["short_name", "shape", "color", "image"]
+    list_display = ["shape", "color", "image"]
     list_filter = ["color"]
     search_fields = ["shape__lego_id", "shape__name", "color__name"]
-
-    def short_name(self, obj):
-        return (
-            f"{obj.shape.lego_id} {obj.color}"
-            if obj.color else f"{obj.shape.lego_id}"
-        )
 
 
 admin_site.register(LegoPart, LegoPartAdmin)
@@ -60,15 +54,8 @@ admin_site.register(LegoSet, LegoSetAdmin)
 
 
 class SetItemAdmin(admin.ModelAdmin):
-    list_display = ["short_name", "set", "part", "quantity"]
+    list_display = ["set", "part", "quantity"]
     list_select_related = ["set", "part__shape", "part__color"]
-
-    def short_name(self, obj):
-        part_str = (
-            f"{obj.part.shape.lego_id} {obj.part.color}"
-            if obj.part.color else f"{obj.part.shape.lego_id}"
-        )
-        return f"{obj.quantity}x {part_str} in {obj.set.lego_id}"
 
 
 admin_site.register(SetItem, SetItemAdmin)

@@ -3,6 +3,7 @@ import logging
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
+from django.db import models
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic import DetailView, ListView
@@ -40,7 +41,7 @@ class SetDetail(DetailView):
         context = super().get_context_data(**kwargs)
         ordered_items = (
             self.object.setitem_set
-            .prefetch_related("part__shape", "part__color", "part__image")
+            .fetch_mode(models.FETCH_PEERS)
             .order_by("part__shape__num_code")
         )
         return context | {
@@ -53,11 +54,7 @@ class PartDetail(DetailView):
     template_name = "lego/part_detail.html"
 
     def get_queryset(self):
-        return (
-            LegoPart.objects
-            .select_related("shape", "color", "image")
-            .prefetch_related("setitem_set__set__image")
-        )
+        return LegoPart.objects.select_related("shape", "color", "image")
 
     def get_object(self, queryset=None):
         return get_object_or_404(
@@ -70,7 +67,7 @@ class PartDetail(DetailView):
         context = super().get_context_data(**kwargs)
         return context | {
             "title": f"Lego Part {self.object}",
-            "items": self.object.setitem_set.all(),
+            "items": self.object.setitem_set.fetch_mode(models.FETCH_PEERS),
         }
 
 

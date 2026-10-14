@@ -13,43 +13,40 @@ admin_site = LegoAdminSite(name="lego_admin")
 
 
 class ShapeAdmin(admin.ModelAdmin):
-    list_display = ["lego_id", "name"]
+    list_display = ["id", "lego_id", "name", "num_code"]
+    search_fields = ["lego_id", "name"]
+    readonly_fields = ["num_code"]
 
 
 admin_site.register(Shape, ShapeAdmin)
 
 
 class ColorAdmin(admin.ModelAdmin):
-    list_display = ["name"]
+    list_display = ["id", "name"]
+    search_fields = ["name"]
 
 
 admin_site.register(Color, ColorAdmin)
 
 
 class ImageAdmin(admin.ModelAdmin):
-    list_display = ["path", "origin_url"]
+    list_display = ["id", "path", "origin_url"]
 
 
 admin_site.register(Image, ImageAdmin)
 
 
 class LegoPartAdmin(admin.ModelAdmin):
-    list_display = ["short_name", "shape", "color", "image"]
+    list_display = ["id", "shape", "color", "image"]
     list_filter = ["color"]
     search_fields = ["shape__lego_id", "shape__name", "color__name"]
-
-    def short_name(self, obj):
-        return (
-            f"{obj.shape.lego_id} {obj.color}"
-            if obj.color else f"{obj.shape.lego_id}"
-        )
 
 
 admin_site.register(LegoPart, LegoPartAdmin)
 
 
 class LegoSetAdmin(admin.ModelAdmin):
-    list_display = ["lego_id", "name", "image"]
+    list_display = ["id", "lego_id", "name", "image"]
     search_fields = ["lego_id", "name"]
 
 
@@ -57,14 +54,8 @@ admin_site.register(LegoSet, LegoSetAdmin)
 
 
 class SetItemAdmin(admin.ModelAdmin):
-    list_display = ["short_name", "set", "part", "quantity"]
-
-    def short_name(self, obj):
-        part_str = (
-            f"{obj.part.shape.lego_id} {obj.part.color}"
-            if obj.part.color else f"{obj.part.shape.lego_id}"
-        )
-        return f"{obj.quantity}x {part_str} in {obj.set.lego_id}"
+    list_display = ["id", "set", "part", "quantity"]
+    list_select_related = ["set", "part__shape", "part__color"]
 
 
 admin_site.register(SetItem, SetItemAdmin)

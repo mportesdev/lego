@@ -209,8 +209,8 @@ MAILERS = {
             "host": os.getenv("LEGO_EMAIL_HOST"),
             "use_tls": True,
             "port": 587,
-            "username": os.getenv("LEGO_EMAIL_HOST_USER"),
-            "password": os.getenv("LEGO_EMAIL_HOST_PASSWORD"),
+            "username": os.getenv("LEGO_EMAIL_USERNAME"),
+            "password": os.getenv("LEGO_EMAIL_PASSWORD"),
         },
     },
 }

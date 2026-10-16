@@ -3,7 +3,7 @@ import logging
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
-from django.db.models import Q
+from django.db import models
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic import DetailView, ListView
 
@@ -40,7 +40,7 @@ class SetDetail(DetailView):
         context = super().get_context_data(**kwargs)
         ordered_items = (
             self.object.setitem_set
-            .prefetch_related("part__shape", "part__color", "part__image")
+            .fetch_mode(models.FETCH_PEERS)
             .order_by("part__shape__num_code")
         )
         return context | {
@@ -53,11 +53,7 @@ class PartDetail(DetailView):
     template_name = "lego/part_detail.html"
 
     def get_queryset(self):
-        return (
-            LegoPart.objects
-            .select_related("shape", "color", "image")
-            .prefetch_related("setitem_set__set__image")
-        )
+        return LegoPart.objects.select_related("shape", "color", "image")
 
     def get_object(self, queryset=None):
         return get_object_or_404(
@@ -70,7 +66,7 @@ class PartDetail(DetailView):
         context = super().get_context_data(**kwargs)
         return context | {
             "title": f"Lego Part {self.object}",
-            "items": self.object.setitem_set.all(),
+            "items": self.object.setitem_set.fetch_mode(models.FETCH_PEERS),
         }
 
 
@@ -86,11 +82,11 @@ def search(request):
     search_string = form.cleaned_data["q"]
     search_mode = form.cleaned_data["mode"]
 
-    name_q = Q(name__icontains=search_string)
-    lego_id_q = Q(lego_id__startswith=search_string)
-    shape_name_q = Q(shape__name__icontains=search_string)
-    shape_num_code_q = Q(shape__num_code__exact=search_string)
-    color_name_q = Q(color__name__icontains=search_string)
+    name_q = models.Q(name__icontains=search_string)
+    lego_id_q = models.Q(lego_id__startswith=search_string)
+    shape_name_q = models.Q(shape__name__icontains=search_string)
+    shape_num_code_q = models.Q(shape__num_code__exact=search_string)
+    color_name_q = models.Q(color__name__icontains=search_string)
 
     if search_mode == "name":
         sets = LegoSet.objects.select_related("image").filter(name_q)

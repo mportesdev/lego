@@ -13,8 +13,8 @@ class TestNumberOfQueries(TestCase):
 
     def test_set_detail(self):
         """
-        1. select LegoSet + related many-to-one (select_related)
-        2. select SetItem (many-to-many) rows related to 1. (prefetch_related)
+        1. select LegoSet + related Image rows (select_related)
+        2. select SetItem rows related to 1. (ordered by part.shape.num_code)
         3. select LegoPart rows related to 2.
         4. select Shape rows related to 3.
         5. select Color rows related to 3.
@@ -25,8 +25,8 @@ class TestNumberOfQueries(TestCase):
 
     def test_part_detail(self):
         """
-        1. select LegoPart + related many-to-one (select_related)
-        2. select SetItem (many-to-many) rows related to 1. (prefetch_related)
+        1. select LegoPart + related many-to-one rows (select_related)
+        2. select SetItem rows related to 1.
         3. select LegoSet rows related to 2.
         4. select Image rows related to 3.
         """

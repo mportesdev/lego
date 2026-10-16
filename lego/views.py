@@ -4,7 +4,6 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
 from django.db import models
-from django.db.models import Q
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic import DetailView, ListView
 
@@ -83,11 +82,11 @@ def search(request):
     search_string = form.cleaned_data["q"]
     search_mode = form.cleaned_data["mode"]
 
-    name_q = Q(name__icontains=search_string)
-    lego_id_q = Q(lego_id__startswith=search_string)
-    shape_name_q = Q(shape__name__icontains=search_string)
-    shape_num_code_q = Q(shape__num_code__exact=search_string)
-    color_name_q = Q(color__name__icontains=search_string)
+    name_q = models.Q(name__icontains=search_string)
+    lego_id_q = models.Q(lego_id__startswith=search_string)
+    shape_name_q = models.Q(shape__name__icontains=search_string)
+    shape_num_code_q = models.Q(shape__num_code__exact=search_string)
+    color_name_q = models.Q(color__name__icontains=search_string)
 
     if search_mode == "name":
         sets = LegoSet.objects.select_related("image").filter(name_q)

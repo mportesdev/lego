@@ -77,3 +77,14 @@ def get_set_parts(set_lego_id):
             }
             logger.debug(entry)
             yield entry
+
+
+def get_set_data(set_lego_id):
+    try:
+        return {
+            "info": get_set_info(set_lego_id),
+            "parts": get_set_parts(set_lego_id),
+        }
+    except OSError as err:
+        logger.error(f"Error calling external API: {err}")
+        raise

@@ -7,7 +7,7 @@ from django.db import models
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic import DetailView, ListView
 
-from .api_calls import get_set_info
+from .api_calls import get_set_data
 from .forms import SearchForm, AddSetForm
 from .models import LegoPart, LegoSet
 from .orm_utils import get_set, save_set_with_parts
@@ -158,15 +158,15 @@ def add_set(request):
         return redirect("add_set")
 
     try:
-        set_info = get_set_info(set_lego_id)
-    except OSError as err:
-        logger.error(f"Error calling external API: {err}")
+        set_data = get_set_data(set_lego_id)
+    except OSError:
         messages.error(
             request, f"Data not found: {set_lego_id}", extra_tags="is-danger"
         )
         return redirect("add_set")
 
     set_, _ = get_set(set_lego_id)
+    set_info = set_data["info"]
     save_set_with_parts(set_, set_info)
     messages.success(
         request, f"Added to queue: {set_}", extra_tags="is-success"

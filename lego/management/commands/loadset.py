@@ -1,6 +1,6 @@
 from django.core.management.base import LabelCommand
 
-from lego.api_calls import get_set_info
+from lego.api_calls import get_set_data
 from lego.orm_utils import get_set, save_set_with_parts
 
 
@@ -12,7 +12,8 @@ class Command(LabelCommand):
     label = "lego_id"
 
     def handle_label(self, lego_id, **options):
-        set_info = get_set_info(lego_id)
+        set_data = get_set_data(lego_id)
+        set_info = set_data["info"]
 
         set_, created = get_set(lego_id)
         if not created:

@@ -12,7 +12,11 @@ class Command(LabelCommand):
     label = "lego_id"
 
     def handle_label(self, lego_id, **options):
-        set_data = get_set_data(lego_id)
+        try:
+            set_data = get_set_data(lego_id)
+        except OSError:
+            self.stdout.write(f"Data not found: {lego_id}")
+            return
 
         set_, created = get_set(lego_id)
         if not created:

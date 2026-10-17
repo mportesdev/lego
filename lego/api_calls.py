@@ -83,7 +83,7 @@ def get_set_data(set_lego_id):
         try:
             return {
                 "info": get_set_info(set_lego_id, session),
-                "parts": get_set_parts(set_lego_id, session),
+                "parts": list(get_set_parts(set_lego_id, session)),
             }
         except OSError as err:
             logger.error(f"Error calling external API: {err}")

@@ -20,8 +20,8 @@ headers = {"Accept": "application/json"}
 logger = logging.getLogger(__name__)
 
 
-def get_set_info(set_lego_id):
-    data = _get_response(f"{API_URL}/lego/sets/{set_lego_id}/")
+def get_set_info(set_lego_id, session):
+    data = _get_response(f"{API_URL}/lego/sets/{set_lego_id}/", session)
     return {
         "name": data["name"],
         "image_url": data["set_img_url"],
@@ -50,41 +50,41 @@ def _color_name_or_none(color_name):
     return color_name
 
 
-def get_set_parts(set_lego_id):
-    with requests.Session() as session:
-        for item in _get_paginated_data(
-            f"{API_URL}/lego/sets/{set_lego_id}/minifigs/", session
-        ):
-            entry = {
-                "lego_id": item["set_num"],
-                "name": item["set_name"],
-                "image_url": item["set_img_url"],
-                "quantity": item["quantity"],
-            }
-            logger.debug(entry)
-            yield entry
+def get_set_parts(set_lego_id, session):
+    for item in _get_paginated_data(
+        f"{API_URL}/lego/sets/{set_lego_id}/minifigs/", session
+    ):
+        entry = {
+            "lego_id": item["set_num"],
+            "name": item["set_name"],
+            "image_url": item["set_img_url"],
+            "quantity": item["quantity"],
+        }
+        logger.debug(entry)
+        yield entry
 
-        for item in _get_paginated_data(
-            f"{API_URL}/lego/sets/{set_lego_id}/parts/", session
-        ):
-            entry = {
-                "lego_id": item["part"]["part_num"],
-                "name": item["part"]["name"],
-                "color_name": _color_name_or_none(item["color"]["name"]),
-                "image_url": item["part"]["part_img_url"],
-                "quantity": item["quantity"],
-                "is_spare": item["is_spare"],
-            }
-            logger.debug(entry)
-            yield entry
+    for item in _get_paginated_data(
+        f"{API_URL}/lego/sets/{set_lego_id}/parts/", session
+    ):
+        entry = {
+            "lego_id": item["part"]["part_num"],
+            "name": item["part"]["name"],
+            "color_name": _color_name_or_none(item["color"]["name"]),
+            "image_url": item["part"]["part_img_url"],
+            "quantity": item["quantity"],
+            "is_spare": item["is_spare"],
+        }
+        logger.debug(entry)
+        yield entry
 
 
 def get_set_data(set_lego_id):
-    try:
-        return {
-            "info": get_set_info(set_lego_id),
-            "parts": get_set_parts(set_lego_id),
-        }
-    except OSError as err:
-        logger.error(f"Error calling external API: {err}")
-        raise
+    with requests.Session() as session:
+        try:
+            return {
+                "info": get_set_info(set_lego_id, session),
+                "parts": get_set_parts(set_lego_id, session),
+            }
+        except OSError as err:
+            logger.error(f"Error calling external API: {err}")
+            raise

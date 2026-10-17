@@ -248,22 +248,22 @@ _API_DATA = {
 }
 
 
-def _info_stub(set_lego_id):
+def _info_stub(set_lego_id, _):
     if set_lego_id in _API_DATA:
         return _API_DATA[set_lego_id]["info"]
     raise HTTPError("404 Not Found")
 
 
 def get_set_info_mock():
-    return patch("lego.views.get_set_info", side_effect=_info_stub)
+    return patch("lego.api_calls.get_set_info", side_effect=_info_stub)
 
 
-def _parts_stub(set_lego_id):
+def _parts_stub(set_lego_id, _):
     yield from _API_DATA[set_lego_id]["parts"]
 
 
 def get_set_parts_mock():
-    return patch("lego.orm_utils.get_set_parts", side_effect=_parts_stub)
+    return patch("lego.api_calls.get_set_parts", side_effect=_parts_stub)
 
 
 def _generate_image(pk, size, font):

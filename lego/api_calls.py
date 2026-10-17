@@ -20,7 +20,7 @@ headers = {"Accept": "application/json"}
 logger = logging.getLogger(__name__)
 
 
-def get_set_info(set_lego_id, session):
+def _get_set_info(set_lego_id, session):
     data = _get_response(f"{API_URL}/lego/sets/{set_lego_id}/", session)
     return {
         "name": data["name"],
@@ -50,7 +50,7 @@ def _color_name_or_none(color_name):
     return color_name
 
 
-def get_set_parts(set_lego_id, session):
+def _get_set_parts(set_lego_id, session):
     for item in _get_paginated_data(
         f"{API_URL}/lego/sets/{set_lego_id}/minifigs/", session
     ):
@@ -82,8 +82,8 @@ def get_set_data(set_lego_id):
     with requests.Session() as session:
         try:
             return {
-                "info": get_set_info(set_lego_id, session),
-                "parts": list(get_set_parts(set_lego_id, session)),
+                "info": _get_set_info(set_lego_id, session),
+                "parts": list(_get_set_parts(set_lego_id, session)),
             }
         except OSError as err:
             logger.error(f"Error calling external API: {err}")

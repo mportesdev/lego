@@ -255,7 +255,7 @@ def _info_stub(set_lego_id, _):
 
 
 def get_set_info_mock():
-    return patch("lego.api_calls.get_set_info", side_effect=_info_stub)
+    return patch("lego.api_calls._get_set_info", side_effect=_info_stub)
 
 
 def _parts_stub(set_lego_id, _):
@@ -263,7 +263,7 @@ def _parts_stub(set_lego_id, _):
 
 
 def get_set_parts_mock():
-    return patch("lego.api_calls.get_set_parts", side_effect=_parts_stub)
+    return patch("lego.api_calls._get_set_parts", side_effect=_parts_stub)
 
 
 def _generate_image(pk, size, font):

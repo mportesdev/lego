@@ -24,4 +24,4 @@ class Command(LabelCommand):
                 self.stdout.write(f"Set image URL changed: {set_info["image_url"]}")
             set_.parts.clear()
 
-        save_set_with_parts(set_, set_info)
+        save_set_with_parts(set_, set_data)

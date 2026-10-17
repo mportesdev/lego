@@ -166,8 +166,7 @@ def add_set(request):
         return redirect("add_set")
 
     set_, _ = get_set(set_lego_id)
-    set_info = set_data["info"]
-    save_set_with_parts(set_, set_info)
+    save_set_with_parts(set_, set_data)
     messages.success(
         request, f"Added to queue: {set_}", extra_tags="is-success"
     )

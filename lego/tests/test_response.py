@@ -390,8 +390,10 @@ class TestAddSet(TestCase, OrderedPartsMixin):
             response = self.client.post(
                 "/lego/set/add/", data={"set_lego_id": "2001-1"}, follow=True
             )
-            mock_1.assert_called_once_with("2001-1")
-            mock_2.assert_called_once_with("2001-1")
+            mock_1.assert_called_once()
+            self.assertEqual(mock_1.call_args.args[0], "2001-1")
+            mock_2.assert_called_once()
+            self.assertEqual(mock_2.call_args.args[0], "2001-1")
 
         self.assertEqual(response.status_code, 200)
         self.assertRedirects(response, "/lego/set/add/")
@@ -432,8 +434,10 @@ class TestAddSet(TestCase, OrderedPartsMixin):
             response = self.client.post(
                 "/lego/set/add/", data={"set_lego_id": "2001"}, follow=True
             )
-            mock_1.assert_called_once_with("2001-1")
-            mock_2.assert_called_once_with("2001-1")
+            mock_1.assert_called_once()
+            self.assertEqual(mock_1.call_args.args[0], "2001-1")
+            mock_2.assert_called_once()
+            self.assertEqual(mock_2.call_args.args[0], "2001-1")
 
         self.assertEqual(response.status_code, 200)
         self.assertRedirects(response, "/lego/set/add/")
@@ -471,7 +475,8 @@ class TestAddSet(TestCase, OrderedPartsMixin):
             response = self.client.post(
                 "/lego/set/add/", data={"set_lego_id": "999-1"}, follow=True
             )
-            mock_1.assert_called_once_with("999-1")
+            mock_1.assert_called_once()
+            self.assertEqual(mock_1.call_args.args[0], "999-1")
             mock_2.assert_not_called()
 
         self.assertEqual(response.status_code, 200)

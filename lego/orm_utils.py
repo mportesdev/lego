@@ -1,6 +1,5 @@
 import logging
 
-from .api_calls import get_set_parts
 from .images import store_set_image, store_part_image
 from .models import Shape, Color, Image, LegoPart, LegoSet
 
@@ -16,18 +15,18 @@ def get_set(lego_id):
     return set_, created
 
 
-def save_set_with_parts(set_, set_info):
-    image_url = set_info["image_url"]
+def save_set_with_parts(set_, set_data):
+    image_url = set_data["info"]["image_url"]
     image_outdated = image_url and (set_.image is None or set_.image.origin_url != image_url)
     if image_outdated:
         set_.image = _get_image(image_url)
 
-    set_.name = set_info["name"]
+    set_.name = set_data["info"]["name"]
     set_.save()
     if image_outdated:
         store_set_image.enqueue(pk=set_.pk)
 
-    for item in get_set_parts(set_.lego_id):
+    for item in set_data["parts"]:
         if item.get("is_spare"):
             logger.info(f"Skipping spare part: {item["name"]}, {item.get("color_name")}")
             continue

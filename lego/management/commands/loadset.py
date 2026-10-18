@@ -1,6 +1,6 @@
 from django.core.management.base import LabelCommand
 
-from lego.api_calls import get_set_info
+from lego.api_calls import get_set_data
 from lego.orm_utils import get_set, save_set_with_parts
 
 
@@ -12,15 +12,21 @@ class Command(LabelCommand):
     label = "lego_id"
 
     def handle_label(self, lego_id, **options):
-        set_info = get_set_info(lego_id)
+        try:
+            set_data = get_set_data(lego_id)
+        except OSError:
+            self.stdout.write(f"Data not found: {lego_id}")
+            return
 
         set_, created = get_set(lego_id)
         if not created:
             self.stdout.write(f"Updating existing set:\n{set_!r}")
-            if set_.name != set_info["name"]:
-                self.stdout.write(f"Set name changed: {set_info["name"]}")
-            if set_.image.origin_url != set_info["image_url"]:
-                self.stdout.write(f"Set image URL changed: {set_info["image_url"]}")
+            new_name = set_data["info"]["name"]
+            if set_.name != new_name:
+                self.stdout.write(f"Set name changed: {new_name}")
+            new_url = set_data["info"]["image_url"]
+            if set_.image.origin_url != new_url:
+                self.stdout.write(f"Set image URL changed: {new_url}")
             set_.parts.clear()
 
-        save_set_with_parts(set_, set_info)
+        save_set_with_parts(set_, set_data)

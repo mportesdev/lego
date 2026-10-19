@@ -36,10 +36,11 @@ def _scale_down(img):
 
 
 def _save_to_media(image, rel_path):
-    logger.info(f"Saving to media: {rel_path}")
     stream = io.BytesIO()
     image.save(stream, format=DEFAULT_IMAGE_FORMAT)
-    storages["default"].save(rel_path, stream)
+    actual_path = storages["default"].save(rel_path, stream)
+    logger.info(f"Saved to media: {actual_path}")
+    return actual_path
 
 
 def _store_image(model, pk, subdir):
@@ -61,7 +62,7 @@ def _store_image(model, pk, subdir):
         image = _scale_down(image)
 
     rel_path = f"lego/img/{subdir}/{pk}.{DEFAULT_IMAGE_FORMAT}"
-    _save_to_media(image, rel_path)
+    rel_path = _save_to_media(image, rel_path)
     obj_image.path = rel_path
     obj_image.save()
 

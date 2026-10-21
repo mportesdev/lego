@@ -131,7 +131,7 @@ class TestStoreImage(TestCase, OrderedPartsMixin):
     def test_object_without_image(self):
         pk = LegoPart.objects.filter(image__isnull=True).first().pk
         with self.assertLogs("lego.images", "INFO") as log_obj:
-            _store_image(LegoPart, pk, "parts")
+            _store_image(LegoPart, pk)
 
         log_output = "\n".join(log_obj.output)
         self.assertParts(log_output, "INFO", "No image: LegoPart")
@@ -141,7 +141,7 @@ class TestStoreImage(TestCase, OrderedPartsMixin):
             image__isnull=False, image__origin_url__isnull=True
         ).first().pk
         with self.assertLogs("lego.images", "INFO") as log_obj:
-            _store_image(LegoPart, pk, "parts")
+            _store_image(LegoPart, pk)
 
         log_output = "\n".join(log_obj.output)
         self.assertParts(log_output, "INFO", "No image URL: Image")
@@ -152,7 +152,7 @@ class TestStoreImage(TestCase, OrderedPartsMixin):
             patch("lego.images._download_image", side_effect=OSError),
             self.assertLogs("lego.images", "ERROR") as log_obj,
         ):
-            _store_image(LegoPart, pk, "parts")
+            _store_image(LegoPart, pk)
 
         log_output = "\n".join(log_obj.output)
         self.assertParts(log_output, "ERROR", "reading image URL for LegoPart")

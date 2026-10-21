@@ -61,7 +61,7 @@ class TestStoreImage(TestCase):
     def test_skips_object_without_image(self):
         pk = LegoPart.objects.filter(image__isnull=True).first().pk
         with patch("lego.images._download_image") as mock:
-            _store_image(LegoPart, pk, "parts")
+            _store_image(LegoPart, pk)
 
         mock.assert_not_called()
 
@@ -70,7 +70,7 @@ class TestStoreImage(TestCase):
             image__isnull=False, image__origin_url__isnull=True
         ).first().pk
         with patch("lego.images._download_image") as mock:
-            _store_image(LegoPart, pk, "parts")
+            _store_image(LegoPart, pk)
 
         mock.assert_not_called()
 
@@ -80,7 +80,7 @@ class TestStoreImage(TestCase):
             patch("lego.images._download_image", side_effect=OSError) as mock_1,
             patch("lego.images._scale_down") as mock_2,
         ):
-            _store_image(LegoPart, pk, "parts")
+            _store_image(LegoPart, pk)
 
         mock_1.assert_called()
         mock_2.assert_not_called()
@@ -91,6 +91,6 @@ class TestStoreImage(TestCase):
             "lego.images._download_image",
             return_value=new("RGBA", (192, 192), color="#000"),
         ):
-            _store_image(LegoPart, part.pk, "parts")
+            _store_image(LegoPart, part.pk)
 
-        self.assertTrue((self.subdir / "img/parts/00009999.webp").is_file())
+        self.assertTrue((self.subdir / "img/00009999.webp").is_file())

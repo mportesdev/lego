@@ -43,7 +43,7 @@ def _save_to_media(image, rel_path):
     return actual_path
 
 
-def _store_image(model, pk, subdir):
+def _store_image(model, pk):
     obj = model.objects.get(pk=pk)
     obj_image = obj.image
     if obj_image is None:
@@ -61,7 +61,7 @@ def _store_image(model, pk, subdir):
     else:
         image = _scale_down(image)
 
-    rel_path = f"lego/img/{subdir}/{obj_image.pk:08d}.{DEFAULT_IMAGE_FORMAT}"
+    rel_path = f"lego/img/{obj_image.pk:08d}.{DEFAULT_IMAGE_FORMAT}"
     rel_path = _save_to_media(image, rel_path)
     obj_image.path = rel_path
     obj_image.save()
@@ -69,9 +69,9 @@ def _store_image(model, pk, subdir):
 
 @task
 def store_set_image(pk):
-    _store_image(LegoSet, pk, "sets")
+    _store_image(LegoSet, pk)
 
 
 @task
 def store_part_image(pk):
-    _store_image(LegoPart, pk, "parts")
+    _store_image(LegoPart, pk)

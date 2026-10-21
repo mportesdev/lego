@@ -280,15 +280,15 @@ def prepare_assets():
 
     # generate images
     font = ImageFont.load_default(size=28)
-    for pk, size, subdir in (
-        (1, 384, "sets"),
-        (3, 192, "parts"),
-        (4, 192, "parts"),
-        (5, 192, "parts"),
+    for pk, size in (
+        (1, 384),
+        (3, 192),
+        (4, 192),
+        (5, 192),
     ):
         image = _generate_image(pk, size, font)
         default_storage.save(
-            f"lego/img/{subdir}/test{pk:04d}.{DEFAULT_IMAGE_FORMAT}",
+            f"lego/img/test{pk:04d}.{DEFAULT_IMAGE_FORMAT}",
             image,
         )
 

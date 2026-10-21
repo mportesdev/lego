@@ -46,8 +46,15 @@ class TestSaveToMedia(TestCase):
 @test_settings
 class TestStoreImage(TestCase):
     @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.subdir = settings.MEDIA_ROOT / "lego"
+        cls.subdir.mkdir()
+        cls.addClassCleanup(shutil.rmtree, cls.subdir)
+
+    @classmethod
     def setUpTestData(cls):
-        LegoPartFactory.create()
+        LegoPartFactory.create(pk=8888, image__pk=9999)
         LegoPartFactory.create(image__origin_url=None)
         LegoPartFactory.create(image=None)
 
@@ -77,3 +84,13 @@ class TestStoreImage(TestCase):
 
         mock_1.assert_called()
         mock_2.assert_not_called()
+
+    def test_image_saved(self):
+        part = LegoPart.objects.get(pk=8888)
+        with patch(
+            "lego.images._download_image",
+            return_value=new("RGBA", (192, 192), color="#000"),
+        ):
+            _store_image(LegoPart, part.pk, "parts")
+
+        self.assertTrue((self.subdir / "img/parts/00009999.webp").is_file())

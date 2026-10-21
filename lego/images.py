@@ -61,7 +61,7 @@ def _store_image(model, pk, subdir):
     else:
         image = _scale_down(image)
 
-    rel_path = f"lego/img/{subdir}/{pk}.{DEFAULT_IMAGE_FORMAT}"
+    rel_path = f"lego/img/{subdir}/{obj_image.pk:08d}.{DEFAULT_IMAGE_FORMAT}"
     rel_path = _save_to_media(image, rel_path)
     obj_image.path = rel_path
     obj_image.save()

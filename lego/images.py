@@ -6,7 +6,7 @@ from django.core.files.storage import storages
 from django.tasks import task
 from PIL import Image
 
-from .models import LegoPart, LegoSet
+from .models import Image as LegoImage
 
 DEFAULT_IMAGE_FORMAT = "webp"
 MAX_WIDTH = 384
@@ -43,20 +43,12 @@ def _save_to_media(image, rel_path):
     return actual_path
 
 
-def _store_image(model, pk):
-    obj = model.objects.get(pk=pk)
-    obj_image = obj.image
-    if obj_image is None:
-        logger.info(f"No image: {obj!r}")
-        return
-    if obj_image.origin_url is None:
-        logger.info(f"No image URL: {obj_image!r}")
-        return
-
+def _store_image(pk):
+    obj_image = LegoImage.objects.get(pk=pk)
     try:
         image = _download_image(obj_image.origin_url)
     except OSError as err:    # e.g. requests.HTTPError, PIL.UnidentifiedImageError
-        logger.error(f"{err!r} reading image URL for {obj!r}")
+        logger.error(f"{err!r} when reading image URL {obj_image.origin_url!r}")
         return
     else:
         image = _scale_down(image)
@@ -68,10 +60,5 @@ def _store_image(model, pk):
 
 
 @task
-def store_set_image(pk):
-    _store_image(LegoSet, pk)
-
-
-@task
-def store_part_image(pk):
-    _store_image(LegoPart, pk)
+def store_image(pk):
+    _store_image(pk)

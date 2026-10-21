@@ -1,6 +1,6 @@
 import logging
 
-from .images import store_set_image, store_part_image
+from .images import store_image
 from .models import Shape, Color, Image, LegoPart, LegoSet
 
 logger = logging.getLogger(__name__)
@@ -20,11 +20,10 @@ def save_set_with_parts(set_, set_data):
     image_outdated = image_url and (set_.image is None or set_.image.origin_url != image_url)
     if image_outdated:
         set_.image = _get_image(image_url)
+        store_image.enqueue(set_.image.pk)
 
     set_.name = set_data["info"]["name"]
     set_.save()
-    if image_outdated:
-        store_set_image.enqueue(pk=set_.pk)
 
     for item in set_data["parts"]:
         if item.get("is_spare"):
@@ -69,13 +68,14 @@ def _get_part(shape, color, image_url):
             part.image = _get_image(image_url)
             part.save()
             logger.info(f"Updated image: {part!r}")
-            store_part_image.enqueue(pk=part.pk)
+            store_image.enqueue(part.image.pk)
     except LegoPart.DoesNotExist:
         part = LegoPart.objects.create(
             shape=shape, color=color, image=_get_image(image_url)
         )
         logger.info(f"Created: {part!r}")
-        store_part_image.enqueue(pk=part.pk)
+        if part.image:
+            store_image.enqueue(part.image.pk)
     return part
 
 

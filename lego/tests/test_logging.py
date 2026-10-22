@@ -3,10 +3,9 @@ from unittest.mock import patch
 from django.test import TestCase, tag
 
 from lego.images import _store_image
-from lego.models import LegoPart
 
 from . import test_settings, OrderedPartsMixin, get_set_info_mock, get_set_parts_mock
-from .factories import LegoPartFactory
+from .factories import ImageFactory
 
 
 @tag("login")
@@ -124,38 +123,17 @@ class TestAddSet(TestCase, OrderedPartsMixin):
 class TestStoreImage(TestCase, OrderedPartsMixin):
     @classmethod
     def setUpTestData(cls):
-        LegoPartFactory.create()
-        LegoPartFactory.create(image__origin_url=None)
-        LegoPartFactory.create(image=None)
-
-    def test_object_without_image(self):
-        pk = LegoPart.objects.filter(image__isnull=True).first().pk
-        with self.assertLogs("lego.images", "INFO") as log_obj:
-            _store_image(LegoPart, pk, "parts")
-
-        log_output = "\n".join(log_obj.output)
-        self.assertParts(log_output, "INFO", "No image: LegoPart")
-
-    def test_object_without_image_url(self):
-        pk = LegoPart.objects.filter(
-            image__isnull=False, image__origin_url__isnull=True
-        ).first().pk
-        with self.assertLogs("lego.images", "INFO") as log_obj:
-            _store_image(LegoPart, pk, "parts")
-
-        log_output = "\n".join(log_obj.output)
-        self.assertParts(log_output, "INFO", "No image URL: Image")
+        ImageFactory.create(pk=1111)
 
     def test_invalid_image_url(self):
-        pk = LegoPart.objects.filter(image__origin_url__isnull=False).first().pk
         with (
             patch("lego.images._download_image", side_effect=OSError),
             self.assertLogs("lego.images", "ERROR") as log_obj,
         ):
-            _store_image(LegoPart, pk, "parts")
+            _store_image(1111)
 
         log_output = "\n".join(log_obj.output)
-        self.assertParts(log_output, "ERROR", "reading image URL for LegoPart")
+        self.assertParts(log_output, "ERROR", "when reading image URL")
 
 
 @tag("login")

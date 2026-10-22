@@ -4,9 +4,9 @@ import logging
 import requests
 from django.core.files.storage import storages
 from django.tasks import task
-from PIL import Image
+from PIL.Image import open as open_image
 
-from .models import LegoPart, LegoSet
+from .models import Image
 
 DEFAULT_IMAGE_FORMAT = "webp"
 MAX_WIDTH = 384
@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 def _download_image(url):
     response = requests.get(url, headers=headers, timeout=5)
     response.raise_for_status()
-    return Image.open(io.BytesIO(response.content))
+    return open_image(io.BytesIO(response.content))
 
 
 def _scale_down(img):
@@ -36,41 +36,29 @@ def _scale_down(img):
 
 
 def _save_to_media(image, rel_path):
-    logger.info(f"Saving to media: {rel_path}")
     stream = io.BytesIO()
     image.save(stream, format=DEFAULT_IMAGE_FORMAT)
-    storages["default"].save(rel_path, stream)
+    actual_path = storages["default"].save(rel_path, stream)
+    logger.info(f"Saved to media: {actual_path}")
+    return actual_path
 
 
-def _store_image(model, pk, subdir):
-    obj = model.objects.get(pk=pk)
-    obj_image = obj.image
-    if obj_image is None:
-        logger.info(f"No image: {obj!r}")
-        return
-    if obj_image.origin_url is None:
-        logger.info(f"No image URL: {obj_image!r}")
-        return
-
+def _store_image(pk):
+    image = Image.objects.get(pk=pk)
     try:
-        image = _download_image(obj_image.origin_url)
+        pil_image = _download_image(image.origin_url)
     except OSError as err:    # e.g. requests.HTTPError, PIL.UnidentifiedImageError
-        logger.error(f"{err!r} reading image URL for {obj!r}")
+        logger.error(f"{err!r} when reading image URL {image.origin_url!r}")
         return
     else:
-        image = _scale_down(image)
+        pil_image = _scale_down(pil_image)
 
-    rel_path = f"lego/img/{subdir}/{pk}.{DEFAULT_IMAGE_FORMAT}"
-    _save_to_media(image, rel_path)
-    obj_image.path = rel_path
-    obj_image.save()
-
-
-@task
-def store_set_image(pk):
-    _store_image(LegoSet, pk, "sets")
+    rel_path = f"lego/img/{image.pk:08d}.{DEFAULT_IMAGE_FORMAT}"
+    rel_path = _save_to_media(pil_image, rel_path)
+    image.path = rel_path
+    image.save()
 
 
 @task
-def store_part_image(pk):
-    _store_image(LegoPart, pk, "parts")
+def store_image(pk):
+    _store_image(pk)

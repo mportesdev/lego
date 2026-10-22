@@ -293,3 +293,7 @@ def setup_media_subdir():
         )
 
     return Path(default_storage.location) / "lego"
+
+
+def dummy_image():
+    return Image.new("RGBA", (192, 192), color="#000")

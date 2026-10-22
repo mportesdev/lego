@@ -2,11 +2,11 @@ import shutil
 from unittest.mock import patch, create_autospec
 
 from django.test import TestCase
-from PIL.Image import Image, new as new_image
+from PIL.Image import Image
 
 from lego.images import _scale_down, _save_to_media, _store_image
 
-from . import test_settings, setup_media_subdir
+from . import test_settings, setup_media_subdir, dummy_image
 from .factories import ImageFactory
 
 
@@ -33,7 +33,7 @@ class TestSaveToMedia(TestCase):
         self.addCleanup(shutil.rmtree, self.media_subdir)
 
     def test_image_saved_to_media(self):
-        img = new_image("RGBA", (192, 192), color="#000")
+        img = dummy_image()
         rel_path = "lego/img/test0099.webp"
         _save_to_media(img, rel_path)
 
@@ -63,10 +63,7 @@ class TestStoreImage(TestCase):
         mock_2.assert_not_called()
 
     def test_image_saved_to_media(self):
-        with patch(
-            "lego.images._download_image",
-            return_value=new_image("RGBA", (192, 192), color="#000"),
-        ):
+        with patch("lego.images._download_image", return_value=dummy_image()):
             _store_image(9999)
 
         self.assertTrue((self.media_subdir / "img/00009999.webp").is_file())

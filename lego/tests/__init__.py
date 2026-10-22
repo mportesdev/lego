@@ -275,7 +275,7 @@ def _generate_image(pk, size, font):
     return stream
 
 
-def prepare_assets():
+def setup_media_subdir():
     default_storage = storages["default"]
 
     # generate images

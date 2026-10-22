@@ -15,7 +15,7 @@ from . import (
     test_settings,
     get_set_info_mock,
     get_set_parts_mock,
-    prepare_assets,
+    setup_media_subdir,
 )
 
 
@@ -37,8 +37,8 @@ class TestBrowserUI(StaticLiveServerTestCase):
         os.environ["TMPDIR"] = cls.temp_dir = mkdtemp(dir=TESTS_DIR)
         cls.addClassCleanup(shutil.rmtree, cls.temp_dir)
 
-        media_dir = prepare_assets()
-        cls.addClassCleanup(shutil.rmtree, media_dir)
+        media_subdir = setup_media_subdir()
+        cls.addClassCleanup(shutil.rmtree, media_subdir)
 
         options = Options()
         if not os.getenv("LEGO_TEST_FIREFOX_GUI"):

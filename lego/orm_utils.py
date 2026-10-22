@@ -17,10 +17,10 @@ def get_set(lego_id):
 
 def save_set_with_parts(set_, set_data):
     image_url = set_data["info"]["image_url"]
-    image_outdated = image_url and (set_.image is None or set_.image.origin_url != image_url)
-    if image_outdated:
-        set_.image = _get_image(image_url)
-        store_image.enqueue(set_.image.pk)
+    if image_url and (set_.image is None or set_.image.origin_url != image_url):
+        image = _get_image(image_url)
+        set_.image = image
+        store_image.enqueue(image.pk)
 
     set_.name = set_data["info"]["name"]
     set_.save()
@@ -65,17 +65,17 @@ def _get_part(shape, color, image_url):
         part = LegoPart.objects.get(shape=shape, color=color)
         if image_url and (part.image is None or part.image.origin_url != image_url):
             logger.info(f"Outdated image: {part!r}")
-            part.image = _get_image(image_url)
+            image = _get_image(image_url)
+            part.image = image
             part.save()
             logger.info(f"Updated image: {part!r}")
-            store_image.enqueue(part.image.pk)
+            store_image.enqueue(image.pk)
     except LegoPart.DoesNotExist:
-        part = LegoPart.objects.create(
-            shape=shape, color=color, image=_get_image(image_url)
-        )
+        image = _get_image(image_url)
+        part = LegoPart.objects.create(shape=shape, color=color, image=image)
         logger.info(f"Created: {part!r}")
-        if part.image:
-            store_image.enqueue(part.image.pk)
+        if image:
+            store_image.enqueue(image.pk)
     return part
 
 

@@ -3,7 +3,7 @@ from unittest.mock import patch, create_autospec
 
 from django.conf import settings
 from django.test import TestCase
-from PIL.Image import Image, new
+from PIL.Image import Image, new as new_image
 
 from lego.images import _scale_down, _save_to_media, _store_image
 
@@ -30,16 +30,16 @@ class TestScaleDown(TestCase):
 class TestSaveToMedia(TestCase):
     def setUp(self):
         super().setUp()
-        self.subdir = settings.MEDIA_ROOT / "lego"
-        self.subdir.mkdir()
-        self.addCleanup(shutil.rmtree, self.subdir)
+        self.media_subdir = settings.MEDIA_ROOT / "lego"
+        self.media_subdir.mkdir()
+        self.addCleanup(shutil.rmtree, self.media_subdir)
 
-    def test_image_saved(self):
-        img = new("RGBA", (192, 192), color="#000")
+    def test_image_saved_to_media(self):
+        img = new_image("RGBA", (192, 192), color="#000")
         rel_path = "lego/img/test0099.webp"
         _save_to_media(img, rel_path)
 
-        self.assertTrue((self.subdir / "img" / "test0099.webp").is_file())
+        self.assertTrue((self.media_subdir / "img" / "test0099.webp").is_file())
 
 
 @test_settings
@@ -47,9 +47,9 @@ class TestStoreImage(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.subdir = settings.MEDIA_ROOT / "lego"
-        cls.subdir.mkdir()
-        cls.addClassCleanup(shutil.rmtree, cls.subdir)
+        cls.media_subdir = settings.MEDIA_ROOT / "lego"
+        cls.media_subdir.mkdir()
+        cls.addClassCleanup(shutil.rmtree, cls.media_subdir)
 
     @classmethod
     def setUpTestData(cls):
@@ -65,11 +65,11 @@ class TestStoreImage(TestCase):
         mock_1.assert_called()
         mock_2.assert_not_called()
 
-    def test_image_saved(self):
+    def test_image_saved_to_media(self):
         with patch(
             "lego.images._download_image",
-            return_value=new("RGBA", (192, 192), color="#000"),
+            return_value=new_image("RGBA", (192, 192), color="#000"),
         ):
             _store_image(9999)
 
-        self.assertTrue((self.subdir / "img/00009999.webp").is_file())
+        self.assertTrue((self.media_subdir / "img/00009999.webp").is_file())

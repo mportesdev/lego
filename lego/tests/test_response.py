@@ -1,4 +1,3 @@
-import shutil
 from operator import attrgetter
 
 from django.test import TestCase, tag
@@ -8,7 +7,6 @@ from . import (
     OrderedPartsMixin,
     get_set_info_mock,
     get_set_parts_mock,
-    prepare_assets,
 )
 from .factories import LegoPartFactory
 
@@ -318,12 +316,6 @@ class TestSearch(TestCase, OrderedPartsMixin):
 
 @test_settings
 class TestImageUrls(TestCase, OrderedPartsMixin):
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        media_dir = prepare_assets()
-        cls.addClassCleanup(shutil.rmtree, media_dir)
-
     @classmethod
     def setUpTestData(cls):
         LegoPartFactory.create(shape__lego_id="1001", color=None)

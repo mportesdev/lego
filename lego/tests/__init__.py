@@ -275,7 +275,7 @@ def _generate_image(pk, size, font):
     return stream
 
 
-def prepare_assets():
+def setup_media_subdir():
     default_storage = storages["default"]
 
     # generate images
@@ -293,3 +293,7 @@ def prepare_assets():
         )
 
     return Path(default_storage.location) / "lego"
+
+
+def dummy_image():
+    return Image.new("RGBA", (192, 192), color="#000")

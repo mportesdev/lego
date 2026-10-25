@@ -48,6 +48,6 @@ dbsh: dbhealth
 tasks: dbhealth
     python -m manage db_worker --verbosity=2
 
-reinstall:
+upgrade:
     pip install --upgrade pip
-    pip install --force-reinstall -r requirements.txt -r test-requirements.txt
+    pip install --upgrade --upgrade-strategy eager -r requirements.txt -r test-requirements.txt

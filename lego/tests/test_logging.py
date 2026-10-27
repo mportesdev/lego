@@ -120,7 +120,7 @@ class TestAddSet(TestCase, OrderedPartsMixin):
 
 
 @test_settings
-class TestStoreImage(TestCase, OrderedPartsMixin):
+class TestStoreImageForPk(TestCase, OrderedPartsMixin):
     @classmethod
     def setUpTestData(cls):
         ImageFactory.create(pk=1111)

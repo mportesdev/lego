@@ -42,7 +42,7 @@ class TestSaveToMedia(TestCase):
 
 
 @test_settings
-class TestStoreImage(TestCase):
+class TestStoreImageForPk(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()

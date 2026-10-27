@@ -17,6 +17,6 @@ class TestTasks(TransactionTestCase):
         with patch("lego.tasks.store_image_for_pk") as mock:
             call_command("db_worker", max_tasks=1)
 
-        mock.assert_called_once()
+        mock.assert_called_once_with(1)
         result.refresh()
         self.assertEqual(result.status, "SUCCESSFUL")

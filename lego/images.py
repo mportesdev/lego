@@ -51,15 +51,15 @@ def _update_image_path(pk, path):
 
 
 def store_image_for_pk(pk):
-    image = Image.objects.get(pk=pk)
+    url = Image.objects.get(pk=pk).origin_url
     try:
-        pil_image = _download_image(image.origin_url)
+        pil_image = _download_image(url)
     except OSError as err:    # e.g. requests.HTTPError, PIL.UnidentifiedImageError
-        logger.error(f"{err!r} when reading image URL {image.origin_url!r}")
+        logger.error(f"{err!r} when reading image URL {url!r}")
         return
     else:
         pil_image = _scale_down(pil_image)
 
-    rel_path = f"lego/img/{image.pk:08d}.{DEFAULT_IMAGE_FORMAT}"
+    rel_path = f"lego/img/{pk:08d}.{DEFAULT_IMAGE_FORMAT}"
     rel_path = _save_to_media(pil_image, rel_path)
     _update_image_path(pk, rel_path)

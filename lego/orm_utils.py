@@ -1,7 +1,7 @@
 import logging
 
-from .images import store_image
 from .models import Shape, Color, Image, LegoPart, LegoSet
+from .tasks import store_image
 
 logger = logging.getLogger(__name__)
 

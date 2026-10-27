@@ -14,7 +14,7 @@ class TestTasks(TransactionTestCase):
         result = store_image.enqueue(1)
         self.assertEqual(result.status, "READY")
 
-        with patch("lego.tasks._store_image") as mock:
+        with patch("lego.tasks.store_image_for_pk") as mock:
             call_command("db_worker", max_tasks=1)
 
         mock.assert_called_once()

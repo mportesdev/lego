@@ -42,7 +42,7 @@ def _save_to_media(image, rel_path):
     return actual_path
 
 
-def _store_image(pk):
+def store_image_for_pk(pk):
     image = Image.objects.get(pk=pk)
     try:
         pil_image = _download_image(image.origin_url)

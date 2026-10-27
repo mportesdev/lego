@@ -3,7 +3,7 @@ from unittest.mock import patch
 from django.core.management import call_command
 from django.test import TransactionTestCase
 
-from lego.images import store_image
+from lego.tasks import store_image
 
 from . import test_settings
 
@@ -14,7 +14,7 @@ class TestTasks(TransactionTestCase):
         result = store_image.enqueue(1)
         self.assertEqual(result.status, "READY")
 
-        with patch("lego.images._store_image") as mock:
+        with patch("lego.tasks.store_image_for_pk") as mock:
             call_command("db_worker", max_tasks=1)
 
         mock.assert_called_once()

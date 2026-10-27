@@ -4,7 +4,7 @@ from unittest.mock import patch, create_autospec
 from django.test import TestCase
 from PIL.Image import Image
 
-from lego.images import _scale_down, _save_to_media, _store_image
+from lego.images import _scale_down, _save_to_media, store_image_for_pk
 
 from . import test_settings, setup_media_subdir, dummy_image
 from .factories import ImageFactory
@@ -57,13 +57,13 @@ class TestStoreImage(TestCase):
             patch("lego.images._download_image", side_effect=OSError) as mock_1,
             patch("lego.images._scale_down") as mock_2,
         ):
-            _store_image(9999)
+            store_image_for_pk(9999)
 
         mock_1.assert_called()
         mock_2.assert_not_called()
 
     def test_image_saved_to_media(self):
         with patch("lego.images._download_image", return_value=dummy_image()):
-            _store_image(9999)
+            store_image_for_pk(9999)
 
         self.assertTrue((self.media_subdir / "img/00009999.webp").is_file())

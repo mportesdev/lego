@@ -3,7 +3,6 @@ import logging
 
 import requests
 from django.core.files.storage import storages
-from django.tasks import task
 from PIL.Image import open as open_image
 
 from .models import Image
@@ -43,7 +42,7 @@ def _save_to_media(image, rel_path):
     return actual_path
 
 
-def _store_image(pk):
+def store_image_for_pk(pk):
     image = Image.objects.get(pk=pk)
     try:
         pil_image = _download_image(image.origin_url)
@@ -57,8 +56,3 @@ def _store_image(pk):
     rel_path = _save_to_media(pil_image, rel_path)
     image.path = rel_path
     image.save()
-
-
-@task
-def store_image(pk):
-    _store_image(pk)

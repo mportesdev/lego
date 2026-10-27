@@ -2,7 +2,7 @@ from unittest.mock import patch
 
 from django.test import TestCase, tag
 
-from lego.images import _store_image
+from lego.images import store_image_for_pk
 
 from . import test_settings, OrderedPartsMixin, get_set_info_mock, get_set_parts_mock
 from .factories import ImageFactory
@@ -130,7 +130,7 @@ class TestStoreImage(TestCase, OrderedPartsMixin):
             patch("lego.images._download_image", side_effect=OSError),
             self.assertLogs("lego.images", "ERROR") as log_obj,
         ):
-            _store_image(1111)
+            store_image_for_pk(1111)
 
         log_output = "\n".join(log_obj.output)
         self.assertParts(log_output, "ERROR", "when reading image URL")

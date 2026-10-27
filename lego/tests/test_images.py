@@ -4,7 +4,7 @@ from unittest.mock import patch, create_autospec
 from django.test import TestCase
 from PIL.Image import Image as PILImage
 
-from lego.images import _scale_down, _save_to_media, store_image_for_pk
+from lego.images import _scale_down, _save_to_media, _update_image_path, store_image_for_pk
 from lego.models import Image
 
 from . import test_settings, setup_media_subdir, dummy_image
@@ -74,6 +74,20 @@ class TestStoreImage(TestCase):
         image = Image.objects.get(pk=1111)
         with patch("lego.images._download_image", return_value=dummy_image()):
             store_image_for_pk(1111)
+
+        image.refresh_from_db()
+        self.assertEqual(image.path, "lego/img/00001111.webp")
+
+
+@test_settings
+class TestUpdateImagePath(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        ImageFactory.create(pk=1111)
+
+    def test_image_path_updated(self):
+        image = Image.objects.get(pk=1111)
+        _update_image_path(1111, "lego/img/00001111.webp")
 
         image.refresh_from_db()
         self.assertEqual(image.path, "lego/img/00001111.webp")

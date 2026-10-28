@@ -1,7 +1,7 @@
 from django.core.management.base import LabelCommand
 
 from lego.api_calls import get_set_data
-from lego.orm_utils import get_set, save_set_with_parts
+from lego.orm_utils import get_set, get_set_if_exists, save_set_with_parts
 
 
 class Command(LabelCommand):
@@ -12,6 +12,11 @@ class Command(LabelCommand):
     label = "lego_id"
 
     def handle_label(self, lego_id, **options):
+        set_ = get_set_if_exists(lego_id=lego_id)
+        if set_:
+            self.stdout.write(f"Already exists: {set_!r}")
+            return
+
         try:
             set_data = get_set_data(lego_id)
         except OSError:
@@ -19,14 +24,4 @@ class Command(LabelCommand):
             return
 
         set_, created = get_set(lego_id)
-        if not created:
-            self.stdout.write(f"Updating existing set:\n{set_!r}")
-            new_name = set_data["info"]["name"]
-            if set_.name != new_name:
-                self.stdout.write(f"Set name changed: {new_name}")
-            new_url = set_data["info"]["image_url"]
-            if set_.image.origin_url != new_url:
-                self.stdout.write(f"Set image URL changed: {new_url}")
-            set_.parts.clear()
-
         save_set_with_parts(set_, set_data)

@@ -6,16 +6,9 @@ from .tasks import store_image
 logger = logging.getLogger(__name__)
 
 
-def get_set(lego_id):
-    """Get or create a `LegoSet` with the given `lego_id`."""
-
-    set_, created = LegoSet.objects.get_or_create(lego_id=lego_id)
-    if created:
-        logger.info(f"Created: {set_!r}")
-    return set_, created
-
-
 def save_set_with_parts(set_, set_data):
+    set_ = set_ or _get_or_create_set(lego_id=set_data["lego_id"])
+
     image_url = set_data["info"]["image_url"]
     if image_url and (set_.image is None or set_.image.origin_url != image_url):
         image = _get_image(image_url)
@@ -98,4 +91,11 @@ def get_set_if_exists(**kwargs):
         set_ = LegoSet.objects.get(**kwargs)
     except LegoSet.DoesNotExist:
         set_ = None
+    return set_
+
+
+def _get_or_create_set(**kwargs):
+    set_, created = LegoSet.objects.get_or_create(**kwargs)
+    if created:
+        logger.info(f"Created: {set_!r}")
     return set_

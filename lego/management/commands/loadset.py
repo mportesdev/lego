@@ -1,7 +1,7 @@
 from django.core.management.base import LabelCommand
 
 from lego.api_calls import get_set_data
-from lego.orm_utils import get_set, get_set_if_exists, save_set_with_parts
+from lego.orm_utils import get_set_if_exists, save_set_with_parts
 
 
 class Command(LabelCommand):
@@ -23,5 +23,4 @@ class Command(LabelCommand):
             self.stdout.write(f"Data not found: {lego_id}")
             return
 
-        set_, created = get_set(lego_id)
         save_set_with_parts(set_, set_data)

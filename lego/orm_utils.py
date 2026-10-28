@@ -89,3 +89,11 @@ def _get_image(url):
     if created:
         logger.info(f"Created: {image!r}")
     return image
+
+
+def get_set_if_exists(**kwargs):
+    try:
+        set_ = LegoSet.objects.get(**kwargs)
+    except LegoSet.DoesNotExist:
+        set_ = None
+    return set_

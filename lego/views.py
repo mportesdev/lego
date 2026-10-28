@@ -10,7 +10,7 @@ from django.views.generic import DetailView, ListView
 from .api_calls import get_set_data
 from .forms import SearchForm, AddSetForm
 from .models import LegoPart, LegoSet
-from .orm_utils import get_set, save_set_with_parts
+from .orm_utils import get_set, get_set_if_exists, save_set_with_parts
 
 logger = logging.getLogger(__name__)
 
@@ -148,9 +148,8 @@ def add_set(request):
     if "-" not in set_lego_id:
         set_lego_id += "-1"
 
-    q = LegoSet.objects.filter(lego_id=set_lego_id)
-    if q:
-        set_ = q.get()
+    set_ = get_set_if_exists(lego_id=set_lego_id)
+    if set_:
         logger.warning(f"Already exists: {set_!r}")
         messages.warning(
             request, f"Already exists: {set_}", extra_tags="is-warning"

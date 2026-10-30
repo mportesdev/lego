@@ -40,6 +40,8 @@ def save_set_with_parts(set_, set_data):
         part = _get_part(shape=shape, color=color, image_url=item["image_url"])
         set_.parts.add(part, through_defaults={"quantity": item["quantity"]})
 
+    return set_
+
 
 def _get_shape(lego_id, name):
     """Get, update or create a `Shape` with given `lego_id` and `name`."""

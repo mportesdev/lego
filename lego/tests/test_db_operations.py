@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from lego.tests import test_settings
+from . import test_settings
 
 
 @test_settings

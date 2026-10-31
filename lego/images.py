@@ -55,7 +55,7 @@ def store_image_for_pk(pk):
     try:
         pil_image = _download_image(url)
     except OSError as err:    # e.g. requests.HTTPError, PIL.UnidentifiedImageError
-        logger.error(f"{err!r} when reading image URL {url!r}")
+        logger.error(f"Error reading image URL {url!r}: {type(err).__name__}: {err}")
         return
     else:
         pil_image = _scale_down(pil_image)

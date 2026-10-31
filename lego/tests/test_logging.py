@@ -103,7 +103,7 @@ class TestAddSet(TestCase, OrderedPartsMixin):
 
         log_output = "\n".join(log_obj.output)
         self.assertParts(
-            log_output, "ERROR", "Error calling external API:", "Not Found",
+            log_output, "ERROR", "Error calling external API:", "HTTPError", "Not Found",
         )
 
     def test_set_not_created_for_invalid_lego_id(self):
@@ -133,7 +133,7 @@ class TestStoreImageForPk(TestCase, OrderedPartsMixin):
             store_image_for_pk(1111)
 
         log_output = "\n".join(log_obj.output)
-        self.assertParts(log_output, "ERROR", "when reading image URL")
+        self.assertParts(log_output, "ERROR", "Error reading image URL", "OSError")
 
 
 @tag("login")

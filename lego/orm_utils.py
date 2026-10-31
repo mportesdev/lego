@@ -13,7 +13,7 @@ def save_set_with_parts(set_, set_data):
         with transaction.atomic(durable=True):
             return _save_set_with_parts(set_, set_data)
     except DatabaseError as err:
-        logger.error(f"Error saving data to database: {err}")
+        logger.error(f"Error saving data to database: {type(err).__name__}: {err}")
 
 
 def _save_set_with_parts(set_, set_data):

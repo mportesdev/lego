@@ -1,5 +1,7 @@
 import logging
 
+from django.db import DatabaseError, transaction
+
 from .models import Shape, Color, Image, LegoPart, LegoSet
 from .tasks import store_image
 
@@ -7,6 +9,14 @@ logger = logging.getLogger(__name__)
 
 
 def save_set_with_parts(set_, set_data):
+    try:
+        with transaction.atomic():
+            return _save_set_with_parts(set_, set_data)
+    except DatabaseError as err:
+        logger.error(f"Error saving data to database: {err}")
+
+
+def _save_set_with_parts(set_, set_data):
     set_ = set_ or _get_or_create_set(lego_id=set_data["lego_id"])
 
     image_url = set_data["info"]["image_url"]

@@ -1,21 +1,24 @@
 import logging
 
+from django.db import DatabaseError, transaction
+
 from .models import Shape, Color, Image, LegoPart, LegoSet
 from .tasks import store_image
 
 logger = logging.getLogger(__name__)
 
 
-def get_set(lego_id):
-    """Get or create a `LegoSet` with the given `lego_id`."""
-
-    set_, created = LegoSet.objects.get_or_create(lego_id=lego_id)
-    if created:
-        logger.info(f"Created: {set_!r}")
-    return set_, created
-
-
 def save_set_with_parts(set_, set_data):
+    try:
+        with transaction.atomic():
+            return _save_set_with_parts(set_, set_data)
+    except DatabaseError as err:
+        logger.error(f"Error saving data to database: {err}")
+
+
+def _save_set_with_parts(set_, set_data):
+    set_ = set_ or _get_or_create_set(lego_id=set_data["lego_id"])
+
     image_url = set_data["info"]["image_url"]
     if image_url and (set_.image is None or set_.image.origin_url != image_url):
         image = _get_image(image_url)
@@ -39,6 +42,8 @@ def save_set_with_parts(set_, set_data):
             color = None
         part = _get_part(shape=shape, color=color, image_url=item["image_url"])
         set_.parts.add(part, through_defaults={"quantity": item["quantity"]})
+
+    return set_
 
 
 def _get_shape(lego_id, name):
@@ -89,3 +94,18 @@ def _get_image(url):
     if created:
         logger.info(f"Created: {image!r}")
     return image
+
+
+def get_set_if_exists(**kwargs):
+    try:
+        set_ = LegoSet.objects.get(**kwargs)
+    except LegoSet.DoesNotExist:
+        set_ = None
+    return set_
+
+
+def _get_or_create_set(**kwargs):
+    set_, created = LegoSet.objects.get_or_create(**kwargs)
+    if created:
+        logger.info(f"Created: {set_!r}")
+    return set_

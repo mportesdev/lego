@@ -82,6 +82,7 @@ def get_set_data(set_lego_id):
     with requests.Session() as session:
         try:
             return {
+                "lego_id": set_lego_id,
                 "info": _get_set_info(set_lego_id, session),
                 "parts": list(_get_set_parts(set_lego_id, session)),
             }

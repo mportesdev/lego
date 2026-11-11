@@ -71,6 +71,7 @@ class OrderedPartsMixin:
 
 _API_DATA = {
     "2001-1": {
+        "lego_id": "2001-1",
         "info": {
             "name": "Test Set 1",
             "image_url": "test://cdn.test/img/2001.jpg",
@@ -111,6 +112,7 @@ _API_DATA = {
         ],
     },
     "2002-1": {
+        "lego_id": "2002-1",
         "info": {
             "name": "Test Set 2",
             "image_url": "test://cdn.test/img/2002.jpg",
@@ -127,6 +129,7 @@ _API_DATA = {
         ],
     },
     "2003-1": {
+        "lego_id": "2003-1",
         "info": {
             "name": "Test Set 3",
             "image_url": "test://cdn.test/img/2003.jpg",
@@ -151,6 +154,7 @@ _API_DATA = {
         ],
     },
     "2004-1": {
+        "lego_id": "2004-1",
         "info": {
             "name": "Test Set 4",
             "image_url": "test://cdn.test/img/2004.jpg",
@@ -167,6 +171,7 @@ _API_DATA = {
         ],
     },
     "2005-1": {
+        "lego_id": "2005-1",
         "info": {
             "name": "Test Set 5",
             "image_url": "test://cdn.test/img/2005.jpg",
@@ -182,6 +187,7 @@ _API_DATA = {
         ],
     },
     "2006-1": {
+        "lego_id": "2006-1",
         "info": {
             "name": "Test Set 6",
             "image_url": "test://cdn.test/img/2006.jpg",
@@ -198,6 +204,7 @@ _API_DATA = {
         ],
     },
     "2007-1": {
+        "lego_id": "2007-1",
         "info": {
             "name": "Test Set 7",
             "image_url": "test://cdn.test/img/2007.jpg",
@@ -214,6 +221,7 @@ _API_DATA = {
         ],
     },
     "2008-1": {
+        "lego_id": "2008-1",
         "info": {
             "name": "Test Set 8",
             "image_url": "test://cdn.test/img/2008.jpg",
@@ -230,6 +238,7 @@ _API_DATA = {
         ],
     },
     "2009-1": {
+        "lego_id": "2009-1",
         "info": {
             "name": "Test Set 9",
             "image_url": "test://cdn.test/img/2009.jpg",
@@ -244,6 +253,14 @@ _API_DATA = {
                 "is_spare": False,
             },
         ],
+    },
+    "111-1": {
+        "lego_id": "111-1",
+        "info": {  # existing set, updated name
+            "name": "New Name",
+            "image_url": "test://cdn.test/img/111.jpg",
+        },
+        "parts": [],
     },
 }
 
@@ -264,6 +281,10 @@ def _parts_stub(set_lego_id, _):
 
 def get_set_parts_mock():
     return patch("lego.api_calls._get_set_parts", side_effect=_parts_stub)
+
+
+def api_data_stub(set_lego_id):
+    return _API_DATA[set_lego_id]
 
 
 def _generate_image(pk, size, font):

@@ -41,16 +41,19 @@ jobs:
       with:
         python-version: "3.15.1"
 
+    - name: Set up uv
+      uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+
     - name: Install Dependencies
       run: |
-        pip install -r requirements.txt -r test-requirements.txt
+        uv sync --locked --no-install-project
 
     - name: Run Tests
       env:
         DATABASE_URL: "postgresql://postgres:test_password@localhost:5432/postgres"
         LEGO_SECRET_KEY: test-secret-key
       run: |
-        python manage.py collectstatic --no-input
-        python manage.py makemigrations --check
-        python manage.py check
-        python manage.py test --noinput --failfast --shuffle --verbosity=2 --durations=10 --exclude-tag=browser lego
+        uv run python manage.py collectstatic --no-input
+        uv run python manage.py makemigrations --check
+        uv run python manage.py check
+        uv run python manage.py test --noinput --failfast --shuffle --verbosity=2 --durations=10 --exclude-tag=browser lego

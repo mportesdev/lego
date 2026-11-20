@@ -48,10 +48,6 @@ dbsh: dbhealth
 tasks: dbhealth
     python -m manage db_worker --verbosity=2
 
-upgrade:
-    pip install --upgrade pip
-    pip install --upgrade --upgrade-strategy eager -r requirements.txt -r test-requirements.txt
-
 sync:
     uv sync --upgrade --exclude-newer P3D --no-install-project
     uv export --quiet --no-dev --output-file pylock.toml

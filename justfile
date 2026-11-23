@@ -1,11 +1,11 @@
 test-fast *args: dbhealth
-    python -Wd -m manage test --keepdb --failfast --verbosity=2 --durations=10 --exclude-tag=browser {{args}} lego
+    python -Wd -m manage test --keepdb --verbosity=2 --durations=10 --exclude-tag=browser {{args}} lego
 
 alias f := test-fast
 
 [env("LEGO_TEST_LOGFILE", "tests.log")]
-test *args: dbhealth check
-    python -Wa -m coverage run -m manage test --noinput --shuffle --verbosity=2 --durations=10 {{args}} lego
+test *args: dbhealth
+    python -Wd -m coverage run -m manage test --noinput --shuffle --verbosity=2 --durations=10 {{args}} lego
     coverage report --show-missing
     coverage html
 
@@ -13,7 +13,7 @@ alias t := test
 
 [env("LEGO_TEST_FIREFOX_GUI", "1")]
 test-gui *args: dbhealth
-    python -m manage test --keepdb --verbosity=2 --durations=10 --tag=browser {{args}} lego
+    python -Wd -m manage test --keepdb --verbosity=2 --durations=10 --tag=browser {{args}} lego
 
 alias tg := test-gui
 
@@ -21,6 +21,10 @@ check:
     python -Wa -m manage makemigrations --check
     python -Wa -m manage migrate --check
     python -Wa -m manage check
+
+audit:
+    uv audit --locked
+    uvx pip-audit --locked .
 
 serve-develop: dbhealth
     python -m manage runserver --nostatic

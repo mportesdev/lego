@@ -3,7 +3,7 @@ import logging
 
 import requests
 from django.core.files.storage import storages
-from django.db import transaction
+from django.db import DatabaseError, transaction
 from PIL.Image import open as open_image
 
 from .models import Image
@@ -44,10 +44,13 @@ def _save_to_media(image, rel_path):
 
 
 def _update_image_path(pk, path):
-    with transaction.atomic():
-        image = Image.objects.get(pk=pk)
-        image.path = path
-        image.save(update_fields=["path"])
+    try:
+        with transaction.atomic():
+            image = Image.objects.get(pk=pk)
+            image.path = path
+            image.save(update_fields=["path"])
+    except DatabaseError as err:
+        logger.error(f"Error updating image path: {type(err).__name__}: {err}")
 
 
 def store_image_for_pk(pk):
@@ -55,7 +58,7 @@ def store_image_for_pk(pk):
     try:
         pil_image = _download_image(url)
     except OSError as err:    # e.g. requests.HTTPError, PIL.UnidentifiedImageError
-        logger.error(f"{err!r} when reading image URL {url!r}")
+        logger.error(f"Error reading image URL {url!r}: {type(err).__name__}: {err}")
         return
     else:
         pil_image = _scale_down(pil_image)

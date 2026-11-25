@@ -56,7 +56,7 @@ class TestStoreImageForPk(TestCase):
 
     def test_skips_invalid_image_url(self):
         with (
-            patch("lego.images._download_image", side_effect=OSError) as mock_1,
+            patch("lego.images._download_image", side_effect=OSError()) as mock_1,
             patch("lego.images._scale_down") as mock_2,
         ):
             store_image_for_pk(9999)

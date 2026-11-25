@@ -12,7 +12,7 @@ from . import api_data_stub, test_settings
 def _get_part_mock():
     return patch(
         "lego.orm_utils._get_part",
-        side_effect=IntegrityError,
+        side_effect=IntegrityError(),
     )
 
 

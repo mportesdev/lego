@@ -127,13 +127,15 @@ class TestStoreImageForPk(TestCase, OrderedPartsMixin):
 
     def test_invalid_image_url(self):
         with (
-            patch("lego.images._download_image", side_effect=OSError),
+            patch("lego.images._download_image", side_effect=OSError("test")),
             self.assertLogs("lego.images", "ERROR") as log_obj,
         ):
             store_image_for_pk(1111)
 
         log_output = "\n".join(log_obj.output)
-        self.assertParts(log_output, "ERROR", "Error reading image URL", "OSError")
+        self.assertParts(
+            log_output, "ERROR", "Error reading image URL", "OSError", "test"
+        )
 
 
 @tag("login")

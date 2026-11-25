@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 def save_set_with_parts(set_, set_data):
     try:
-        with transaction.atomic():
+        with transaction.atomic(durable=True):
             return _save_set_with_parts(set_, set_data)
     except DatabaseError as err:
         logger.error(f"Error saving data to database: {err}")

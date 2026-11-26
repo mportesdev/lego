@@ -1,7 +1,7 @@
 from django.core.management.base import LabelCommand
 
-from lego.api_calls import get_set_data
-from lego.orm_utils import get_set_if_exists, save_set_with_parts
+from ...api_calls import get_set_data
+from ...orm_utils import get_set_if_exists, save_set_with_parts
 
 
 class Command(LabelCommand):

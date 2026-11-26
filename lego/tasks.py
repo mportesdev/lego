@@ -1,6 +1,6 @@
 from django.tasks import task
 
-from lego.images import store_image_for_pk
+from .images import store_image_for_pk
 
 
 @task

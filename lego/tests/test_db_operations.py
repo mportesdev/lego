@@ -1,5 +1,7 @@
 from django.test import TestCase
 
+from lego.orm_utils import get_set_if_exists, _get_or_create_set
+
 from . import test_settings
 
 
@@ -56,3 +58,13 @@ class TestNumberOfQueries(TestCase):
             self.client.get(
                 "/lego/search/", query_params={"q": "red", "mode": "color"}
             )
+
+    def test_get_set_if_exists(self):
+        with self.assertNumQueries(1):    # 1 LegoSet + Image join query
+            legoset = get_set_if_exists(lego_id="123-1")
+            legoset.image
+
+    def test_get_or_create_set(self):
+        with self.assertNumQueries(1):    # 1 LegoSet + Image join query
+            legoset = _get_or_create_set(lego_id="123-1")
+            legoset.image
